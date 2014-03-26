@@ -1,0 +1,119 @@
+form{
+width:100%;
+text-align:center;
+
+}
+
+form table{
+width:756px;
+align:center;
+margin-left:auto;
+margin-right:auto;
+background-color:#eeeeec;
+margin-top:5px;
+}
+.page_caption {
+background-color:#555753; 
+height:30px;
+/* border-top-left-radius:15px;
+border-top-right-radius:15px; */
+padding-top:5px;
+padding-left:10px;
+padding-right:10px;
+color:#fff;
+font-size:18px;
+font-weight:bold;
+text-align:left !important;
+
+}
+
+
+
+
+form table tr td:first-child {
+width:200px;
+text-align:right;
+font-size:14px;
+font-weight:bold;
+}
+
+form table tr td input[type="text"] {
+width:320px;
+}
+
+form table tr td input[type="password"] {
+width:320px;
+}
+
+
+form table tr td input[type="text"].datepicker {
+width:120px;text-align:center;
+}
+
+form table tr td input[type="text"].timepicker{
+width:120px;text-align:center;
+}
+
+
+form table tr td input[type="file"] {
+width:320px;
+}
+
+form table tr td textarea {
+width:320px;
+height:80px;
+}
+
+form table tr td textarea.big_textarea {
+width:500px;
+height:300px;
+}
+
+
+
+
+form table tr td img {
+float:right;
+margin-top:10px;
+margin-right:50px;
+}
+
+table{
+width:756px;
+align:center;
+margin:-2px;
+
+}
+
+table tr td:first-child {
+text-align:right;
+}
+.sub_caption {
+background-color:#ccc; 
+height:25px;
+padding-top:5px;
+padding-left:10px;
+padding-right:10px;
+color:#fff;
+font-size:14px;
+font-weight:bold;
+text-align:left;
+}
+
+.td_ckeditor{
+padding-left:5%;
+}
+
+.errormessage{
+text-align:center !important;
+vertical-align:middle;
+color:red;
+
+}
+
+
+.td_right{
+text-align:right !important;
+padding-right:20px;
+}
+

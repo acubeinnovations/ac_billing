@@ -1,0 +1,6 @@
+form table tr td:first-child {
+width:35%;
+/*text-align:right;*/
+font-size:14px;
+font-weight:bold;
+}

@@ -1,0 +1,136 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=288458437926391";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<link rel="shortcut icon" href="/images/layouts/default/favicon.ico" type="image/x-icon" />
+<meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+<title><?php if (!empty($this->title)) echo $this->title ?></title>
+<link rel="stylesheet" href="/style/default.css" type="text/css" media="screen" title="default" />
+  <?php if (!empty($this->script)) echo $this->script ?>
+  <?php if (!empty($this->style)) echo $this->style ?>
+<style type="text/css">
+
+body{
+ background-image:url(images/layouts/default/default/body_01.png);
+ background-repeat:repeat-x;
+}
+
+</style>
+
+	<!-- Slider  -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8/jquery.min.js"></script>
+	<script>window.jQuery || document.write('<script src="/script/jquery.min.js"><\/script>')</script>
+
+	<!-- Anything Slider -->
+	<link rel="stylesheet" href="/style/anythingslider.css">
+	<script src="/script/jquery.anythingslider.js"></script>
+
+	<style>
+	#slider { width: 1140px; height: 334px; }
+	</style>
+
+	<!-- AnythingSlider initialization -->
+	<script>
+		// DOM Ready
+		$(function(){
+			$('#slider').anythingSlider();
+		});
+	</script>
+</head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="padding-top:0px">
+
+<div id="loginsmall">
+<div class="fb-like" data-href="https://www.facebook.com/pages/mydailytestcom/194165150765329?fref=ts" data-width="300" data-show-faces="false" data-send="false"></div>
+<a  style="color:#333;" href="#">About Us</a>&nbsp;&nbsp;| &nbsp;&nbsp;
+<a  style="color:#333;" href="#">FAQ</a>&nbsp;&nbsp;| &nbsp;&nbsp;
+<a  style="color:#333;" href="#">Contact Us</a>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+<a style="color:#333;" href="/login.php">Log in</a> &nbsp;&nbsp;| &nbsp;&nbsp;
+
+<a  style="color:#333;" href="/sign_up.php">Register</a>
+</div>
+
+
+<div id="wrapper">
+
+<div id="header">
+	<div id="logo"> <a href="/index.php" ><img src="/images/layouts/demo_test_design/logo.png"></a>	
+
+	</div>
+	
+</div>
+
+<div id="menu_bar">
+	<?php if (isset($menu)) echo $menu ?>
+</div>
+<!--<div align="center"><img src="layouts/images/index_14.png"></div>-->
+<div align="center">
+	<ul id="slider">
+		<li><img src="images/layouts/demo_test_design/banner/index_14.png" alt=""></li>
+		<li><img src="images/layouts/demo_test_design/banner/index_14.png" alt=""></li>
+	</ul>
+</div>
+<div align="center">&nbsp;</div>
+<div align="center">
+<table width="1100" height="823" border="0">
+  <tr>
+    <td width="50%">&nbsp;</td>
+    <td width="50%">&nbsp;</td>
+  </tr>
+  <tr>
+    <td><span style="font-family:'Comic Sans MS'; font-size:32px;">FREE Mock Tests</span></td>
+    <td rowspan="2" align="right"><img src="layouts/images/right_home.png"></td>
+  </tr>
+  <tr>
+    <td valign="top"><span style="font-family:'Comic Sans MS';">Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+    Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span></td>
+  </tr>
+
+</table>
+
+
+</div>
+
+<div id="content_home">
+<div id="mocktest">
+<a href="demo.php?id=1"><img src="layouts/images/demo.png"></a></div>
+</div>
+<div align="center"><img src="layouts/images/index_18.png" border="0" usemap="#Map">
+		<map name="Map">
+				<area shape="circle" coords="121,90,16" href="https://www.facebook.com/pages/mydailytestcom/194165150765329?fref=ts"> <!-- FACEBOOK-->
+				<area shape="circle" coords="162,90,16" href="#"> <!-- TWITTER-->
+				<area shape="circle" coords="203,90,16" href="#"> <!-- GPLUS-->
+				<area shape="circle" coords="244,90,16" href="#"> <!-- IN-->
+		</map>
+</div>
+
+</div>
+<?php if((isset($_SESSION[SESSION_TITLE.'flash']) && trim($_SESSION[SESSION_TITLE.'flash'])!="") || (isset($mesg_error) && trim($mesg_error)!="") ){ ?>
+<div id="flash_div">
+	<a href="#" onClick="this.parentNode.style.display = 'none';">close</a>
+	<h2>Message</h2>
+<p>
+	<?php 	
+	if(isset($_SESSION[SESSION_TITLE.'flash_redirect_page']) && trim($_SESSION[SESSION_TITLE.'flash_redirect_page'])!=""){ ?>
+	<a href="<?php echo $_SESSION[SESSION_TITLE.'flash_redirect_page'];  $_SESSION[SESSION_TITLE.'flash_redirect_page'] = ''; ?>" > Go Back</a>
+	<?php } ?>
+<?php 	
+	if(isset($_SESSION[SESSION_TITLE.'flash']) && trim($_SESSION[SESSION_TITLE.'flash'])!=""){
+		echo $_SESSION[SESSION_TITLE.'flash'];
+		$_SESSION[SESSION_TITLE.'flash']="";
+	}else{
+ 	 	if(isset($mesg_error)) echo  $mesg_error ;
+	}
+?>
+</p>
+</div>
+<?php } ?>
+</body>
+</html>

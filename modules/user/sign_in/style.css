@@ -1,0 +1,56 @@
+@charset "utf-8";
+/* CSS Document */
+
+form table{
+	width:500px;
+	align:center;
+	margin-left:auto;
+	margin-right:auto;
+	background-color:#eeeeec;
+	margin-top:5px;
+	
+}
+.sign_up{
+	color:#FFF;
+	background-color:#D00;
+	padding:4px;text-decoration:none;
+}
+.label_newuser{
+	color:#0000FF;
+	font-weight:100;
+}
+
+.label_cap{
+	color:#000000;
+	font-size:15px;
+	font-weight:bold;
+}
+
+.login_caption {
+background-color:#7CD325; 
+height:30px;
+/* border-top-left-radius:15px;
+border-top-right-radius:15px; */
+padding-top:5px;
+padding-left:10px;
+padding-right:10px;
+color:#fff;
+font-size:18px;
+font-weight:bold;
+text-align:left !important;
+
+}
+
+.login_box{
+	
+}
+.login_error{
+text-align:center !important;
+vertical-align:middle;
+color:red;
+font-size:12px;
+
+}
+
+
+

@@ -1,0 +1,88 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_GB/all.js#xfbml=1&appId=288458437926391";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<link rel="shortcut icon" href="/images/layouts/default/favicon.ico" type="image/x-icon" />
+  <meta content="text/html; charset=ISO-8859-1" http-equiv="content-type">
+  <title><?php if (!empty($this->title)) echo $this->title ?></title>
+<link rel="stylesheet" href="/style/default.css" type="text/css" media="screen" title="default" />
+  <?php if (!empty($this->script)) echo $this->script ?>
+  <?php if (!empty($this->style)) echo $this->style ?>
+  <style type="text/css">
+body{
+ background-image:url(/images/layouts/demo_test_design/default/inner_page_01.png);
+ background-repeat:repeat-x;
+}
+
+</style>
+<?php 
+if(isset($_SESSION[SESSION_TITLE.'flash_redirect_page']) && trim($_SESSION[SESSION_TITLE.'flash_redirect_page'])!=""){
+	$flash_redirect_page = $_SESSION[SESSION_TITLE.'flash_redirect_page'];
+	$_SESSION[SESSION_TITLE.'flash_redirect_page'] = ""; 
+}else{
+	$flash_redirect_page = DEFAULT_REDIRECT_PAGE;
+}
+
+if(isset($_SESSION[SESSION_TITLE.'flash_refresh_page']) && trim($_SESSION[SESSION_TITLE.'flash_refresh_page'])!="" && trim($_SESSION[SESSION_TITLE.'flash_refresh_page']) > 0){
+	$flash_refresh_page = $_SESSION[SESSION_TITLE.'flash_refresh_page'];
+	$_SESSION[SESSION_TITLE.'flash_refresh_page'] = ""; 
+}else{
+	$flash_refresh_page = 30;
+}
+
+?>
+<!--<meta http-equiv="Refresh" content="<?php echo $flash_refresh_page ?>;url=<?php echo $flash_redirect_page ?>"/>
+--></head>
+
+<body bgcolor="#FFFFFF" leftmargin="0" topmargin="0" marginwidth="0" marginheight="0" style="padding-top:0px">
+<div id="loginsmall">
+<div class="fb-like" data-href="https://www.facebook.com/pages/mydailytestcom/194165150765329?fref=ts" data-width="300" data-show-faces="false" data-send="false"></div>
+<a  style="color:#333;" href="#">About Us</a>&nbsp;&nbsp;| &nbsp;&nbsp;
+<a  style="color:#333;" href="#">FAQ</a>&nbsp;&nbsp;| &nbsp;&nbsp;
+<a  style="color:#333;" href="#">Contact Us</a>&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;
+<a style="color:#333;" href="/login.php">Log in</a> &nbsp;&nbsp;| &nbsp;&nbsp;
+
+<a  style="color:#333;" href="/sign_up.php">Register</a>
+</div>
+<div id="wrapper">
+<div id="header">
+	<div id="logo"> <a href="/index.php" ><img src="/images/layouts/demo_test_design/logo.png"></a>	</div>
+	
+</div>
+<div id="menu_bar">
+
+	<?php if (isset($menu)) echo $menu ?>
+
+</div>
+	<?php if  (isset($_SESSION[SESSION_TITLE.'name'])) { ?>
+	<div class = "user_info">
+	<p>Welcome <?php echo $_SESSION[SESSION_TITLE.'name'] ?></p>
+	<br>
+	<p>	Credit Balance : <?php if(isset($_SESSION[SESSION_TITLE.'user_credit'])) echo $_SESSION[SESSION_TITLE.'user_credit']; ?>	<a href="/get_credit.php" style="text-decoration:none;">
+	<br>
+	<input type="button" value="Get Credit"/></a>		</p>
+	</div>
+	<?php }?>
+
+<div id="content"> 
+<?php if (isset($content)) echo $content; ?>
+<?php if (isset($this->print_page)) echo $this->print_page;  ?>
+
+
+
+
+
+<!--<div style="background-color:#2a2a2a" align="center"><img src="/images/layouts/demo_test_design/default/index_18.png"></div>
+-->
+</div>
+</div>
+<div style="background-color:#2a2a2a" id="footer">
+</div>
+</body>
+</html>

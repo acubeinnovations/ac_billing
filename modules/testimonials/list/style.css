@@ -1,0 +1,101 @@
+#dashboard_content{
+float:left;
+
+}
+
+#dashboard_content h1{
+margin:8px;
+color:#000;
+font-weight:bold;
+}
+#dashboard_content p{
+margin:8px;
+color:#000;
+font-weight:bold;
+}
+
+
+
+#sample_tests{
+width:250px;
+height:50%;
+float:right;
+background-color:#ccc;
+}
+
+
+#sample_tests h3{
+text-align:center;
+margin-top:10px;
+}
+
+#sample_tests p{
+margin:8px;
+color:#000;
+font-weight:bold;
+}
+
+#sample_tests p a{
+color:#000;
+text-decoration:none;
+
+}
+#sample_tests p a:hover{
+color:#ef2929;
+text-decoration:none;
+
+}
+.a{
+text-align:right;
+}
+
+
+
+
+
+#sample_history p{
+margin:8px;
+color:#000;
+
+}
+
+
+#sample_history h3{
+text-align:center;
+margin-top:10px;
+}
+
+#sample_history{
+position:absolute;
+right:254px;
+width:300px;
+height:50%;
+background-color:#ccc;
+border:#FFF;
+
+}
+
+
+
+#real_tests p{
+margin:8px;
+color:#000;
+
+}
+
+
+#real_tests h3{
+text-align:center;
+margin-top:10px;
+}
+
+#real_tests{
+position:absolute;
+right:560px;
+width:300px;
+height:50%;
+background-color:#ccc;
+border:#FFF;
+
+}
+

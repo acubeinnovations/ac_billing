@@ -1,0 +1,15 @@
+ul.master_list >li {
+	font-weight: bold;
+	
+}
+.master_list li{
+	font-size: 13px;	
+}
+
+.scroll-div{
+	float: left;
+	max-height: 500px;
+	overflow: scroll;
+	width:100%;
+
+}

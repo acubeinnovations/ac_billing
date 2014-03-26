@@ -1,0 +1,86 @@
+
+table{
+width:100%;
+}
+table tr th {
+height:25px;
+background-color:#555753;
+color:#fff;
+text-align:center;
+font-size:12px;
+font-weight:bold;
+}
+
+
+table tr td {
+font-size:12px;
+text-align:left;
+}
+
+table tr td a:link{
+color:#000;
+}
+table tr td a:visited{
+color:#000;
+}
+
+
+table tr td:first-child {
+width:50px;
+text-align:center;
+}
+
+table tr th:first-child {
+width:50px;
+text-align:center;
+}
+
+th.slno{
+width:50px;
+text-align:center;
+}
+
+.row_dark{
+background:#888a85;
+}
+.row_lite{
+background:#babdb6;
+}
+.row_highlight{
+background:#f9f2b7;
+}
+
+.table_pagination{
+width:200px;
+}
+
+.td_pagination a:link{
+	-moz-box-shadow:inset 0px 1px 0px 0px #ccc;
+	-webkit-box-shadow:inset 0px 1px 0px 0px #888a85;
+	box-shadow:inset 0px 1px 0px 0px #ccc;
+	background-color:#79bbff;
+	-moz-border-radius:6px;
+	-webkit-border-radius:6px;
+	border-radius:6px;
+	border:1px solid #ccc;
+	display:inline-block;
+	color:#ffffff;
+	font-family:arial;
+	font-size:12px;
+	font-weight:bold;
+	padding:3px 15px;
+	text-decoration:none;
+	text-shadow:1px 1px 0px #ccc;
+}
+.td_pagination a:hover {
+	background-color:#378de5;
+}
+.td_pagination a:active {
+	position:relative;
+	top:1px;
+}
+
+
+
+
+

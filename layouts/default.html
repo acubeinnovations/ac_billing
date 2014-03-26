@@ -1,0 +1,191 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><?php if (!empty($this->title)) echo $this->title ?></title>
+    <link rel="stylesheet" href="/css/foundation.css" />
+    <link rel="stylesheet" href="/style/default.css" />
+    <script src="/js/modernizr.js"></script>
+
+
+		<?php if (!empty($this->script)) echo $this->script ?>
+<script>
+	function popup_alert(message, redirect_url, button_ok, button_cancel ){
+
+		if (button_ok == "" ){
+			button_ok = "OK";
+		}
+
+		if (button_cancel == "" ){
+			button_cancel = "Cancel";
+			$("#popup_alert_button_cancel").show();
+		}else if(button_cancel == "false"){
+			$("#popup_alert_button_cancel").hide();
+		}
+		else{
+			$("#popup_alert_button_cancel").show();
+		}
+
+
+		$("#popup_alert_message").html(message);
+		$("#popup_alert_redirect").attr('href',redirect_url);
+		$("#popup_alert_button_ok").attr('value',button_ok);
+
+		if (redirect_url == "" ){
+
+			$("#popup_alert_redirect").hide();
+		}else{
+			$("#popup_alert_redirect").show();
+		}
+		$("#popup_alert_button_cancel").attr('value',button_cancel);
+		docHeight = $(document).height();
+		docWidth = $(window).width();
+		$(".overlay, .overlay-panel").fadeIn(300);
+		$(".overlay").css({"height":docHeight,"width":docWidth});
+		return false;
+	}
+</script>
+<script>
+
+	function flash_alert(message,redirect_url){
+		$("#popup_alert_message").html(message);
+		$("#popup_alert_redirect").attr('href',redirect_url);
+			if (redirect_url == "#" ){
+				$("#popup_alert_redirect").hide();
+			}else{
+				$("#popup_alert_redirect").show();
+			}
+		docHeight = $(document).height();
+		docWidth = $(window).width();
+		$(".overlay, .overlay-panel").fadeIn(300);
+		$(".overlay").css({"height":docHeight,"width":docWidth});
+	}
+$(document).ready(function(){
+
+<?php if(isset($_SESSION[SESSION_TITLE.'flash_redirect_page']) && trim($_SESSION[SESSION_TITLE.'flash_redirect_page'])!=""){ ?>
+	alert_redirect = "<?php echo WEB_URL.'/'.$_SESSION[SESSION_TITLE.'flash_redirect_page']; ?>";
+<?php $_SESSION[SESSION_TITLE.'flash_redirect_page'] = "" ;}else{ ?>
+	alert_redirect  ="#";
+<?php } ?>
+
+
+<?php if(isset($_SESSION[SESSION_TITLE.'flash']) && trim($_SESSION[SESSION_TITLE.'flash'])!=""){ ?>
+alert_message = "<?php echo $_SESSION[SESSION_TITLE.'flash']; ?>";
+flash_alert(alert_message,alert_redirect);
+<?php  $_SESSION[SESSION_TITLE.'flash']="";	} ?>
+
+});
+</script>
+		<?php if (!empty($this->style)) echo $this->style ?>
+	</head>
+  <body >
+  <div class="show_screen">
+
+    <!-- Navigation -->
+
+  <nav class="top-bar" data-topbar>
+    <ul class="title-area">
+      <!-- Title Area -->
+      <li class="name">
+        <h1>
+          <a  href="/index.php"><?php echo ORG_NAME; ?> </a> </h1>
+      </li>
+      <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
+    </ul>
+    <section class="top-bar-section">
+      <!-- left Nav Section -->
+      <ul class="left">
+		<li>
+		<span style="color:#fff;"><?php if (isset($breadcrumb)) echo $breadcrumb; ?></span>
+        </li>
+ 	  </ul>
+	<?php if (isset($menu)) echo $menu; ?>
+	 </section>
+  </nav>
+
+  <!-- End Top Bar -->
+
+  <div class="row" id="main_content" >
+    <div class="medium-12 columns">
+
+    <!-- Content  -->
+
+      <div class="row">
+        <div class="medium-12 columns">
+				<?php if (isset($content)) echo $content; ?>
+				<?php if (isset($this->print_page)) echo $this->print_page;  ?>
+
+      </div>
+    </div>
+
+    <!-- End Content  -->
+
+
+
+    <!-- Footer -->
+
+      <footer class="row">
+        <div class="medium-12 columns"><hr>
+            <div class="row">
+
+              <div class="medium-6 columns">
+                  <small><?php if (isset($footer)) echo $footer ?> &nbsp;&nbsp;&nbsp;&nbsp; Copyright &copy; Acube Innovations Private Limitted. All Rights Reserved.</small>
+              </div>
+
+              <div class="medium-6 small-12 columns">
+                  <ul class="inline-list right">
+
+                  </ul>
+              </div>
+
+            </div>
+        </div>
+      </footer>
+
+    <!-- End Footer -->
+
+    </div>
+  </div>
+<div class="overlay-panel">
+  	<p class="heading">
+		<span class="fleft">Notification</span>
+		<span class="fright"><a href="#" class="close-panel" onClick="$('.overlay, .overlay-panel').fadeOut(300); " id = "popup_alert_close" ></a></span>
+	</p>
+	<p class="content">
+		<span class="info"></span>
+		<span id ="popup_alert_message"> </span>
+	</p>
+	<p class="overlay-button">
+
+	<br><a id = "popup_alert_redirect" href="#" > <input id = "popup_alert_button_ok"  type="button" class="button" value="Go Back" />&nbsp;</a>
+	<input type="submit" id = "popup_alert_button_cancel" class="button gray close-panel" value="Close" onClick="$('.overlay, .overlay-panel').fadeOut(300); " />
+	</p>
+</div>
+<div class="overlay"></div>
+
+ 	<script src="/js/jquery.js"></script>
+ 	<script src="/js/foundation.min.js"></script>
+	<script src="/js/foundation/foundation-datepicker.js"></script>
+    <script>
+            $(document).foundation();
+                                $('.mydatepicker').fdatepicker({
+                                        format: 'dd-mm-yyyy',
+                                        closeButton: true
+                                });
+    </script>
+    <link rel="stylesheet" href="/css/foundation-datepicker.css" />
+
+<!-- styles needed by jScrollPane -->
+<link type="text/css" href="/css/jquery.jscrollpane.css" rel="stylesheet" media="all" />
+
+<!-- the mousewheel plugin - optional to provide mousewheel support -->
+<script type="text/javascript" src="/js/jscroll/jquery.mousewheel.js"></script>
+
+<!-- the jScrollPane script -->
+<script type="text/javascript" src="/js/jscroll/jquery.jscrollpane.min.js"></script>
+</div>
+<div class="show_print"><?php if (isset($print_content)) echo $print_content; ?></div>
+  </body>
+
+</html>
