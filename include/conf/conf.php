@@ -136,16 +136,16 @@ $g_obj_select_default_text = "Choose from list..";
 
 
 //Email
-define("EMAIL_FEEDBACK", "feedback@temple_soft.local");
-define("EMAIL_NO_REPLY", "noreply@temple_soft.local");
-define("EMAIL_INFO", "noreply@temple_soft.local");
-define("EMAIL_SUPPORT", "noreply@temple_soft.local");
+define("EMAIL_FEEDBACK", "feedback@billing.local");
+define("EMAIL_NO_REPLY", "noreply@billing.local");
+define("EMAIL_INFO", "noreply@billing.local");
+define("EMAIL_SUPPORT", "noreply@billing.local");
 
 
-define("WEB_URL", "http://temple_soft.local");
-define("ADMIN_URL", "http://temple_soft.local/admin");
-define("WEB_NAME", "temple_soft.local");
-define("ORG_NAME", "temple_soft");
+define("WEB_URL", "http://billing.local");
+define("ADMIN_URL", "http://billing.local/admin");
+define("WEB_NAME", "billing.local");
+define("ORG_NAME", "billing");
 
 
 
