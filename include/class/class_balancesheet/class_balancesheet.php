@@ -50,9 +50,11 @@ public function __construct($connection)
 
 		$strSQL = "SELECT LS.ledger_id, LM.ledger_name , SUM(AM.account_debit), SUM(AM.account_credit), ( SUM(AM.account_debit) -SUM(AM.account_credit)) as balance 
 FROM 
-ledger_sub LS, ledger_master LM , account_master AM
+ ledger_sub LS, fy_ledger_sub FYLS , ledger_master LM , account_master AM
 WHERE 
 LS.ledger_id=LM.ledger_id 
+AND  LS.ledger_sub_id = FYLS.ledger_sub_id
+AND FYLS.fy_id='".$this->fy_id."'
 AND  AM.ref_ledger=LS.ledger_sub_id 
 AND AM.fy_id='".$this->fy_id."' 
 AND AM.deleted='".NOT_DELETED."'
@@ -122,10 +124,15 @@ ORDER BY LS.ledger_id ASC";
 				$balancesheet["profit"]  = 0;
 				$balancesheet["loss"]  = abs($total_income - $total_expenses);
 				$balancesheet["difference_in_opening_balance"]  = (abs($total_income - $total_expenses)+$total_liabilities)-$total_assets;
-			}else{
+			}elseif(($total_income - $total_expenses)>0){
 				$balancesheet["profit"]  = $total_income - $total_expenses;
 				$balancesheet["loss"]  = 0;
 				$balancesheet["difference_in_opening_balance"]  = (abs($total_income - $total_expenses)+$total_assets)-$total_liabilities;
+			}else{
+
+				$balancesheet["profit"]  =0;
+				$balancesheet["loss"]  = 0;
+				$balancesheet["difference_in_opening_balance"]  = ($total_assets)-$total_liabilities;
 			}
 			
 			
@@ -143,9 +150,11 @@ ORDER BY LS.ledger_id ASC";
 
 		$strSQL = "SELECT LS.ledger_id, LM.ledger_name , LS.ledger_sub_id, LS.ledger_sub_name,  SUM(AM.account_debit), SUM(AM.account_credit), ( SUM(AM.account_debit) -SUM(AM.account_credit)) as balance 
 FROM 
-ledger_sub LS, ledger_master LM , account_master AM
+ledger_sub LS, fy_ledger_sub FYLS , ledger_master LM , account_master AM
 WHERE 
 LS.ledger_id=LM.ledger_id 
+AND  LS.ledger_sub_id = FYLS.ledger_sub_id
+AND FYLS.fy_id='".$this->fy_id."'
 AND  AM.ref_ledger=LS.ledger_sub_id 
 AND AM.fy_id='".$this->fy_id."' 
 AND AM.deleted='".NOT_DELETED."'
@@ -240,10 +249,15 @@ ORDER BY LS.ledger_sub_id ASC";
 				$balancesheet["profit"]  = 0;
 				$balancesheet["loss"]  = abs($total_income - $total_expenses);
 				$balancesheet["difference_in_opening_balance"]  = (abs($total_income - $total_expenses)+$total_liabilities)-$total_assets;
-			}else{
+			}elseif(($total_income - $total_expenses)>0){
 				$balancesheet["profit"]  = $total_income - $total_expenses;
 				$balancesheet["loss"]  = 0;
 				$balancesheet["difference_in_opening_balance"]  = (abs($total_income - $total_expenses)+$total_assets)-$total_liabilities;
+			}else{
+
+				$balancesheet["profit"]  =0;
+				$balancesheet["loss"]  = 0;
+				$balancesheet["difference_in_opening_balance"]  = ($total_assets)-$total_liabilities;
 			}
 			
 			
@@ -272,9 +286,11 @@ function get_subledger_closing($ledger_sub_id = "", $closing_date = ""){
 
 		$strSQL = "SELECT LS.ledger_id, LM.ledger_name , LS.ledger_sub_id, LS.ledger_sub_name,  SUM(AM.account_debit), SUM(AM.account_credit), ( SUM(AM.account_debit) -SUM(AM.account_credit)) as balance 
 FROM 
-ledger_sub LS, ledger_master LM , account_master AM
+ledger_sub LS, fy_ledger_sub FYLS , ledger_master LM , account_master AM
 WHERE 
 LS.ledger_id=LM.ledger_id 
+AND  LS.ledger_sub_id = FYLS.ledger_sub_id
+AND FYLS.fy_id='".$this->fy_id."'
 AND  AM.ref_ledger=LS.ledger_sub_id 
 AND AM.fy_id='".$this->fy_id."' 
 AND AM.deleted='".NOT_DELETED."' ".$condition."

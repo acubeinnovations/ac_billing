@@ -10,13 +10,15 @@ $ledger->connection = $myconnection;
 $account = new Account($myconnection);
 $account->connection = $myconnection;
 
-$ledgers = $ledger->get_list_array();
+$ledgers = $ledger->get_list_array_have_no_children();
 
 $datefrom = "";
 $dateto = "";
 $ledger_name = "";
 
 $dataArray = array();
+$ledger_name = "";
+$datestr = "";
 
 
 $mybalancesheet = new BalanceSheet($myconnection);
@@ -47,7 +49,17 @@ if(isset($_GET['submit'])){
 		$dateto = $_GET['txtfromdate'];
 	}
 
+	if($datefrom == $dateto){
+		$datestr = $datefrom;
+	}else{
+		$datestr = $datefrom." - ".$dateto;
+	}
+
+	$ledger_name = $ledger->ledgerName($account->ref_ledger);
+
 	$account_list = $account->getAccountTransaction($pagination->start_record,$pagination->max_records,$dataArray);
+
+	$account_total_list = $account->getAllAccountTransaction($dataArray);
 
 
 	$closing_from = date('Y-m-d', strtotime('-1 day', strtotime($datefrom)));
@@ -57,11 +69,13 @@ if(isset($_GET['submit'])){
 		$subledger_opening = $mybalancesheet->get_subledger_closing($_GET['lstledger'],$closing_from);
 		$subledger_closing = $mybalancesheet->get_subledger_closing($_GET['lstledger'],$closing_to );
 	}
-if($account_list){
-	$count_list = count($account_list);
-	$pagination->total_records = $account->total_records;
-	$pagination->paginate();
-}
+
+
+	if($account_list){
+		$count_list = count($account_list);
+		$pagination->total_records = $account->total_records;
+		$pagination->paginate();
+	}
 
 	
 

@@ -10,6 +10,7 @@ ob_start();
 	<div id="header">
 		<?php echo $voucher->header; ?>
 	</div>
+	<p>Voucher number : <?php echo $vouchertxt;?></p>
 	<div id="content">
 		<table width="600px">
 			<tr>

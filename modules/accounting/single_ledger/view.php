@@ -8,7 +8,7 @@ if(!defined('CHECK_INCLUDED')){
 		<h3>Search Ledger</h3>
 	</div>
 	<div class="text-right" style="margin-top:5px;">
-		
+		<input type="button" class="tiny button" value="print" id="button-print"/>
 	</div>
 </div>
 
@@ -95,6 +95,67 @@ if(!defined('CHECK_INCLUDED')){
 </table>
 	
 <?php }?>
+
+
+<?php ob_start();?>
+<?php if( isset($account_total_list) and count($account_total_list) > 0){?>
+	<h3><?php echo $ledger_name; ?></h3>
+	<p>Date :<?php echo $datestr;?></p>
+	<table width="100%">
+	<thead>
+	<tr>
+		<td width="10%">Date</td>
+		<td width="10%">Voucher Number</td>
+		<td width="20%">Voucher Type</td>
+		<td width="40%">Particulars</td>
+		<td width="10%">Debit</td>
+		<td width="10%">Credit</td>
+	</tr>
+	</thead>
+	<tr>
+		<td colspan="4"><b>Opening Balance </b></td>
+		<td width="10%"><b><?php if(isset($subledger_opening) && $subledger_opening!=false){
+				echo $subledger_opening[0]["balance_dr"];
+			}else{ echo 0; }?></b></td>
+		<td width="10%"><b><?php if(isset($subledger_opening) && $subledger_opening!=false){
+				echo $subledger_opening[0]["balance_cr"];
+			}else{ echo 0; }?></b></td>
+	</tr>
+
+
+	<tbody>
+	<?php 
+	$i=0;
+	while($i < count($account_total_list)){
+	?>
+	<tr>
+		<td><?php echo $account_total_list[$i]['date']; ?></td>
+		<td><?php echo $account_total_list[$i]['voucher_number']; ?></td>
+		<td><?php echo $account_total_list[$i]['voucher_name']; ?></td>
+		<td><?php echo  $ledger->ledgerName($account_total_list[$i]['account_to'])."-".$account_total_list[$i]['narration']; ?></td>
+		<td><?php echo $account_total_list[$i]['account_debit']; ?></td>
+		<td><?php echo $account_total_list[$i]['account_credit']; ?></td>
+	</tr>
+	<?php $i++; }?>
+	<tr>
+		<td colspan="4"><b>Closing Balance </b></td>
+		<td width="10%"><b><?php if(isset($subledger_closing) && $subledger_closing!=false){
+				echo $subledger_closing[0]["balance_dr"];
+			}else{ echo 0; }?></b></td>
+		<td width="10%"><b><?php if(isset($subledger_closing) && $subledger_closing!=false){
+				echo $subledger_closing[0]["balance_cr"];
+			}else{ echo 0; } ?></b></td>
+	</tr>
+	</tbody>
+</table>
+
+<?php }?>
+<?php 
+	$print_content = ob_get_contents();
+	ob_end_clean();
+	//echo $print_content;
+	
+?>
 
 
 

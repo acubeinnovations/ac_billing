@@ -25,7 +25,7 @@ class UserSession {
     var $error_description="";
 
 
-    function __construct($username,$password,$connection)
+    function __construct($username ='',$password = '',$connection = '')
     {
 			$this->username =$username;
 			$this->password =$password;

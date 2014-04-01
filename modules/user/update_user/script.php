@@ -97,40 +97,90 @@ function delete_member(){
 
 
 $(document).ready(function(){
-	 var checking_html = 'Checking...';
-	 $('#check_availability').click(function(){ 
-	var res=validate_username();
-if(res==true)
-{
-                $('#username_availability_result').html(checking_html);  
-                check_availability();  
-}
+
+
+    $("#frmuser").submit(function(){
+        var username = $('#txtusername').val(); 
+        var userstatus = $('#txtuserstatus').val(); 
+        var usertype = $('#lstusertype').val(); 
+        var password = $('#txtpassword').val(); 
+        var repassword = $('#txtrepassword').val(); 
+        var fname = $('#txtfirstname').val(); 
+        var lname = $('#txtlastname').val(); 
+        var email = $('#txtemail').val(); 
+        var phone = $('#txtphone').val(); 
+        var error = "";
+       
+        if(userstatus == -1){
+            error += "Select User Status<br>";
+        }
+        if(usertype == -1){
+            error += "Select User Type<br>";
+        }
+               
+        if(!validate_email()){
+            error += "Invalid Email Id<br>";
+        }
+        if(phone != ""){
+            if(isNaN(phone)){
+                error += "Invalid Phone Number<br>";
+            }
+        }
+
+        if(error != ""){
+            popup_alert(error,false);
+            return false;
+        }else{
+            return true;
+        }
+
+    });
+
+
+
+	var checking_html = 'Checking...';
+	$('#check_availability').click(function(){ 
+	   var res=validate_username();
+        if(res==true)
+        {
+            $('#username_availability_result').html(checking_html);  
+            check_availability();  
+        }
              
-   }); 
+    }); 
+
+function validate_username(){
+    var error = "";
+    var username = $('#txtusername').val(); 
+    if(username == ""){
+        error = "Empty Username\n";
+    }
+
+    if ( error != "" ){
+        str_result = '<div data-alert class="alert-box info radius">'+error + '</div>'
+        $('#username_availability_result').html(str_result);
+        return false;
+    }else{
+        return true;
+    }
+}
 
 
 //function for check email id
 
-function validate_username(){
- var error = "";
-var username = $('#txtusername').val(); 
-    if(username==""){
-        error = "Empty Username\n";
-    }else{
-	    
+function validate_email(){
+    var email = $('#txtemail').val(); 
+    if(email != ""){	    
 	    pattern = /^[a-zA-Z0-9]\w+(\.)?\w+@\w+\.\w{2,5}(\.\w{2,5})?$/;
-	    result = pattern.test(username);
+	    result = pattern.test(email);
 	    if( result == false) {
-	       error = "Username must be an emailid\n";
-	    }
-	}
- if ( error != "" ){
-		str_result = '<div data-alert class="alert-box info radius">'+error + '</div>'
-       $('#username_availability_result').html(str_result);
-return false;
-    }else{
-return true;
-}
+	       return false;
+	    }else{
+            return true;
+        }
+	}else{
+        return true;
+    }
 }
 
 
@@ -139,29 +189,27 @@ return true;
 
 
 
-//function to check username availability  
-function check_availability(){  
-
-
-  
+    //function to check username availability  
+    function check_availability(){  
         //get the username  
-       var username = $('#txtusername').val();  
+        var username = $('#txtusername').val();  
         //use ajax to run the check  
         $.post("user_check.php", { username: username },  
             function(result){ 
-
                 //if the result is 1  
                 if(result == 1){  
                     //show that the username is available  
-					str_result = '<div data-alert class="alert-box info radius">'+ username + ' is available.</div>'
+                    str_result = '<div data-alert class="alert-box info radius">'+ username + ' is available.</div>'
                     $('#username_availability_result').html(str_result);  
                 }else{  
                     //show that the username is NOT available
-					str_result = '<div data-alert class="alert-box info radius">'+ username + ' is not available. </div>'  
+                    str_result = '<div data-alert class="alert-box info radius">'+ username + ' is not available. </div>'  
                     $('#username_availability_result').html(str_result);  
                 }  
         });  
-}
+    }
+
+
 
 });
 

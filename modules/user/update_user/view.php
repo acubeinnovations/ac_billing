@@ -7,13 +7,13 @@
 
  ?>
 <!-- form start-->
-<form data-abide target="_self" method="post" action="<?php echo $current_url?>" name="frmchange_passwd" >
+<form data-abide target="_self" method="post" action="<?php echo $current_url?>" name="frmuser" id="frmuser">
 <fieldset>
 	<legend>Add/Update User</legend>
 
 	<div class="row">
 		<div class="medium-6 columns">
-			<label for="new_username">Username (email) <small>required</small></label>
+			<label for="new_username">Username <small>required</small></label>
 			<input placeholder=""  required = "email"  type="text" name="txtusername" id="txtusername" value="<?php if(isset($_POST['txtusername'])){echo $_POST['txtusername'];}elseif(isset($_GET['id'])){echo $myuser->username;}?>" >
 			<small class="error">Empty Username.</small>
 			

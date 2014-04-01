@@ -1,54 +1,63 @@
+
 <?php
 if(!defined('CHECK_INCLUDED')){
 	exit();
 }
 ob_start();
 ?>
-<div style="width:600px;">	
-	
-	<div class="row" style="height:75px;">
-			<div class="medium-6 columns">
-				Pooja :<?php echo $vazhipadu->pooja_description; ?>	
-			</div>
-
-			<div class="medium-4 columns">
-				Receipt Number :<?php echo $vazhipadu->vazhipadu_rpt_number; ?><br/>
-				Date :<?php echo $vazhipadu->vazhipadu_date; ?>
-			</div>
-	</div>
-
+<div>	
 	<?php if($vazhipadu_details){?>
 	
 
 	<div class="row">
-		<table width="100%" >
-			<thead>
-				<tr>
-					<td>Name</td>
-					<td>Star</td>
-					<td>Amount</td>
-				</tr>
-			</thead>
-			<tbody>
+<table width="360" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td width="184" height="49">&nbsp;</td>
+    <td width="96" height="49">&nbsp;</td>
+    <td width="80" height="49">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="184" height="15">&nbsp;</td>
+    <td width="96" height="15">&nbsp;</td>
+    <td width="80" height="15"><?php echo $vazhipadu->vazhipadu_rpt_number; ?></td>
+  </tr>
+  <tr>
+    <td width="184" height="15"><?php echo $vazhipadu->pooja_description; ?></td>
+    <td width="96" height="15">&nbsp;</td>
+    <td width="80" height="15"><?php echo date("d-m-Y");?></td>
+  </tr>
+  <tr>
+    <td width="184" height="14">&nbsp;</td>
+    <td width="96" height="14">&nbsp;</td>
+    <td width="80" height="14">&nbsp;</td>
+  </tr>
+  <tr>
+    <td height="79" colspan="3">
+    	<table width="360">
 				<?php $i=0;$total = 0;
 				while($i<count($vazhipadu_details)){
 					$total += $vazhipadu_details[$i]['rate'];
 				?>
 				<tr>
-					<td><?php echo $vazhipadu_details[$i]['name']	;?></td>
-					<td><?php echo $vazhipadu_details[$i]['star']; ?></td>
-					<td><?php echo $vazhipadu_details[$i]['rate']; ?></td>
+					<td width="184" height="19"><?php echo $vazhipadu_details[$i]['name']	;?></td>
+					<td width="96" height="19"><?php echo $vazhipadu_details[$i]['star']; ?></td>
+					<td width="80" height="19"><?php echo $vazhipadu_details[$i]['rate']; ?></td>
 					
 				</tr>
 				<?php $i++;}?>
-				<tr>
-					<td></td>
-					<td align="right" style="font-weight:bold;">Total</td>
-					<td style="font-weight:bold;"><?php echo $total;?></td>
-				</tr>
-			</tbody>
-		</table>
-	</div>
+        </table>
+    </td>
+    </tr>
+  <tr>
+    <td width="184" height="17">&nbsp;</td>
+    <td width="96" height="17">&nbsp;</td>
+    <td width="80" height="17"><?php echo $total;?></td>
+  </tr>
+  <tr>
+    <td height="23" colspan="3"><?php echo $vazhipadu->vazhipadu_date; ?></td>
+  </tr>
+</table>
+  </div>
 	<?php }?>
 
 </div>
@@ -57,4 +66,4 @@ ob_start();
 <?php 
 $print_content = ob_get_contents();
 ob_end_clean();
-echo $print_content;?>
+$print_content;?>

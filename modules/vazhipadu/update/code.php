@@ -15,6 +15,8 @@ $add_vazhipadu->connection=$myconnection;
 $add_pooja=new Pooja($myconnection);
 $add_pooja->connection=$myconnection;
 
+
+
 $array_vazhipadu=$add_pooja->get_array();
 if($array_vazhipadu==false){
 	$array_vazhipadu=array();
@@ -24,6 +26,15 @@ if($array_vazhipadu==false){
 $add_star=new Stars($myconnection);
 $add_star->connection=$myconnection;
 $array_star=$add_star->get_array();
+
+if(isset($_GET['pr'])){
+	$add_vazhipadu->vazhipadu_rpt_number = $_GET['pr'];
+	$vazhipadu_details = $add_vazhipadu->get_vazhipadu_details();
+
+}else{
+	$vazhipadu_details = false;
+}
+
 
 if(isset($_POST['submit'])){
 
@@ -75,10 +86,10 @@ if(isset($_POST['submit'])){
 		$account->date				= CURRENT_DATE;
 		$dataAccount[0]['account_debit']  = $total_amount;
 		$dataAccount[0]['account_credit'] = "";
-		$dataAccount[0]['ref_ledger'] = $voucher->default_from;
+		$dataAccount[0]['ref_ledger'] = $account->account_from;
 		$dataAccount[1]['account_debit']  = "";
 		$dataAccount[1]['account_credit'] = $total_amount;
-		$dataAccount[1]['ref_ledger'] = $voucher->default_to;
+		$dataAccount[1]['ref_ledger'] = $account->account_to;
 
 		//print_r($dataAccount);exit();
 		$insert = $account->insert_batch($dataAccount);
@@ -88,19 +99,19 @@ if(isset($_POST['submit'])){
 			$account->get_details();
 			$vazhipadu_rpt_number = $voucher->series_prefix.$voucher->series_seperator.$account->voucher_number.$voucher->series_seperator.$voucher->series_sufix;
 			$add_vazhipadu->vazhipadu_rpt_number = $vazhipadu_rpt_number;
-//echo $add_vazhipadu->vazhipadu_rpt_number;
-//print_r($dataArray);exit();
+
 			$last_id = $add_vazhipadu->update($dataArray);
 			if($last_id){
-				if($vazhipadu_rpt_number){
-					header("Location:vazhipadu_print.php?id=".$vazhipadu_rpt_number);
+				if($vazhipadu_rpt_number){	
+					//print page
+					header( "Location:".$current_url."?pr=".$vazhipadu_rpt_number);
 					exit();
-				}else{
-					header("Location:vazhipadu.php");
-					exit();
+					//header("Location:vazhipadu_print.php?id=".$vazhipadu_rpt_number);
+					//exit();
 				}
 			}
 		}
+
 	}else{
 		$_SESSION[SESSION_TITLE.'flash'] = $errorMSG;
         header( "Location:".$current_url);

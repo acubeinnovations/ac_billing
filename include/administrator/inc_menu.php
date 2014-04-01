@@ -190,10 +190,11 @@ if ( mysql_num_rows($rsRES2) > 0 )
             <li class="has-dropdown">
               <a href="ac_stock.php">Stock</a>
               <ul class="dropdown">
-                <li><a href="ac_stock.php">Add Item</a>
-                <li><a href="ac_stock_register.php">Stock Register</a>
-                <li><a href="ac_sale_register.php">Sale Register</a>
-                <li><a href="ac_purchase_register.php">Purchase Register</a>
+                <li><a href="ac_stock.php">Add Item</a></li>
+                <li><a href="ac_stock_register.php">Stock Register</a></li>
+                <li><a href="ac_stock_register.php?type=<?php echo INPUT_SALE;?>">Sale Register</a></li>
+                <li><a href="ac_stock_register.php?type=<?php echo INPUT_PURCHASE;?>">Purchase Register</a></li>
+
               </ul>
             </li>
         

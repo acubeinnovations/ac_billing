@@ -11,6 +11,9 @@ $supplier->connection=$myconnection;
 $ledger=new Ledger($myconnection);
 $ledger->connection=$myconnection;
 
+$fy_ledger_sub = new FyLedgerSub($myconnection);
+$fy_ledger_sub->connection = $myconnection;
+
 $account_settings = new AccountSettings($myconnection);
 $account_settings->connection = $myconnection;
 $account_settings->getAccountSettings();
@@ -60,8 +63,10 @@ if(isset($_POST['submit'])){
 	if(trim($_POST['txtphone']) == ""){
 		$errorMSG .= "supplier Phone number is required  <br>";
 	}
-	if(!filter_var($_POST['txtemail'], FILTER_VALIDATE_EMAIL)){
-		$errorMSG .= "Invalid Email Id <br>";
+	if(trim($_POST['txtemail']) != "" ){
+		if(!filter_var($_POST['txtemail'], FILTER_VALIDATE_EMAIL)){
+			$errorMSG .= "Invalid Email Id <br>";
+		}
 	}
 	
 
@@ -81,6 +86,11 @@ if(isset($_POST['submit'])){
 			//echo $ledger->ledger_sub_id;exit();
 			$ledger_sub_id = $ledger->update();
 			if($ledger_sub_id){
+				//add ledger in fy_ledger_sub
+				$fy_ledger_sub->ledger_sub_id = $ledger->ledger_sub_id;
+				$fy_ledger_sub->update();
+
+				//supplier
 				$supplier->ledger_sub_id = $ledger->ledger_sub_id;
 				$supplier->supplier_name = $_POST['txtname'];
 				$supplier->supplier_phone = $_POST['txtphone'];

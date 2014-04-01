@@ -26,7 +26,8 @@ if($items <> false){
 }else{
 	$count_items = 0;
 }
-$opening_qty = false;
+$opening_qty = 0;
+$opening_rate = false;
 $stk_id = -1;
 
 //edit
@@ -35,7 +36,7 @@ if(isset($_GET['edt'])){
 	$stock->get_details();
 
 	$stock_register->item_id = $stock->item_id;
-	list($stk_id,$opening_qty) = $stock_register->getItemOpeningQuantity();
+	list($stk_id,$opening_qty,$opening_rate) = $stock_register->getItemOpeningQuantity();
 }
 if(isset($_GET['dlt'])){
 	$stock->item_id = $_GET['dlt'];
@@ -61,11 +62,14 @@ if(isset($_POST['submit'])){
 
 	$errorMSG = "";
 	if(trim($_POST['txtname']) == ""){
-		$errorMSG = "Item name is empty \n";
+		$errorMSG = "Item name is empty <br>";
 	}
 
 	if($_POST['lstuom'] <= 0){
-		$errorMSG = "Select unit of measure\n";
+		$errorMSG = "Select unit of measure<br>";
+	}
+	if($_POST['txtqty'] > 0 and trim($_POST['txtrate']) == ''){
+		$errorMSG = "Enter Unit rate<br>";
 	}
 
 	if(trim($errorMSG) == ""){
@@ -83,10 +87,11 @@ if(isset($_POST['submit'])){
 		if($check){
 			$update = $stock->update();
 			if($update){
-				if($_POST['txtqty'] > 0){
+				if($_POST['txtqty'] >= 0 and $_POST['txtrate']>0){
 					$stock->get_details();
 					$stock_register->item_id = $stock->item_id;
 					$stock_register->quantity = $_POST['txtqty'];
+					$stock_register->unit_rate = $_POST['txtrate'];
 					$stock_register->input_type = INPUT_OPENING;
 					$stock_register->date = $fy_year->fy_start;
 					//echo $stock_register->stk_id;exit();
@@ -107,7 +112,7 @@ if(isset($_POST['submit'])){
 	        exit();
 		}
 	}else{
-		$_SESSION[SESSION_TITLE.'flash'] = "Please fill the required fields";
+		$_SESSION[SESSION_TITLE.'flash'] = $errorMSG;
         header( "Location:".$current_url);
         exit();
 	}

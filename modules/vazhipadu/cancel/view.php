@@ -28,10 +28,9 @@ if(!defined('CHECK_INCLUDED')){
 	</fieldset>
 </form>
 
-<div class="medium-12 columns">
 <?php if(isset($count)){?>
 <div class="row">
-
+<div class="medium-12 columns">
 	<table width="100%" id="tbl-append">
 		<thead>
 			<tr>
@@ -80,31 +79,27 @@ if(!defined('CHECK_INCLUDED')){
 			<td><a href="javascript:cancelVazhipadu('<?php echo $vazhipadu_list[$i]['vazhipadu_rpt_number'];?>')">Cancel</a></td>
 
 		</tr>
-		<?php $total_amount+=$vazhipadu_list[$i]['amount'];$i++;}?>
-		<!--<tr>
-			<td colspan="3" align="right" style="font-weight:bold;">Total</td>
-			<td><?php echo $total_amount;?></td>
-		</tr>-->
-			
+		<?php $total_amount+=$vazhipadu_list[$i]['amount'];$i++;}?>			
 		</tbody>
 
 		
 
 	</table>
+</div>
+</div>
 
-
+<div class="row">
+	<div class="medium-12 columns">
+		<?php echo $pagination->pagination_style_numbers();?>
 	</div>
 </div>
-<div class="medium-12 columns">
-<div class="row">
-	<?php echo $pagination->pagination_style_numbers();?>
-</div></div>
 
-<?php }else{?>		
-<div class="medium-12 columns">
-<div class="text-center">
-No Records Found
-</div>
+<?php }else{?>	
+
+<div class="row">
+	<div class="text-center">
+	No Records Found
+	</div>
 </div>
 
 <?php }?>

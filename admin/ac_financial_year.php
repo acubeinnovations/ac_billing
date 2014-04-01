@@ -17,7 +17,7 @@ $page = new Page;
     $page->menuconf_list = array("menu_conf.php");
 	$page->connection_list = array("connection.php");
 	$page->function_list = array("functions.php");
-	$page->class_list = array("class_financial_year.php","class_pagination.php","class_balancesheet.php", "class_account.php");
+	$page->class_list = array("class_financial_year.php","class_pagination.php","class_balancesheet.php", "class_account.php", "class_stock_register.php");
 	$page->script_list = array("jquery.min.js");
 	
 	$page->access_list = array("ADMINISTRATOR");

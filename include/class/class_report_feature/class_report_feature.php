@@ -84,6 +84,7 @@ Class ReportFeature{
 
 
     		$strSQL .= " WHERE RF.report_id = '".$this->report_id."' AND RF.status = '".STATUS_ACTIVE."' AND RF.position = '".$this->position."'";
+            $strSQL .= " ORDER BY LM.ledger_id";
 
             mysql_query("SET NAMES utf8");    		
     		$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
@@ -107,14 +108,14 @@ Class ReportFeature{
 						// Do Noting
 					}
 
-                    $strSQL_sub = "SELECT ls.ledger_sub_id,ls.ledger_sub_name, (SELECT SUM(account_debit) FROM account_master   WHERE fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id ) AS debit,(SELECT SUM(account_credit) FROM account_master   WHERE  fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id) AS credit 
-FROM ledger_sub ls 
-WHERE ls.fy_id = '".$this->current_fy_id."' AND ls.ledger_sub_id IN(".$sub_ledgers.")";
+                    $strSQL_sub = "SELECT ls.ledger_sub_id,ls.ledger_sub_name, (SELECT SUM(account_debit) FROM account_master   WHERE fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id AND deleted = '".NOT_DELETED."' ) AS debit,(SELECT SUM(account_credit) FROM account_master   WHERE  fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id AND deleted = '".NOT_DELETED."') AS credit";
+                    $strSQL_sub .= " FROM ledger_sub ls";
+                    $strSQL_sub .= " WHERE ls.ledger_sub_id IN(SELECT ledger_sub_id FROM fy_ledger_sub WHERE fy_id = '".$this->current_fy_id."') AND ls.ledger_sub_id IN(".$sub_ledgers.")";
 
-    				//$strSQL_sub = "SELECT ls.ledger_sub_id,ls.ledger_sub_name, SUM(am.account_debit) AS debit,SUM(am.account_credit) AS credit FROM ledger_sub ls";
-    				//$strSQL_sub .= " LEFT JOIN account_master am ON am.ref_ledger = ls.ledger_sub_id";
-    				//$strSQL_sub .= " WHERE ls.ledger_sub_id IN(".$sub_ledgers.")";
+                    $strSQL_sub .= " ORDER BY ls.ledger_sub_name";
+
                    // echo $strSQL_sub;exit();
+
     				$rsRES_sub = mysql_query($strSQL_sub,$this->connection) or die(mysql_error(). $strSQL_sub );
     				$sub_ledger = array();$j=0;
     				$master_balance = 0;
@@ -174,6 +175,18 @@ WHERE ls.fy_id = '".$this->current_fy_id."' AND ls.ledger_sub_id IN(".$sub_ledge
                 $i++;
             }
             return $features;
+        }else{
+            return false;
+        }
+    }
+
+
+    public function delete()
+    {
+        $strSQL = "DELETE FROM report_feature WHERE feature_id = '".$this->feature_id."'";
+        $rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
+        if ( mysql_affected_rows($this->connection) > 0 ) {
+            return true;
         }else{
             return false;
         }

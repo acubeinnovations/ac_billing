@@ -4,9 +4,15 @@ if(!defined('CHECK_INCLUDED')){
 }
 ?>
 
-<div class="row">
-	<h3>Stock Register</h3>
+<div class="row" >
+	<div class="medium-4 columns">
+		<h3><?php echo $type?> Register</h3>
+	</div>
+	<div class="text-right" style="margin-top:5px;">
+		<input type="button" class="tiny button" value="print" id="button-print"/>
+	</div>
 </div>
+
 
 <?php if($count_items > 0){?>
 
@@ -46,3 +52,47 @@ if(!defined('CHECK_INCLUDED')){
 </div>
 
 <?php }?>
+
+
+
+<?php ob_start();?>
+<?php if(count($all_items) > 0){?>
+<h3><?php echo $type?> Register</h3>
+
+<table width="100%">
+	  	<thead>
+		<tr>
+			<td width="6%">Sl no</td>
+			<td width="9%">Item Code</td>
+			<td width="25%">Item Name</td>
+			<td width="">Unit Rate</td>
+			<td width="">Qty</td>
+			<td>Gross Amt</td>
+			<td>Tax</td>
+			<td>Net Amt</td>
+		</tr>
+		</thead>
+		<tbody>
+		<?php $slno = 1;
+		foreach ($all_items as $item) {?>
+		<tr>
+			<td><?php echo $slno;?></td>
+			<td><?php echo $item['item_code']?></td>
+			<td><?php echo $item['item_name']?></td>
+			<td><?php echo $item['unit_rate']?></td>
+			<td><?php echo $item['quantity']." ".$item['uom_value'];?></td>
+			<td><?php echo number_format($item['gross_amt'],2)?></td>
+			<td><?php echo number_format($item['tax'],2)?></td>
+			<td><?php echo number_format($item['net_amt'],2)?></td>
+		</tr>
+		<?php $slno++; }?>
+		</tbody>
+	</table>
+<?php }?>
+
+<?php 
+	$print_content = ob_get_contents();
+	ob_end_clean();
+	//echo $print_content;
+	
+?>

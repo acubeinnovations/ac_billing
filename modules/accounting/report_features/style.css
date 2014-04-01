@@ -1,0 +1,24 @@
+.button-remove ,.button-edit {
+   cursor: pointer;
+  font-family: "Helvetica Neue", "Helvetica", Helvetica, Arial, sans-serif;
+  font-weight: normal;
+  line-height: normal;
+  margin: 0 0 1.25rem;
+  position: relative;
+  text-decoration: none;
+  text-align: center;
+  display: inline-block;
+   padding-top: 0.625rem;
+    padding-right: 0.85rem;
+    padding-bottom: 0.625rem;
+    padding-left: 0.85rem;
+    font-size: 0.6975rem;
+ /* background-color: #2ba6cb;*/
+   background-color: #e9e9e9;
+  border-color: gainsboro;
+  color: #333333;
+  border: none;
+  font-weight: normal !important;
+}
+.button-remove:hover,.button-edit:hover {
+      background-color: gainsboro; }

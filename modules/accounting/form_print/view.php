@@ -9,6 +9,7 @@ ob_start();
 <div id="wrapper" style="margin-top:10px;">
 	<div id="header">
 		<?php echo $voucher->header; ?>
+		<p>Voucher number : <?php echo $vouchertxt;?></p>
 	</div>
 
 	<?php if($form_variables){?>

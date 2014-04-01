@@ -100,6 +100,7 @@ $(document).ready(function(){
 		if(tax > 0){
 			var taxvalue = $("#lsttax option:selected").text();
 		}else{
+			tax = 0;
 			var taxvalue = 0;
 		}
 		var l_totaltxt = $("#txtlinetotal").text();

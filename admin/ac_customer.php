@@ -17,7 +17,7 @@ $page = new Page;
     $page->menuconf_list = array("menu_conf.php");
 	$page->connection_list = array("connection.php");
 	$page->function_list = array("functions.php");
-	$page->class_list = array("class_customer.php","class_pagination.php","class_ledger.php","class_account_settings.php");
+	$page->class_list = array("class_customer.php","class_pagination.php","class_ledger.php","class_account_settings.php","class_fy_ledger_sub.php");
 	$page->script_list = array("jquery.min.js");
 	
 	$page->access_list = array("ADMINISTRATOR");

@@ -22,6 +22,7 @@ $form_variable = new FormVariable($myconnection);
 $form_variable->connection = $myconnection;
 
 $form_variables = $form_variable->get_list_array();
+$vouchertxt ='';
 
 if(isset($_GET['ac'])){//url parameter account id
 
@@ -29,6 +30,10 @@ if(isset($_GET['ac'])){//url parameter account id
 	$account->get_details();
 	$voucher->voucher_id = $account->voucher_type_id;
 	$voucher->get_details();
+	$vouchertxt .=($voucher->series_prefix!="")?$voucher->series_prefix.$voucher->series_seperator:'';
+	$vouchertxt .= $account->voucher_number;
+	$vouchertxt .=($voucher->series_sufix!="")?$voucher->series_seperator.$voucher->series_sufix:'';
+	
 	$form_type->id =$voucher->form_type_id;
 	$form_type->get_details();
 	$form_type_variables = unserialize($form_type->form_variables);

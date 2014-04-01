@@ -24,7 +24,8 @@ if(!defined('CHECK_INCLUDED')){
 
 	<tr>
 		<td width="10%">Sl no</td>
-		<td>Star name</td>
+		<td width="10%">Star Code</td>
+		<td width="50%">Star name</td>
 		<td>Status</td>
 	</tr>
 		</thead>
@@ -32,7 +33,7 @@ if(!defined('CHECK_INCLUDED')){
 		<?php if($array_stars==false){?>
 
 		<tr>
-			<td>No Records Found</td>
+			<td colspan="4">No Records Found</td>
 		</tr>
 
 		<?php } else { 
@@ -44,6 +45,7 @@ if(!defined('CHECK_INCLUDED')){
 
 			<tr>
 				<td><?php echo $slno; ?></td>
+				<td><?php echo $array_stars[$i]['id'];?></td>
 				<td><a href="star.php?id=<?php echo $array_stars[$i]['id'] ?>"><?php echo $array_stars[$i]['name'];  ?></td>
 				<td><?php if(isset($g_ARRAY_STATUS[$array_stars[$i]['status_id']])){ echo $g_ARRAY_STATUS[$array_stars[$i]['status_id']];}?></td>
 			</tr>
@@ -58,7 +60,7 @@ if(!defined('CHECK_INCLUDED')){
 
 
 	<tr>
-		<td colspan="3">
+		<td colspan="4">
 			<?php  $pagination->pagination_style_numbers();?>
 		</td>
 	</tr>

@@ -62,7 +62,7 @@ if(!defined('CHECK_INCLUDED')){
 	
 		<td><?php echo $array_poojas[$i]['id']?></td>
 		<td><a href="pooja.php?id=<?php echo $array_poojas[$i]['id'] ?>"><?php echo $array_poojas[$i]['name']?></a></td>
-		<td><?php echo $array_poojas[$i]['rate']?></td>
+		<td><?php echo number_format($array_poojas[$i]['rate'],2)?></td>
 		<td><?php if(isset($g_ARRAY_STATUS[$array_poojas[$i]['status_id']])){ echo $g_ARRAY_STATUS[$array_poojas[$i]['status_id']];}?></td>
 
 	

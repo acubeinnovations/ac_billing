@@ -53,6 +53,16 @@ p.heading {
     overflow: hidden;
 }
 
+.wrapper{
+	border:1px solid #ccc;
+	padding: 0.85em;
+	width: 100%;
+	background-color: #FFFFFF;
+}
+fieldset{
+	background-color: #FFFFFF;
+}
+
 @media screen
   {
   .show_print{display: none;}

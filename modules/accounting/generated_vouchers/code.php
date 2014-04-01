@@ -45,6 +45,7 @@ if(isset($_GET['slno'])){
 	$account->voucher_type_id = $voucher->voucher_id;
  
 	$account_list = $account->getAccountTransaction($pagination->start_record,$pagination->max_records,$dataArray);
+	$account_total_list = $account->getAllAccountTransaction($dataArray);
 	
 	if($account_list){
 		$pagination->total_records = $account->total_records;
@@ -63,6 +64,7 @@ else if(isset($_GET['bid'])){
 	$page_heading = $acbook->name;
 
 	$account_list = $account->getBookDetails($pagination->start_record,$pagination->max_records,unserialize($acbook->ledgers));
+	$account_total_list = $account->getAllBookDetails(unserialize($acbook->ledgers));
 
 	if($account_list){
 		$pagination->total_records = $account->total_records;

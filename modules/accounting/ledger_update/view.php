@@ -26,17 +26,18 @@ if(!defined('CHECK_INCLUDED')){
 
 	<div class="medium-7 columns">
 		<form id="frm-ledger" name="frm-ledger" method="POST" action="<?php echo $current_url;?>">
+		<input type="hidden" value="<?php echo $ledger->ledger_sub_id;?>" name="hd_id"/>
 
 		<fieldset>
 	 		<legend>Add Ledger </legend>
 	 		<div class="row">
 	 			<div class="medium-8 columns">
 	 				<label for="ledger">Ledger Name <small>required</small>
-	 				<input type="text" name="txtledger" id="txtledger" value="<?php //echo $add_pooja->name;?>" required/></label>
+	 				<input type="text" name="txtledger" id="txtledger" value="<?php echo $ledger->ledger_sub_name;?>" required/></label>
 	 			</div>
 	 			<div class="medium-8 columns">
 	 				<label for="ledger">Ledger Master</label>
-	 				<?php echo populate_list_array("lstmledger", $ledger_masters, 'id','name', '',$disable=false);?>
+	 				<?php echo populate_list_array("lstmledger", $ledger_masters, 'id','name', $ledger->ledger_id,$disable=false);?>
 	 			</div>
 
 	 			<div class="medium-8 columns" id="sub-ledger">

@@ -59,9 +59,9 @@ if(!defined('CHECK_INCLUDED')){
 		<tr>
 			<td><?php echo $slno;?></td>
 			<td><?php echo $pooja_list[$i]['name']?></td>
-			<td><?php echo $pooja_list[$i]['rate']?></td>
+			<td><?php echo number_format($pooja_list[$i]['rate'],2)?></td>
 			<td><?php echo $pooja_list[$i]['quantity']?></td>
-			<td><?php echo $pooja_list[$i]['total']?></td>
+			<td><?php echo number_format($pooja_list[$i]['total'],2);?></td>
 		</tr>
 		<?php
 				$total_qty += $pooja_list[$i]['quantity'];$total_amount +=$pooja_list[$i]['total'];
@@ -88,7 +88,7 @@ if(!defined('CHECK_INCLUDED')){
 <?php ob_start();?>
 <div id="print_content" >
 	<h3>Pooja Register</h3>
-	<p>Date : <?php echo date('d-m-Y',strtotime($pooja->vazhipadu_date));?></p>
+	<p>Date : <?php echo ($pooja->from_date == $pooja->to_date)?$pooja->from_date:$pooja->from_date." - ".$pooja->to_date;?></p>
 	<?php if(count($pooja_total_list) > 0){?>
 	<table width="100%">
 		<thead>

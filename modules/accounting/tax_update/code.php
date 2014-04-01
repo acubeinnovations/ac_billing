@@ -15,6 +15,9 @@ $tax->connection = $myconnection;
 $ledger = new Ledger($myconnection);
 $ledger->connection = $myconnection;
 
+$fy_ledger_sub = new FyLedgerSub($myconnection);
+$fy_ledger_sub->connection = $myconnection;
+
 $tax->total_records=$pagination->total_records;
 
 $tax_list = $tax->get_list_array_bylimit($pagination->start_record,$pagination->max_records);
@@ -59,40 +62,44 @@ if(isset($_POST['submit'])){
 		$errorMSG = "Enter tax rate\n";
 	}
 	
-
 	if(trim($errorMSG) == ""){
 		$tax->id = $_POST['hd_taxid'];
-		if($tax->id > 0){
-			$tax->get_details();
-			$ledger->ledger_sub_name = $tax->name;
-			$ledger_sub_id = $ledger->getLedgerId();
-		}else{
-			$ledger_sub_id = false;
-		}
-
 		$tax->name = $_POST['txtname'];
-		$tax->rate = $_POST['txtrate']/100;
-		$tax->status = $_POST['lststatus'];
-		$update = $tax->update();
-		if($update){
-			if($ledger_sub_id){
-				$ledger->ledger_sub_id = $ledger_sub_id;
-			}
+		if($tax->validate()){
+			$ledger->ledger_sub_id = $tax->ledger_sub_id;
 			$ledger->ledger_sub_name = $_POST['txtname'];
 			$ledger->ledger_id = LEDGER_DUTIES_AND_TAXES;
 			$ledger->fy_id = $account_settings->current_fy_id;
 
-			$ledger->update();
-			$_SESSION[SESSION_TITLE.'flash'] = "Success";
-	        header( "Location:".$current_url);
-	        exit();
+			$update = $ledger->update();
+			if($update){
+				//add ledger in fy_ledger_sub
+				$fy_ledger_sub->ledger_sub_id = $ledger->ledger_sub_id;
+				$fy_ledger_sub->update();
+
+				//tax update
+				$tax->ledger_sub_id = $ledger->ledger_sub_id;
+				$tax->name = $_POST['txtname'];
+				$tax->rate = $_POST['txtrate']/100;
+				$tax->status = $_POST['lststatus'];
+				$update = $tax->update();
+			}
+			if($update){
+				$_SESSION[SESSION_TITLE.'flash'] = "Success";
+		        header( "Location:".$current_url);
+		        exit();
+			}else{
+				$_SESSION[SESSION_TITLE.'flash'] = "Failed to add data";
+		        header( "Location:".$current_url);
+		        exit();
+			}
 		}else{
-			$_SESSION[SESSION_TITLE.'flash'] = "Failed to add data";
+			$_SESSION[SESSION_TITLE.'flash'] = "Data already exists";
 	        header( "Location:".$current_url);
 	        exit();
-		}
+		}	
 	}else{
-		$_SESSION[SESSION_TITLE.'flash'] = "Please fill the required fields";
+		$_SESSION[SESSION_TITLE.'flash'] = $errorMSG;
         header( "Location:".$current_url);
         exit();
 	}

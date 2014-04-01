@@ -4,13 +4,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title><?php if (!empty($this->title)) echo $this->title ?></title>
-    <link rel="stylesheet" href="/css/foundation.css" />
-    <link rel="stylesheet" href="/style/default.css" />
+    <link rel="stylesheet" href="/css/foundation.css"  />
+    <link rel="stylesheet" href="/style/default.css"  media="screen"/>
+
+    <link href="/style/print.css" rel="stylesheet" type="text/css" media="print" />
+
     <script src="/js/modernizr.js"></script>
 
 
 		<?php if (!empty($this->script)) echo $this->script ?>
 <script>
+
+
 	function popup_alert(message, redirect_url, button_ok, button_cancel ){
 
 		if (button_ok == "" ){
@@ -63,6 +68,12 @@
 	}
 $(document).ready(function(){
 
+	//disable mouse right click event
+	$(document)[0].oncontextmenu = function() { return false;}
+	
+	
+
+
 <?php if(isset($_SESSION[SESSION_TITLE.'flash_redirect_page']) && trim($_SESSION[SESSION_TITLE.'flash_redirect_page'])!=""){ ?>
 	alert_redirect = "<?php echo WEB_URL.'/'.$_SESSION[SESSION_TITLE.'flash_redirect_page']; ?>";
 <?php $_SESSION[SESSION_TITLE.'flash_redirect_page'] = "" ;}else{ ?>
@@ -89,7 +100,7 @@ flash_alert(alert_message,alert_redirect);
       <!-- Title Area -->
       <li class="name">
         <h1>
-          <a  href="/index.php"><?php echo ORG_NAME; ?> </a> </h1>
+          <a  href="#"><img src="../images/ayyappa1.png" width="45"><?php echo ORG_NAME; ?> </a> </h1>
       </li>
       <li class="toggle-topbar menu-icon"><a href="#"><span>menu</span></a></li>
     </ul>

@@ -130,7 +130,7 @@ Class StockRegister{
 
     public function quantityInStock($item_id)
     {
-		$strSQL = "SELECT sum(quantity) as quantity_in_hand FROM stock_register WHERE item_id = '".$item_id."'";
+		$strSQL = "SELECT sum(quantity) as quantity_in_hand FROM stock_register WHERE fy_id='".$this->current_fy_id."' AND item_id = '".$item_id."'";
 		$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
 		$row = mysql_fetch_assoc($rsRES);
 		if($row['quantity_in_hand'] == NULL){
@@ -140,6 +140,55 @@ Class StockRegister{
 		}
 		return $quantity_in_hand;	
     }
+
+
+
+
+
+    public function close($current_fy_id,$next_fy_id, $opening_date)
+    {
+
+		if($current_fy_id > 0 && $next_fy_id > 0 && trim($opening_date) != ""){
+			$strSQL = "SELECT SR.item_id, SR.unit_rate, sum(SR.quantity) as quantity_in_hand  FROM stock_register SR, stock_master S WHERE SR.fy_id='".$current_fy_id."' AND SR.item_id = S.item_id GROUP BY SR.item_id,SR.unit_rate ";
+			$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
+			while($row = mysql_fetch_assoc($rsRES)){
+				if($row["quantity_in_hand"] > 0){
+					$this->stk_id= gINVALID;
+					$this->voucher_number ="";
+					$this->voucher_type_id = gINVALID; //voucher
+					$this->item_id	= $row["item_id"];
+					$this->quantity = $row["quantity_in_hand"];
+					$this->unit_rate = $row["unit_rate"];
+					$this->input_type = INPUT_OPENING; //from where or how the item added in stock
+					$this->purchase_reference_number = "";
+					$this->date = $opening_date;
+					$this->tax_id = gINVALID;
+					$this->fy_id = gINVALID;
+					$this->current_fy_id = $next_fy_id;	
+					$this->update();
+				}
+			}
+
+			return true;
+		}else{
+			return false;
+		}
+    }
+
+   public function revert_close($next_fy_id) {
+		if($next_fy_id > 0){
+			$strSQL = "DELETE FROM stock_register WHERE fy_id='".$next_fy_id."'";
+			$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
+			return true;
+		}else{
+			return false;
+		}
+    }
+
+
+
+
+
 
 
     public function get_voucher_inventory_details()
@@ -219,10 +268,10 @@ Class StockRegister{
 			while($row = mysql_fetch_assoc($rsRES)){
 				$items[$i]['item_id'] = $row['item_id'];
 				$items[$i]['item_name'] = $row['item_name'];
-				$items[$i]['quantity'] = $row['quantity'];
+				$items[$i]['quantity'] = abs($row['quantity']);
 				$items[$i]['unit_rate'] = $row['unit_rate'];
 				$items[$i]['tax'] = 0;
-				$items[$i]['total'] = $row['unit_rate']*$row['quantity'];
+				$items[$i]['total'] = $row['unit_rate']*abs($row['quantity']);
 				$i++;
 			}
 			return $items;
@@ -231,6 +280,42 @@ Class StockRegister{
 		}
     }
 
+
+    function get_list_array(){
+    	$items = array();
+		$i=0;
+		$str_condition = "";
+        $strSQL = "SELECT sr.item_id,sm.item_name,tm.rate,um.uom_value,sr.unit_rate,SUM(sr.quantity) AS quantity FROM stock_register sr";
+        $strSQL .= " LEFT JOIN stock_master sm ON sm.item_id = sr.item_id";
+        $strSQL .= " LEFT JOIN tax_master tm ON tm.id = sr.tax_id";
+        $strSQL .= " LEFT JOIN uom_master um ON sm.uom_id = um.uom_id";
+        $strSQL .= " WHERE sr.fy_id = '".$this->current_fy_id."'";
+
+        if($this->input_type != ""){
+        	$strSQL .= " AND sr.input_type = '".$this->input_type."'";
+        }
+
+        $strSQL .= " GROUP BY sr.item_id ,sr.unit_rate";
+		$rsRES = mysql_query($strSQL, $this->connection) or die(mysql_error(). $strSQL);
+		if ( mysql_num_rows($rsRES) > 0 ){
+			while ( list ($id,$name,$tax,$uom,$unit_rate,$quantity) = mysql_fetch_row($rsRES) ){
+				$tax_rate = ($tax == NULL)?0:$tax;
+				$items[$i]["item_code"] =  $id;
+				$items[$i]["item_name"] = $name;
+				$items[$i]["uom_value"] = $uom;
+				$items[$i]["unit_rate"] =  $unit_rate;
+				$items[$i]["quantity"] = abs($quantity);
+				$items[$i]['gross_amt'] =$unit_rate*abs($quantity);
+				$items[$i]['tax'] = $items[$i]['gross_amt']*$tax_rate;
+				$items[$i]['net_amt'] = $items[$i]['gross_amt']+$items[$i]['tax'];
+
+				$i++;
+			}
+			return $items;
+		} else {
+			return false;
+		}
+    }
 
     function get_list_array_bylimit($start_record = 0,$max_records = 25){
     	$items = array();
@@ -284,14 +369,15 @@ Class StockRegister{
     public function getItemOpeningQuantity()
     {
     	if($this->item_id >0){
-    		$strSQL = "SELECT sr.quantity AS opening_qty,sr.stk_id FROM stock_register sr WHERE sr.fy_id = '".$this->current_fy_id."' AND sr.item_id = '".$this->item_id."' AND sr.input_type = '".INPUT_OPENING."'";
+    		$strSQL = "SELECT sr.quantity AS opening_qty,sr.unit_rate AS opening_rate, sr.stk_id FROM stock_register sr WHERE sr.fy_id = '".$this->current_fy_id."' AND sr.item_id = '".$this->item_id."' AND sr.input_type = '".INPUT_OPENING."'";
     		$rsRES = mysql_query($strSQL, $this->connection) or die(mysql_error(). $strSQL);
     		if(mysql_num_rows($rsRES) > 0){
     			$row = mysql_fetch_assoc($rsRES);
     			$id= $row['stk_id'];
-    			$value = $row['opening_qty'];
+    			$qty = $row['opening_qty'];
+    			$rate = $row['opening_rate'];
     			
-    			return array($id,$value);
+    			return array($id,$qty,$rate);
     		}else{
     			return false;
     		}

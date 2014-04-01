@@ -11,6 +11,9 @@ $customer->connection=$myconnection;
 $ledger = new Ledger($myconnection);
 $ledger->connection = $myconnection;
 
+$fy_ledger_sub = new FyLedgerSub($myconnection);
+$fy_ledger_sub->connection = $myconnection;
+
 $account_settings = new AccountSettings($myconnection);
 $account_settings->connection = $myconnection;
 $account_settings->getAccountSettings();
@@ -52,23 +55,23 @@ if(isset($_POST['submit'])){
 
 	//validation
 	if(trim($_POST['txtname']) == ""){
-		$errorMSG .= "Customer Name is required \n";
+		$errorMSG .= "Customer Name is required <br>";
 	}
 	if(trim($_POST['txtaddress']) == ""){
-		$errorMSG .= "Customer Address is required \n";
+		$errorMSG .= "Customer Address is required <br>";
 	}
 	if(trim($_POST['txtmobile']) == ""){
-		$errorMSG .= "Customer Mobile number is required \n";
+		$errorMSG .= "Customer Mobile number is required <br>";
 	}
 	if(trim($_POST['txtemail']) != "" ){
 		if(!filter_var($_POST['txtemail'], FILTER_VALIDATE_EMAIL)){
-			$errorMSG .= "Invalid Email Id \n";
+			$errorMSG .= "Invalid Email Id <br>";
 		}
 	}
 
 
 	if(trim($errorMSG) != ""){//validation failed
-		$_SESSION[SESSION_TITLE.'flash'] = "Please fill all required fields";
+		$_SESSION[SESSION_TITLE.'flash'] = $errorMSG;
         header( "Location:".$current_url);
         exit();
 	}else{//validation true
@@ -79,10 +82,16 @@ if(isset($_POST['submit'])){
 			$ledger->ledger_sub_name = $_POST['txtname'];
 			$ledger->ledger_id = LEDGER_SUNDRY_CREDITORS;
 			$ledger->fy_id = $account_settings->current_fy_id;
+			
 			$ledger_sub_id = $ledger->update();
 
 			if($ledger_sub_id){
-				$customer->ledger_sub_id = $ledger_sub_id;
+				//add ledger in fy_ledger_sub
+				$fy_ledger_sub->ledger_sub_id = $ledger->ledger_sub_id;
+				$fy_ledger_sub->update();
+				
+				//add customer
+				$customer->ledger_sub_id = $ledger->ledger_sub_id;
 				$customer->customer_name = $_POST['txtname'];
 				$customer->customer_mobile = $_POST['txtmobile'];
 				$customer->customer_address = $_POST['txtaddress'];

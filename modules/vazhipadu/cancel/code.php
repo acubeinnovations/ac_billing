@@ -20,6 +20,8 @@ $data = array();
 if(isset($_GET['submit'])){
 	$vazhipadu->vazhipadu_date =  $_GET['txtdate'];
 	$vazhipadu->vazhipadu_rpt_number = $_GET['txtrpt'];
+}else{
+	$vazhipadu->vazhipadu_date = date('d-m-Y',strtotime(CURRENT_DATE));
 }
 
 

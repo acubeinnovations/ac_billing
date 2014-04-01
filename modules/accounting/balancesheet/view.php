@@ -32,14 +32,20 @@
 				<tr><td align="left" >Net Loss </td> <td align="right"><?php echo $sheet["loss"]; ?></td></td>
 			</table>
 		<?php 
-			$total_liabilities = $sheet["total_liabilities"] +  $sheet["loss"];
-			}else{ ?>
+				$total_liabilities = $sheet["total_liabilities"] +  $sheet["loss"];
+			}else{
+				$total_liabilities = $sheet["total_liabilities"];
+			}
+
+
+			if($sheet["difference_in_opening_balance"] > 0){ ?>
 			<table width="100%">
 				<tr><td align="left" >Difference in opening Balance</td> <td align="right"><?php echo $sheet["difference_in_opening_balance"]; ?></td></td>
 			</table>
 		<?php 
-		$total_liabilities = $sheet["total_liabilities"] +  $sheet["difference_in_opening_balance"];
-		} ?>
+					$total_liabilities = $sheet["total_liabilities"] +  $sheet["difference_in_opening_balance"];
+			}
+			?>
 		</td>
 		<td>
 		<?php if($sheet["profit"]>0){ ?>
@@ -47,14 +53,20 @@
 				<tr><td align="left" >Net Profit </td> <td align="right"><?php echo $sheet["profit"]; ?></td></td>
 			</table>
 		<?php 
-			$total_assets = $sheet["total_assets"] +  $sheet["profit"];
-			}else{ ?>
+				$total_assets = $sheet["total_assets"] +  $sheet["profit"];
+			}else{
+				$total_assets = $sheet["total_assets"];
+
+			}
+
+			if($sheet["difference_in_opening_balance"] < 0){ ?>
 			<table width="100%">
-				<tr><td align="left" >Difference in opening Balance</td> <td align="right"><?php echo $sheet["difference_in_opening_balance"]; ?></td></td>
+				<tr><td align="left" >Difference in opening Balance</td> <td align="right"><?php echo abs($sheet["difference_in_opening_balance"]); ?></td></td>
 			</table>
 		<?php 
-			$total_assets = $sheet["total_assets"] +  $sheet["difference_in_opening_balance"];
-			} ?>
+				$total_assets = $sheet["total_assets"] +  abs($sheet["difference_in_opening_balance"]);
+			}
+			 ?>
 		</td>
 	</tr>
 

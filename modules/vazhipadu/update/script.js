@@ -1,6 +1,9 @@
 <!--
 $(document).ready(function(){
 
+	var key_code = [48,49,50,51,52,53,54,55,56,57];
+	$('#listpooja').focus();
+
 	var nameObj	= $("input:text[name=txtname]");
 	var starObj = $("#liststar");
 
@@ -15,8 +18,12 @@ $(document).ready(function(){
 
 		if(name!=''  && star_id >0){
 			var hiddenStr = name+'_'+star_id;
-					
-			$("#tbl-append").append('<tbody><tr><td>'+name+'<input type="hidden" name="hd_row[]" value="'+hiddenStr+'"></td><td>'+star+'<input type="hidden" name="hd_star[]" value="'+star+'"></td><td></td></tr></tbody>');
+			
+			$("#tbl-append").append('<tbody><tr><td>'+name+'<input type="hidden" class="hide-rows" name="hd_row[]" value="'+hiddenStr+'"></td><td>'+star+'<input type="hidden" name="hd_star[]" value="'+star+'"></td><td></td></tr></tbody>');
+			var row = $('.hide-rows').length;
+			if(row == 4){
+				$(this).hide();
+			}
 
 			$("input:text[name=txtname]").val('');
 			$("#liststar").val(-1);
@@ -55,6 +62,26 @@ $(document).ready(function(){
 				}				
 			});
         }
+    });
+
+    
+
+    $("#liststar").focus(function(){
+    	var star ='';
+    	$(this).keypress(function(e){  
+            if(e.which == 0){
+            	$(this).val(star);
+            	if($(this).val() == null){
+            		$(this).val(-1);
+            	}
+            	star = 0;
+            }else{
+            	var val = key_code.indexOf(e.which); 
+            	star += val.toString();
+            }
+                
+        });
+
     });
 
 

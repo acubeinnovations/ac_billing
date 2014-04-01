@@ -14,6 +14,7 @@ $account->connection = $myconnection;
 
 $stock_register = new StockRegister($myconnection);
 $stock_register->connection = $myconnection;
+$vouchertxt ='';
 
 if(isset($_GET['ac'])){//url parameter account id
 
@@ -22,7 +23,9 @@ if(isset($_GET['ac'])){//url parameter account id
 	$voucher->voucher_id = $account->voucher_type_id;
 	$voucher->get_details();
 
-	
+	$vouchertxt .=($voucher->series_prefix!="")?$voucher->series_prefix.$voucher->series_seperator:'';
+	$vouchertxt .= $account->voucher_number;
+	$vouchertxt .=($voucher->series_sufix!="")?$voucher->series_seperator.$voucher->series_sufix:'';
 	 
 
 	//check source for voucher print form

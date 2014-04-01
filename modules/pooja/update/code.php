@@ -9,6 +9,9 @@ $pooja->connection=$myconnection;
 $ledger = new Ledger($myconnection);
 $ledger->connection = $myconnection;
 
+$fy_ledger_sub = new FyLedgerSub($myconnection);
+$fy_ledger_sub->connection = $myconnection;
+
 if(isset($_GET['id'])){
 	$pooja->id=$_GET['id'];
 	$pooja->get_details();
@@ -40,6 +43,11 @@ if(isset($_POST['submit'])){
 				$ledger->parent_sub_ledger_id = $vazhipadu_ledger;
 				$ledger_update = $ledger->update();
 				if($ledger_update){
+					//add ledger in fy_ledger_sub
+					$fy_ledger_sub->ledger_sub_id = $ledger->ledger_sub_id;
+					$fy_ledger_sub->update();
+
+					//update pooja
 					$pooja->name=$_POST['name'];
 					$pooja->ledger_sub_id = $ledger->ledger_sub_id;
 					$pooja->rate=$_POST['rate'];
