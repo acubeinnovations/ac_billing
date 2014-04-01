@@ -78,7 +78,7 @@ if ( mysql_num_rows($rsRES2) > 0 )
 
       
 
-         <li class="has-dropdown">
+ <!--        <li class="has-dropdown">
            <a href="#">Master</a>
            <ul class="dropdown">
               <li><a href="poojas.php"> Pooja</a></li>
@@ -99,15 +99,15 @@ if ( mysql_num_rows($rsRES2) > 0 )
           </ul>
         </li>
           
-          <!--
+          
         <li class="has-dropdown">
           <a href="donation.php"> Donations</a>
             <ul class="dropdown">
             </ul>
           </li>
-          -->
-
-
+          
+-->
+        
          
           
 
@@ -118,12 +118,14 @@ if ( mysql_num_rows($rsRES2) > 0 )
               <a href="#">Books</a>
               <ul class="dropdown">
               <li><a href="ac_books.php">Add Book</a></li>
+              <li class="divider"></li>
               <?php if($books){
                    $i=0;
                   while($i<count($books)){
                    $url = "ac_generated_vouchers.php?bid=".$books[$i]['id'];
                 ?>
                 <li><a href="<?php echo $url;?>"><?php echo $books[$i]['name'];?></a></li>
+                <li class="divider"></li>
                 <?php 
                     $i++;
                   }
@@ -132,25 +134,33 @@ if ( mysql_num_rows($rsRES2) > 0 )
               </ul>
 
             </li>
+            <li class="divider"></li>
             <li><a href="ac_customer.php">Customer</a></li>
+            <li class="divider"></li>
             <li><a href="ac_supplier.php">Supplier</a></li>
+            <li class="divider"></li>
             <li class="has-dropdown"><a href="ac_ledgers.php">Ledgers</a>
 			<ul class="dropdown">
 			<li><a href="ac_ledgers.php">Add Ledger</a>
+        <li class="divider"></li>
 			<li><a href="ac_ledger_list.php">List Ledgers</a>
+        <li class="divider"></li>
 			<li><a href="ac_single_ledger.php">Single Ledger</a>
 			</ul>
 			</li>
+      <li class="divider"></li>
             <li class="has-dropdown"> 
               <a href="ac_vouchers.php">Voucher</a>
               <ul class="dropdown">
               <li><a href="ac_vouchers.php">Add Voucher</a></li>
+              <li class="divider"></li>
               <?php if($vouchers){
                    $i=0;
                   while($i<count($vouchers)){
                    $url = "ac_generate_voucher.php?v=".$vouchers[$i]['id'];
                 ?>
                 <li><a href="<?php echo $url;?>"><?php echo $vouchers[$i]['name'];?></a></li>
+                <li class="divider"></li>
                 <?php 
                     $i++;
                   }
@@ -158,51 +168,68 @@ if ( mysql_num_rows($rsRES2) > 0 )
                 ?>
               </ul>
             </li>
+            <li class="divider"></li>
 <li class="has-dropdown"><a href="ac_report.php">Reports</a>
 			<ul class="dropdown">
 			<li><a href="ac_report.php">Add Reports</a>
+        <li class="divider"></li>
 			<li><a href="ac_report_list.php">List Reports</a>
+        <li class="divider"></li>
       <?php if($reports){
                    $i=0;
                   while($i<count($reports)){
                    $url = "ac_show_report.php?slno=".$reports[$i]['id'];
                 ?>
                 <li><a href="<?php echo $url;?>"><?php echo $reports[$i]['name'];?></a></li>
+                <li class="divider"></li>
                 <?php 
                     $i++;
                   }
                 }
                 ?>
-			<li><a href="balancesheet.php">Balancesheet</a>
+
 			</ul>
 			</li>
+      <li class="divider"></li>
             <li class="has-dropdown">
                <a href="ac_form_type.php">Form Type</a>
                <ul class="dropdown">
-                  <li><a href="ac_form_type.php">Add Form Type</a></li>
+                  <li><a href="ac_form_type.php">Add Form Type</a></li><li class="divider"></li>
                   <li><a href="ac_form_variable.php">Add Form Variable</a></li>
                 </ul>
-
+<li class="divider"></li>
             </li>          
             <li class="has-dropdown">
-            <li><a href="ac_financial_year.php">Financial Year</a></li> 
-            <li><a href="ac_tax.php">Tax</a></li>         
+            <li><a href="ac_financial_year.php">Financial Year</a></li>
+            <li class="divider"></li> 
+            <li><a href="ac_tax.php">Tax</a></li>   
+            <li class="divider"></li>      
             <li class="has-dropdown">
               <a href="ac_stock.php">Stock</a>
               <ul class="dropdown">
-                <li><a href="ac_stock.php">Add Item</a></li>
-                <li><a href="ac_stock_register.php">Stock Register</a></li>
-                <li><a href="ac_stock_register.php?type=<?php echo INPUT_SALE;?>">Sale Register</a></li>
+                <li><a href="ac_stock.php">Add Item</a></li><li class="divider"></li>
+                <li><a href="ac_stock_register.php">Stock Register</a></li><li class="divider"></li>
+                <li><a href="ac_stock_register.php?type=<?php echo INPUT_SALE;?>">Sale Register</a></li><li class="divider"></li>
                 <li><a href="ac_stock_register.php?type=<?php echo INPUT_PURCHASE;?>">Purchase Register</a></li>
 
-              </ul>
+              </ul><li class="divider"></li>
             </li>
         
             <li><a href="ac_account_settings.php">Settings</a></li>
             <li class="divider"></li>
           </ul>
         </li>
-
+<li class="divider"></li>
+<li class="has-dropdown">
+          <a href="#">Statements</a>
+          <ul class="dropdown">
+                  <li><a href="balancesheet.php">Balancesheet</a>
+                   <li class="divider"></li>
+        <li><a href="profitandloss.php">Profit & Loss</a>
+           
+          </ul>
+        </li>
+<li class="divider"></li>
         <li class="has-dropdown">
           <a href="#">Administrator</a>
           <ul class="dropdown">

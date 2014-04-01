@@ -81,11 +81,11 @@ if(!defined('CHECK_INCLUDED')){
 <table width="100%">
   	<thead>
 	<tr>
-		<td width="6%">Sl no</td>
-		<td width="40%">Supplier</td>
-		<td width="15%">Phone Number</td>
-		<td >Contact Person</td>
-		<td width="11%"></td>
+		<td width="10%">Sl No</td>
+		<td width="30%">Supplier</td>
+
+		<td width="30%">Contact Person</td>
+		<td width="30%"></td>
 	</tr>
 	</thead>
 	<tbody>
@@ -97,18 +97,21 @@ if(!defined('CHECK_INCLUDED')){
 	?>
 	<tr>
 		<td><?php echo $slno; ?></td>
-		<td><?php echo $suppliers[$i]['supplier_name']."<br/>".$suppliers[$i]['supplier_address'];?></td>
-		<td><?php echo $suppliers[$i]['supplier_phone'];?></td>
+		<td><?php echo $suppliers[$i]['supplier_name']."<br/>".$suppliers[$i]['supplier_address'];?><br/>Contact: <?php echo $suppliers[$i]['supplier_phone'];?>
+		<br/><a href="<?php echo $edit; ?>">Edit</a> / <a href="javascript:deletesupplier(<?php echo $suppliers[$i]['supplier_id']?>)">Delete</a>
+		</td>
+		
 		<td>
 			<?php echo $suppliers[$i]['contact_person'];?>
-			<span style="font-size:11px;">
+			
 			<?php
+				
 				echo ($suppliers[$i]['contact_mobile']!="")?"<br/>Mobile :".$suppliers[$i]['contact_mobile']:"";
 				echo ($suppliers[$i]['contact_email']!="")?"<br/>Email :".$suppliers[$i]['contact_email']:"";
 			?>
-			</span>
+			
 		</td>
-		<td><a href="<?php echo $edit; ?>">Edit</a> / <a href="javascript:deletesupplier(<?php echo $suppliers[$i]['supplier_id']?>)">Delete</a></td>
+		<td></td>
 	</tr>
 	<?php $slno++; }?>
 	<tr>
