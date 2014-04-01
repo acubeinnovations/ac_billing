@@ -9,6 +9,7 @@ Class Voucher{
 	var $connection ="";
 	var $voucher_master_id  =  gINVALID; //master voucher
 	var $voucher_master_name ="";
+	var $voucher_master_source = "";
 
 	var $voucher_id = gINVALID; //voucher
 	var $voucher_name = "";
@@ -27,6 +28,16 @@ Class Voucher{
 	var $source = "";
 	var $hidden = VOUCHER_SHOW;
 	var $module_id = "NULL";
+
+	var $voucher_source_item_id = gINVALID;
+	var $default_header = "";
+	var $default_footer = "";
+	var $default_currency = "";
+	var $currency_id = gINVALID;
+	var $discount_rc_amt = "";
+	var $frieght_demurge = "";
+	var $round_off = "";
+	var $no_of_copies = "";
 	
 
 	var $error = false;
@@ -52,7 +63,7 @@ Class Voucher{
     public function update()
     {
     	if ( $this->voucher_id == "" || $this->voucher_id == gINVALID) {
-    		$strSQL= "INSERT INTO voucher(voucher_name,voucher_description,fy_id,voucher_master_id,header,footer,number_series,series_prefix,series_sufix,series_start,series_seperator,default_from,default_to,form_type_id,source,hidden,module_id) VALUES('";
+    		$strSQL= "INSERT INTO voucher(voucher_name,voucher_description,fy_id,voucher_master_id,header,footer,number_series,series_prefix,series_sufix,series_start,series_seperator,default_from,default_to,form_type_id,source,hidden,module_id,voucher_source_item_id,default_header,default_footer,default_currency,currency_id,discount_rc_amt,frieght_demurge,round_off,no_of_copies) VALUES('";
     		$strSQL.= mysql_real_escape_string($this->voucher_name)."','";
     		$strSQL.= mysql_real_escape_string($this->voucher_description)."','";
     		$strSQL.= mysql_real_escape_string($this->current_fy_id)."','";
@@ -78,7 +89,17 @@ Class Voucher{
     		$strSQL.= mysql_real_escape_string($this->form_type_id)."','";
     		$strSQL.= mysql_real_escape_string($this->source)."','";
     		$strSQL.= mysql_real_escape_string($this->hidden)."',";
-    		$strSQL.= mysql_real_escape_string($this->module_id).")";
+    		$strSQL.= mysql_real_escape_string($this->module_id)."',";
+
+    		$strSQL.= mysql_real_escape_string($this->voucher_source_item_id)."',";
+    		$strSQL.= mysql_real_escape_string($this->default_header)."',";
+    		$strSQL.= mysql_real_escape_string($this->default_footer)."',";
+    		$strSQL.= mysql_real_escape_string($this->default_currency)."',";
+    		$strSQL.= mysql_real_escape_string($this->currency_id)."',";
+    		$strSQL.= mysql_real_escape_string($this->discount_rc_amt)."',";
+    		$strSQL.= mysql_real_escape_string($this->frieght_demurge)."',";
+    		$strSQL.= mysql_real_escape_string($this->round_off)."',";
+    		$strSQL.= mysql_real_escape_string($this->no_of_copies).")";
 			//echo $strSQL;exit();
 			mysql_query("SET NAMES utf8");
 			$rsRES = mysql_query($strSQL,$this->connection) or die ( mysql_error() . $strSQL );
@@ -231,6 +252,23 @@ Class Voucher{
 			}else{
 				return false;
 			}
+		}
+    }
+
+    public function get_master_details()    	
+    {
+		$strSQL = "SELECT * FROM voucher_master WHERE voucher_master_id = '".$this->voucher_master_id."'";
+		mysql_query("SET NAMES utf8");
+		$rsRES	= mysql_query($strSQL,$this->connection) or die(mysql_error().$strSQL);
+		if(mysql_num_rows($rsRES) > 0){
+			$row 	= mysql_fetch_assoc($rsRES);
+			$this->voucher_master_id 	 = $row['voucher_master_id'];
+			$this->voucher_master_name   = $row['voucher_master_name'];
+			$this->status 				 = $row['status'];
+			$this->voucher_master_source = $row['voucher_master_source'];
+			return true;
+		}else{
+			return false;
 		}
     }
 

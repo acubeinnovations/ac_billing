@@ -1,4 +1,8 @@
-#div-dtls1,#div-dtls2{
+#div-dtls1,#div-dtls2,#src_items,#div_cnr{
+	display: none;
+}
+
+#default_header_content,#default_footer_content{
 	display: none;
 }
 

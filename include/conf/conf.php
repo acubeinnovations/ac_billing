@@ -188,5 +188,25 @@ define('LEDGER_SUB_VAZHIPADU', 'വഴിപാട്');
 define('CANCEL_STATUS_TRUE', 2);
 define('CANCEL_STATUS_FALSE',1);
 
+//define number of copies
+$g_ARRAY_LIST_COPY = array();
+$g_ARRAY_LIST_COPY[0]["id"] = 1;
+$g_ARRAY_LIST_COPY[0]["value"] = "1";
+$g_ARRAY_LIST_COPY[1]["id"] = 2;
+$g_ARRAY_LIST_COPY[1]["value"] = "2";
+$g_ARRAY_LIST_COPY[2]["id"] = 3;
+$g_ARRAY_LIST_COPY[2]["value"] = "3";
+$g_ARRAY_LIST_COPY[3]["id"] = 4;
+$g_ARRAY_LIST_COPY[3]["value"] = "4";
+
+
+//default currenct
+define("DEFAULT_TRUE",1);
+define("DEFAULT_FALSE", 2);
+
+//voucher master source
+define("V_MASTER_SOURCE_TRUE", 1);
+define("V_MASTER_SOURCE_FALSE", 2);
+
 
 ?>
