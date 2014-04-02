@@ -83,6 +83,8 @@ if(!defined('CHECK_INCLUDED')){
 	<?php if($voucher->source == VOUCHER_FOR_INVENTORY){?>
 	<div class="row">
 		<div class="medium-12 columns">
+		<input type="hidden" name="hd_total" id="hd_total" value=0 />
+
 		<table  id="tbl-append">
 			<thead>
 			<tr>
@@ -126,14 +128,15 @@ if(!defined('CHECK_INCLUDED')){
 					</td>
 				</tr>
 
-				<tr style="font-weight:bold;">
+				<!--<tr style="font-weight:bold;">
 					<td colspan="5" align="right">Total Tax</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
 						<span id="lbl_tax"><?php echo number_format($amount,2);?></span>
 						</div>
 					</td>
-				</tr>
+				</tr>-->
+				<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
 				<tr style="font-weight:bold;">
 					<td colspan="5" align="right">Cash Discount</td>
 					<td colspan="2" align="left">
@@ -142,6 +145,9 @@ if(!defined('CHECK_INCLUDED')){
 						</div>
 					</td>
 				</tr>
+				<?php }?>
+
+				<?php if($voucher->frieght_demurge == DEFAULT_TRUE){?>
 				<tr style="font-weight:bold;">
 					<td colspan="5" align="right">Frieght and Demurge</td>
 					<td colspan="2" align="left">
@@ -150,14 +156,22 @@ if(!defined('CHECK_INCLUDED')){
 						</div>
 					</td>
 				</tr>
+				<?php }?>
+
+				<?php if($voucher->round_off == DEFAULT_TRUE){?>
 				<tr style="font-weight:bold;">
 					<td colspan="5" align="right">Round Off</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
-						<span id="lbl_tax"><?php echo number_format($roundoff,2);?></span>
+						<span id="lbl_round">
+							<input type="hidden" name="hd_round" id="hd_round" value="<?php echo number_format($roundoff,2);?>" />
+							<?php echo number_format($roundoff,2);?>
+						</span>
 						</div>
 					</td>
 				</tr>
+				<?php }?>
+
 				<tr style="font-weight:bold;">
 					<td colspan="5" align="right">Total Amount</td>
 					<td colspan="2" align="left">

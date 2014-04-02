@@ -2,7 +2,7 @@
 $(document).ready(function(){
 
 	var total_amount = 0;
-	var total_tax = 0;
+	var total_tax = {};
 
 
 	//item code entry
@@ -18,6 +18,14 @@ $(document).ready(function(){
 	});
 	//select quantity
 	$("#txtquantity").on("focus",function(){
+		$(this).select();
+	});
+	//select discount	
+	$("#txtdiscount").on("focus",function(){
+		$(this).select();
+	});
+	//select frieght	
+	$("#txtfrieght").on("focus",function(){
 		$(this).select();
 	});
 
@@ -119,16 +127,33 @@ $(document).ready(function(){
 
 
 		if($("#lstitem").val() >0){
-
+			
 			total_amount += parseFloat(l_totaltxt);
-			total_tax += calculateTax(qty*rate);
+			$("#hd_total").val(total_amount);
+			
+			if(tax > 0){
+				if( total_tax[taxvalue] == undefined ) {
+					total_tax[taxvalue] = 0;
+				}
+				
+				total_tax[taxvalue] += calculateTax(qty*rate);
+			}
+			
+
+			$(".trtax").remove();
 			
 			$("#insert-item").before('<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>');
-			clearForm();
 
-			$("#txtamount").val(formatNumber(total_amount));
-			$("#lbl_total").html(formatNumber(total_amount));
-			$("#lbl_tax").html(formatNumber(total_tax));
+			$.each(total_tax, function( index, value ) {
+				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger" value="'+index+'_'+'" />'
+				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="5" align="right">'+index+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
+			});
+			
+
+			clearForm();
+			updateTotal();
+			//$("#lbl_tax").html(formatNumber(total_tax));
+			
 			
 		}
     	 return false;
@@ -137,11 +162,37 @@ $(document).ready(function(){
 
 	$("#txtdiscount").blur(function(){
 		var discount = $(this).val();
+		if(isNaN(discount)){
+			$(this).val(formatNumber(0));
+			popup_alert("Enter valid discount amount",false);
+
+		}else{
+			updateTotal();
+		}
+		
 	});
+
+	$("#txtfrieght").blur(function(){
+		var discount = $(this).val();
+		if(isNaN(discount)){
+			$(this).val(formatNumber(0));
+			popup_alert("Enter valid frieght amount",false);
+
+		}else{
+			updateTotal();
+		}
+		
+	});
+
+
+	
 
 
 
 });
+
+
+
 
 
 //functions 
@@ -156,7 +207,7 @@ function clearForm(){
 	$("#lsttax").val(-1);
 }
 
-function calculateLineTotal(rate,quantity,tax)
+function calculateLineTotal(rate,quantity)
 {
 	var total = parseFloat(rate)*parseInt(quantity);
 	var tax = calculateTax(total);
@@ -169,9 +220,37 @@ function calculateTax(total)
 	if($("#lsttax").val() >0 ){
 		tax_value = parseFloat($("#lsttax option:selected").text());
 	}
-	var tax_rate = tax_value/100;
-	var tax = total*tax_rate;
+	var tax = total*tax_value/100;
 	return tax;
+}
+
+function updateTotal()
+{
+	var total_amount = parseFloat($("#hd_total").val());
+	var value = total_amount;
+	if($("#txtfrieght").length > 0){
+		var frieght = parseFloat($("#txtfrieght").val());
+		value += frieght;
+	}
+
+	if($("#txtdiscount").length > 0){
+		var discount = parseFloat($("#txtdiscount").val());
+		value -= discount;
+	}
+	
+	changeTotal(value);
+	
+}
+function changeTotal(total)
+{
+	var round_total = formatNumber(parseInt(total));
+	total = formatNumber(total);
+	
+	$("#txtamount").val(total);
+	$("#lbl_total").html(total);
+	$("#lbl_total").html(total);
+	$("#lbl_round").html(round_total);
+	
 }
 
 
