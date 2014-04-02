@@ -13,12 +13,35 @@ if(!defined('CHECK_INCLUDED')){
 		<?php if(isset($_GET['slno'])){?>
 		<a class="tiny button" href="<?php echo $new_url; ?>">New</a>
 		<?php }?>
-		<input type="button" class="tiny button" value="print" id="button-print"/>
+		<!-- <input type="button" class="tiny button" value="print" id="button-print"/> -->
 	</div>
 	
 </div>
 
+<form id="" name="form1" method="GET" >
+	<fieldset>
+		<div class="row">		
+			<div class="medium-2 columns">
+				<label for="name"> From Date</label>
+				<input class="mydatepicker" name="txtfrom" id="" value="<?php echo date("Y-m-d"); //$vazhipadu->from_date;?>" />
+			</div>
 
+			<div class="medium-2 columns">
+				<label for="name"> To Date</label>
+				<input class="mydatepicker" name="txtto" id="" value="<?php echo date("Y-m-d"); //$vazhipadu->to_date;?>" />
+			</div>
+			<div class="medium-2 columns">
+				<input type="submit" class="small button" value="Search" name="submit">
+			</div>
+				<div class="medium-4 columns">
+				&nbsp;
+			</div>
+			<div class="medium-2 columns">
+					<input type="button" class="tiny button" value="Print" id="button-print"/>
+				</div>
+		</div>
+	</fieldset>
+</form>
 
 
 <?php if(isset($_GET['bid'])){?>
@@ -32,7 +55,7 @@ if(!defined('CHECK_INCLUDED')){
 			<td width="45%">Particulars</td>
 			<td width="10%">Debit</td>
 			<td width="10%">Credit</td>
-			<td width="5%"></td>
+			<!-- <td width="5%"></td> -->
 		</tr>
 		</thead>
 		<tbody>
@@ -49,12 +72,12 @@ if(!defined('CHECK_INCLUDED')){
 			<td><?php echo $account_list[$i]['ref_ledger_name'].",".$account_list[$i]['narration']; ?></td>
 			<td><?php echo $account_list[$i]['account_debit']; ?></td>
 			<td><?php echo $account_list[$i]['account_credit']; ?></td>
-			<td>
+			<!-- <td>
 				<div <?php if(isset($_GET['bid'])) echo 'style="display:none;"'?>>
 				<a href="<?php echo $edit; ?>">Edit</a>/
 				<a href="javascript:deleteVoucher(<?php echo $account_list[$i]['account_id']?>)">Delete</a>
 				</div>
-			</td>
+			</td> -->
 		</tr>
 		<?php $i++; }?>
 		<tr>

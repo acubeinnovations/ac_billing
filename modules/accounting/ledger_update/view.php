@@ -30,6 +30,7 @@ if(!defined('CHECK_INCLUDED')){
 
 		<fieldset>
 	 		<legend>Add Ledger </legend>
+	 	</br>
 	 		<div class="row">
 	 			<div class="medium-8 columns">
 	 				<label for="ledger">Ledger Name <small>required</small>

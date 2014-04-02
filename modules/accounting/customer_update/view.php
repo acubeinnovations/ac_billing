@@ -55,15 +55,17 @@ if(!defined('CHECK_INCLUDED')){
 				<label for="ledger">TIN Number</label>
 				<input type="text" name="txttinnumber" id="txttinnumber" value="<?php echo $customer->customer_tin_number;?>"/>
 			</div>
-		</div>
-
-		<div class="row">
-			<div class="text-center">
-				<input class="tiny button"  value="Save" name="submit" type="submit"/>
+			<div class="medium-2 columns">
+				
+				&nbsp;
+			</div>
+			<div class="medium-2 columns">
+				
+				<input class="small button"  value="Save" name="submit" type="submit"/>
 			</div>
 		</div>
-	
 
+		
 	</fieldset>
 
 </form>
@@ -73,10 +75,10 @@ if(!defined('CHECK_INCLUDED')){
 <table width="100%">
   	<thead>
 	<tr>
-		<td width="10%">Sl no</td>
-		<td width="40%">Customer</td>
-		<td width="30%">Contact number</td>
-		<td>Edit / Delete</td>
+		<td width="10%">Sl No</td>
+		<td width="50%">Customer Details</td>
+		<td width="20%"></td>
+		<td width="20%"></td>
 	</tr>
 	</thead>
 	<tbody>
@@ -88,9 +90,10 @@ if(!defined('CHECK_INCLUDED')){
 	?>
 	<tr>
 		<td><?php echo $slno; ?></td>
-		<td><?php echo $customers[$i]['customer_name']."<br/>".$customers[$i]['customer_address'];?></td>
-		<td><?php echo $customers[$i]['customer_mobile'];?></td>
-		<td><a href="<?php echo $edit; ?>">Edit</a> / <a href="javascript:deleteCustomer(<?php echo $customers[$i]['customer_id']?>)">Delete</a></td>
+		<td><?php echo $customers[$i]['customer_name']."<br/>".$customers[$i]['customer_address'];?><br/>Contact: <?php echo $customers[$i]['customer_mobile'];?>
+		<br/><a href="<?php echo $edit; ?>">Edit</a> / <a href="javascript:deleteCustomer(<?php echo $customers[$i]['customer_id']?>)">Delete</a></td>
+		<td></td>
+		<td></td>
 	</tr>
 	<?php $slno++; }?>
 	<tr>
