@@ -12,30 +12,32 @@ if(!defined('CHECK_INCLUDED')){
 	<fieldset>
 		<div class="row">
 			<div class="medium-6 columns">
-						<label for="ledger"> Holding Organization</label>
-						<input type="text" name="organization" id="organization" value=""/>
+						<label for="ledger"> Holding Organization
+						<input type="text" name="organization" id="organization" value="<?php echo $account_settings->organization_name; ?>"/>
+						</label>
 			</div>
 			<div class="medium-6 columns">
-						<label for="ledger"> Address</label>
-						<textarea name="address" id="address" value=""/></textarea>
+						<label for="ledger"> Address
+						<textarea name="address" id="address" value=""/><?php echo $account_settings->organization_address; ?></textarea>
+						</label>
 			</div>
 
 			
 			<div class="medium-6 columns">
 						<label for="ledger"> Tax Payers Identification Number</label>
-						<input type="text" name="tin" id="tin" value=""/>
+						<input type="text" name="tin" id="tin" value="<?php echo $account_settings->tax_payers_id_no; ?>"/>
 			</div>
 			<div class="medium-6 columns">
 						<label for="ledger"> Central Sales Tax Reg Number</label>
-						<input type="text" name="cst" id="cst" value=""/>
+						<input type="text" name="cst" id="cst" value="<?php echo $account_settings->central_sales_tax_reg_no; ?>"/>
 			</div>
 			<div class="medium-6 columns">
 						<label for="ledger"> Central Excise Reg Number</label>
-						<input type="text" name="ce" id="ce" value=""/>
+						<input type="text" name="ce" id="ce" value="<?php echo $account_settings->central_exise_reg_no; ?>"/>
 			</div>
 			<div class="medium-6 columns">
 						<label for="ledger"> SSI / MSI / LSI Reg Number</label>
-						<input type="text" name="ssi" id="ssi" value=""/>
+						<input type="text" name="ssi" id="ssi" value="<?php echo $account_settings->reg_no; ?>"/>
 			</div>
 			
 		</div>	
@@ -48,8 +50,8 @@ if(!defined('CHECK_INCLUDED')){
  			
  		
  			<div class="medium-6 columns">
- 				<label for="ledger">Default Capital Ledger:</label>
- 				<?php echo populate_list_array("lstledger", $ledgers, 'id','name', '',$disable=false);?>
+ 				<label for="ledger">Default Capital Ledger(Current: <?php echo $account_settings->organization_address; ?>)</label>
+ 				<?php echo populate_list_array("lstledger", $ledgers, 'id','name', $account_settings->default_capital,$disable=false);?>
  				<label for="ledger">(Selcted Default)</label>
  			</div>
  			
