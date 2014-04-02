@@ -1,6 +1,10 @@
 
 $(document).ready(function(){
 
+	var total_amount = 0;
+	var total_tax = 0;
+
+
 	//item code entry
 	$("#lstitem").change(function(){
 		var item_code = $(this).val();
@@ -88,7 +92,7 @@ $(document).ready(function(){
 	});
 
 	
-	var total_amount = 0;
+	
 
 	$("#button-add").click(function(){
 
@@ -113,15 +117,26 @@ $(document).ready(function(){
 		var qtytxt = qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">';
 		var taxtxt = taxvalue+'<input type="hidden" name="hd_itemtax[]" value="'+tax+'">';
 
+
 		if($("#lstitem").val() >0){
 
 			total_amount += parseFloat(l_totaltxt);
+			total_tax += calculateTax(qty*rate);
+			
 			$("#insert-item").before('<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>');
 			clearForm();
 
 			$("#txtamount").val(formatNumber(total_amount));
+			$("#lbl_total").html(formatNumber(total_amount));
+			$("#lbl_tax").html(formatNumber(total_tax));
+			
 		}
     	 return false;
+	});
+
+
+	$("#txtdiscount").blur(function(){
+		var discount = $(this).val();
 	});
 
 
@@ -138,19 +153,25 @@ function clearForm(){
 	$("#txtquantity").val(1);
 	$("#txtunit").text("0.00");
 	$("#txtlinetotal").text("0.00");
-	$("#lsttax").val(1);
+	$("#lsttax").val(-1);
 }
 
 function calculateLineTotal(rate,quantity,tax)
 {
 	var total = parseFloat(rate)*parseInt(quantity);
+	var tax = calculateTax(total);
+	return total+tax;
+}
+
+function calculateTax(total)
+{
 	var tax_value = 0;
 	if($("#lsttax").val() >0 ){
 		tax_value = parseFloat($("#lsttax option:selected").text());
 	}
 	var tax_rate = tax_value/100;
 	var tax = total*tax_rate;
-	return total+tax;
+	return tax;
 }
 
 

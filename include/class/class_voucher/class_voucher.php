@@ -89,17 +89,18 @@ Class Voucher{
     		$strSQL.= mysql_real_escape_string($this->form_type_id)."','";
     		$strSQL.= mysql_real_escape_string($this->source)."','";
     		$strSQL.= mysql_real_escape_string($this->hidden)."',";
-    		$strSQL.= mysql_real_escape_string($this->module_id)."',";
+    		$strSQL.= mysql_real_escape_string($this->module_id).",'";
 
-    		$strSQL.= mysql_real_escape_string($this->voucher_source_item_id)."',";
-    		$strSQL.= mysql_real_escape_string($this->default_header)."',";
-    		$strSQL.= mysql_real_escape_string($this->default_footer)."',";
-    		$strSQL.= mysql_real_escape_string($this->default_currency)."',";
-    		$strSQL.= mysql_real_escape_string($this->currency_id)."',";
-    		$strSQL.= mysql_real_escape_string($this->discount_rc_amt)."',";
-    		$strSQL.= mysql_real_escape_string($this->frieght_demurge)."',";
-    		$strSQL.= mysql_real_escape_string($this->round_off)."',";
-    		$strSQL.= mysql_real_escape_string($this->no_of_copies).")";
+    		$strSQL.= mysql_real_escape_string($this->voucher_source_item_id)."','";
+    		$strSQL.= mysql_real_escape_string($this->default_header)."','";
+    		$strSQL.= mysql_real_escape_string($this->default_footer)."','";
+    		$strSQL.= mysql_real_escape_string($this->default_currency)."','";
+    		$strSQL.= mysql_real_escape_string($this->currency_id)."','";
+    		$strSQL.= mysql_real_escape_string($this->discount_rc_amt)."','";
+    		$strSQL.= mysql_real_escape_string($this->frieght_demurge)."','";
+    		$strSQL.= mysql_real_escape_string($this->round_off)."','";
+    		$strSQL.= mysql_real_escape_string($this->no_of_copies)."')";
+
 			//echo $strSQL;exit();
 			mysql_query("SET NAMES utf8");
 			$rsRES = mysql_query($strSQL,$this->connection) or die ( mysql_error() . $strSQL );
@@ -247,6 +248,17 @@ Class Voucher{
 				$this->default_to 			= $row['default_to'];
 				$this->form_type_id 		= $row['form_type_id'];
 				$this->source 				= $row['source'];
+				$this->hidden 				= $row['hidden'];
+				$this->module_id 			= $row['module_id'];
+				$this->voucher_source_item_id = $row['voucher_source_item_id'];
+				$this->default_header 		= $row['default_header'];
+				$this->default_footer 		= $row['default_footer'];
+				$this->default_currency 	= $row['default_currency'];
+				$this->currency_id 			= $row['currency_id'];
+				$this->discount_rc_amt 		= $row['discount_rc_amt'];
+				$this->frieght_demurge 		= $row['frieght_demurge'];
+				$this->round_off 			= $row['round_off'];
+				$this->no_of_copies 		= $row['no_of_copies'];
 				
 				return true;
 			}else{

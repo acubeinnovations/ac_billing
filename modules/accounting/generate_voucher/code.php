@@ -27,7 +27,10 @@ $items = $stock->get_list_array();
 $page_heading = "Generate Voucher";
 $list_url = "#";
 $readonly = "";
-$amount = "";
+$amount = 0;
+$frieght = 0;
+$discount = 0;
+$roundoff = 0;
 $edt_items = false;
 
 
@@ -91,10 +94,35 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 
 	if($voucher->default_to != ""){
 		$default_to = true;
-		$ids = unserialize($voucher->default_to);
-		$filter = "ledger_sub_id IN (".implode(",",$ids).")";
-		$ledgers_default_to_filtered = $ledger->get_list_array_have_no_children($filter);
-		$filter1 = "ledger_sub_id NOT IN (".implode(",",$ids).")";
+		$join = "";
+		if($voucher->voucher_source_item_id > 0){
+			if($voucher->voucher_source_item_id == ALL_CUSTOMERS and $voucher->voucher_source_item_id == ALL_SUPPLIERS){
+				$filter = "ls.ledger_id = '".$voucher->default_to."'";
+			}else if($voucher->voucher_source_item_id == CUSTOMER_TIN_CST){
+				$join = " LEFT JOIN customer c ON c.ledger_sub_id = ls.ledger_sub_id";
+				$filter = "ls.ledger_id = '".$voucher->default_to."' AND c.customer_cst_number <> '' AND c.customer_tin_number <> ''";
+			}else if($voucher->voucher_source_item_id == SUPPLIER_TIN_CST){
+				$join = " LEFT JOIN supplier s ON s.ledger_sub_id = ls.ledger_sub_id";
+				$filter = "ls.ledger_id = '".$voucher->default_to."' AND s.supplier_cst_number <> '' AND s.supplier_tin_number <> ''";
+			}
+			$filter1 = "ls.ledger_id <> '".$voucher->default_to."'";
+			
+		}else{
+			$ids = @unserialize($voucher->default_to);
+			if(is_array($ids)){
+				$filter = "ls.ledger_sub_id IN (".implode(",",$ids).")";
+				$filter1 = "ls.ledger_sub_id NOT IN (".implode(",",$ids).")";
+			}else if($ids >0){
+				$filter = "ls.ledger_sub_id = '".$ids."'";
+				$filter1 = "ls.ledger_sub_id <> '".$ids."'";
+			}else{
+				$filter = "";
+				$filter1 = "";
+			}
+		}
+		//echo $filter;exit();
+		$ledgers_default_to_filtered = $ledger->get_list_array_have_no_children($filter,$join);
+		
 		$ledgers_exept_default_to_filtered = $ledger->get_list_array_have_no_children($filter1);
 	}else{
 		$default_to = false;

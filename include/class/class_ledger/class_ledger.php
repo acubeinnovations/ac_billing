@@ -121,16 +121,22 @@ Class Ledger{
     }
 
     //get ledger sub list which have no children - current financial year
-    public function get_list_array_have_no_children($filter = "")
+    public function get_list_array_have_no_children($filter = "",$join = "")
     {
     	$ledgers = array();$i=0;
-		$strSQL = "SELECT ledger_sub_id,ledger_sub_name FROM ledger_sub WHERE deleted = '".NOT_DELETED."'AND status = '".STATUS_ACTIVE."'";
-		$strSQL .= " AND ledger_sub_id NOT IN (SELECT parent_sub_ledger_id FROM ledger_sub)";
-		$strSQL .= " AND ledger_sub.ledger_sub_id IN(SELECT ledger_sub_id FROM fy_ledger_sub WHERE fy_id = '".$this->current_fy_id."')";
+		$strSQL = "SELECT ls.ledger_sub_id,ls.ledger_sub_name FROM ledger_sub ls";
+		if($join <> ""){
+			$strSQL .= $join;
+		}
+		$strSQL .= " WHERE ls.deleted = '".NOT_DELETED."'AND ls.status = '".STATUS_ACTIVE."'";
+		$strSQL .= " AND ls.ledger_sub_id NOT IN (SELECT parent_sub_ledger_id FROM ledger_sub)";
+		$strSQL .= " AND ls.ledger_sub_id IN(SELECT ledger_sub_id FROM fy_ledger_sub WHERE fy_id = '".$this->current_fy_id."')";
 		if($filter != ""){
 			$strSQL .= " AND ".$filter;
 		}
-		$strSQL .= " ORDER BY ledger_sub_name";
+		$strSQL .= " ORDER BY ls.ledger_sub_name";
+
+		//echo $strSQL;exit();
 		 mysql_query("SET NAMES utf8");
 		$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
 		if ( mysql_num_rows($rsRES) > 0 )

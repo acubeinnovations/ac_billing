@@ -63,7 +63,7 @@ if(!defined('CHECK_INCLUDED')){
 		</div>
 		<div class="medium-4 columns">
 			<label for="voucher">Amount</label>
-			<input type="text" name="txtamount" id="txtamount" value="<?php echo $amount;?>" <?php if($voucher->source == VOUCHER_FOR_INVENTORY){ echo "readonly";}?>/>
+			<input type="text" name="txtamount" id="txtamount" value="<?php echo number_format($amount,2);?>" <?php if($voucher->source == VOUCHER_FOR_INVENTORY){ echo "readonly";}?>/>
 		</div>
 	</div>
 	<div class="row">
@@ -122,9 +122,51 @@ if(!defined('CHECK_INCLUDED')){
 					<td><label id="txtlinetotal">0.00</label></td>
 					<td>
 						<input type="hidden" name="hd_stock" id="hd_stock" value=0/>
-						<input type="button" name="button-add" value="Add Item" id="button-add"/>
+						<input type="button" name="button-add" value="+" id="button-add" class="tiny secondary button" />
 					</td>
-				</tr>	
+				</tr>
+
+				<tr style="font-weight:bold;">
+					<td colspan="5" align="right">Total Tax</td>
+					<td colspan="2" align="left">
+						<div class="medium-6 columns">
+						<span id="lbl_tax"><?php echo number_format($amount,2);?></span>
+						</div>
+					</td>
+				</tr>
+				<tr style="font-weight:bold;">
+					<td colspan="5" align="right">Cash Discount</td>
+					<td colspan="2" align="left">
+						<div class="medium-6 columns">
+						<input type="text" id="txtdiscount" name="txtdiscount" value="<?php echo number_format($discount,2);?>"/>
+						</div>
+					</td>
+				</tr>
+				<tr style="font-weight:bold;">
+					<td colspan="5" align="right">Frieght and Demurge</td>
+					<td colspan="2" align="left">
+						<div class="medium-6 columns">
+						<input type="text" id="txtfrieght" name="txtfrieght" value="<?php echo number_format($frieght,2);?>"/>
+						</div>
+					</td>
+				</tr>
+				<tr style="font-weight:bold;">
+					<td colspan="5" align="right">Round Off</td>
+					<td colspan="2" align="left">
+						<div class="medium-6 columns">
+						<span id="lbl_tax"><?php echo number_format($roundoff,2);?></span>
+						</div>
+					</td>
+				</tr>
+				<tr style="font-weight:bold;">
+					<td colspan="5" align="right">Total Amount</td>
+					<td colspan="2" align="left">
+						<div class="medium-6 columns">
+						<span id="lbl_total"><?php echo number_format($amount,2);?></span>
+						</div>
+					</td>
+				</tr>
+
 			</tbody>
 
 		</table>
