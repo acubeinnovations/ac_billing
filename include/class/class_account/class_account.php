@@ -19,6 +19,9 @@ Class Account{
 	var $date = "";
 	var $narration = "";
 	var $ref_ledger = gINVALID;
+
+    var $date_from = '';
+    var $date_to   = '';
 	
 
 	var $error = false;
@@ -193,6 +196,16 @@ Class Account{
             $strSQL .= " LEFT JOIN voucher v ON v.voucher_id=am.voucher_type_id";
             $strSQL .= " WHERE am.fy_id = '".$this->current_fy_id."' AND am.deleted='".NOT_DELETED."'";
 
+            if($this->date_from !=""){
+               if($this->date_to !="" and $this->date_from != $this->date_to){
+                     $strSQL .= " AND (am.date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+                }else{
+                    $strSQL .= " AND am.date = '".date('Y-m-d',strtotime($this->date_from))."'";
+                }
+                
+            }
+
+
             if($this->voucher_type_id > 0){
               $strSQL .= " AND am.voucher_type_id = '".$this->voucher_type_id."'";
             }
@@ -258,6 +271,15 @@ Class Account{
             $strSQL .= " LEFT JOIN voucher v ON v.voucher_id=am.voucher_type_id";
             $strSQL .= " WHERE am.fy_id = '".$this->current_fy_id."' AND am.deleted='".NOT_DELETED."'";
 
+            if($this->date_from !=""){
+               if($this->date_to !="" and $this->date_from != $this->date_to){
+                     $strSQL .= " AND (am.date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+                }else{
+                    $strSQL .= " AND am.date = '".date('Y-m-d',strtotime($this->date_from))."'";
+                }
+                
+            }
+
             if($this->voucher_type_id > 0){
               $strSQL .= " AND am.voucher_type_id = '".$this->voucher_type_id."'";
             }
@@ -316,7 +338,16 @@ Class Account{
         $strSQL .= " LEFT JOIN voucher v ON v.voucher_id = am.voucher_type_id";
         $strSQL .= " LEFT JOIN ledger_sub ls ON ls.ledger_sub_id = am.ref_ledger";
         $strSQL .= " WHERE 1";
-         $strSQL .= " AND am.fy_id = '".$this->current_fy_id."' AND am.deleted='".NOT_DELETED."'";
+        if($this->date_from !=""){
+           if($this->date_to !="" and $this->date_from != $this->date_to){
+                 $strSQL .= " AND (am.date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+            }else{
+                $strSQL .= " AND am.date = '".date('Y-m-d',strtotime($this->date_from))."'";
+            }
+            
+        }
+        $strSQL .= " AND am.fy_id = '".$this->current_fy_id."' AND am.deleted='".NOT_DELETED."'";
+       // echo $strSQL;exit();
         mysql_query("SET NAMES utf8");
 
         if(is_array($ledgers)){
@@ -361,7 +392,16 @@ Class Account{
         $strSQL .= " LEFT JOIN voucher v ON v.voucher_id = am.voucher_type_id";
         $strSQL .= " LEFT JOIN ledger_sub ls ON ls.ledger_sub_id = am.ref_ledger";
         $strSQL .= " WHERE 1";
+        if($this->date_from !=""){
+           if($this->date_to !="" and $this->date_from != $this->date_to){
+                 $strSQL .= " AND (am.date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+            }else{
+                $strSQL .= " AND am.date = '".date('Y-m-d',strtotime($this->date_from))."'";
+            }
+            
+        }
          $strSQL .= " AND am.fy_id = '".$this->current_fy_id."' AND am.deleted='".NOT_DELETED."'";
+         //echo $strSQL;
         mysql_query("SET NAMES utf8");
 
         if(is_array($ledgers)){

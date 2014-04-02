@@ -3,6 +3,7 @@ if(!defined('CHECK_INCLUDED')){
 	exit();
 }
 ?>
+<form id="" name="form1" method="GET" action="" >
 
 <div class="row" >
 	<div class="medium-4 columns">
@@ -18,17 +19,17 @@ if(!defined('CHECK_INCLUDED')){
 	
 </div>
 
-<form id="" name="form1" method="GET" >
+
 	<fieldset>
 		<div class="row">		
 			<div class="medium-2 columns">
 				<label for="name"> From Date</label>
-				<input class="mydatepicker" name="txtfrom" id="" value="<?php echo date("Y-m-d"); //$vazhipadu->from_date;?>" />
+				<input class="mydatepicker" name="txtfrom" id="" value="<?php echo $account->date_from;?>" />
 			</div>
 
 			<div class="medium-2 columns">
 				<label for="name"> To Date</label>
-				<input class="mydatepicker" name="txtto" id="" value="<?php echo date("Y-m-d"); //$vazhipadu->to_date;?>" />
+				<input class="mydatepicker" name="txtto" id="" value="<?php echo $account->date_to;?>" />
 			</div>
 			<div class="medium-2 columns">
 				<input type="submit" class="small button" value="Search" name="submit">
@@ -41,10 +42,11 @@ if(!defined('CHECK_INCLUDED')){
 				</div>
 		</div>
 	</fieldset>
-</form>
+
 
 
 <?php if(isset($_GET['bid'])){?>
+<input type="hidden" name="bid" value="<?php echo $_GET['bid'];?>" />
 	
 	<?php if($count_list >0){?>
 	<table width="100%">
@@ -92,6 +94,7 @@ if(!defined('CHECK_INCLUDED')){
 		<div id="print_content" >
 		<?php if(count($account_total_list) >0){?>
 		<h3><?php echo $page_heading; ?></h3>
+		<p>Date : <?php echo ($account->date_from == $account->date_to)?$account->date_from:$account->date_from." - ".$account->date_to;?></p>
 		<table width="100%">
 			<thead>
 			<tr>
@@ -129,6 +132,7 @@ if(!defined('CHECK_INCLUDED')){
 	?>
 
 <?php }else if(isset($_GET['slno'])){?>
+<input type="hidden" name="slno" value="<?php echo $_GET['slno'];?>" />
 
 	<?php if($count_list >0){?>
 
@@ -183,6 +187,8 @@ if(!defined('CHECK_INCLUDED')){
 		<div id="print_content" >
 		<?php if(count($account_total_list) >0){?>
 			<h3><?php echo $page_heading; ?></h3>
+			<p>Date : <?php echo ($account->date_from == $account->date_to)?$account->date_from:$account->date_from." - ".$account->date_to;?></p>
+
 			<table width="100%">
 			<thead>
 			<tr>
@@ -225,4 +231,5 @@ if(!defined('CHECK_INCLUDED')){
 
 
 <?php }?>
+</form>
 
