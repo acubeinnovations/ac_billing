@@ -87,6 +87,9 @@ if(!defined('CHECK_INCLUDED')){
 
 <?php ob_start();?>
 <div id="print_content" >
+	
+	<h3><?php echo $account_settings->organization_name; ?></h3>
+	<p><?php echo $account_settings->organization_address; ?></p>
 	<h3>Pooja Register</h3>
 	<p>Date : <?php echo ($pooja->from_date == $pooja->to_date)?$pooja->from_date:$pooja->from_date." - ".$pooja->to_date;?></p>
 	<?php if(count($pooja_total_list) > 0){?>

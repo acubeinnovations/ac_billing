@@ -1,6 +1,10 @@
 .show_print{display: block;}
  .show_screen{display: none;}
 
+ .print-head{display: block;}
+ .page-head{display: none;}
+ 
+
  .wrapper{
 	border:1px solid #ccc;
 	padding: 0.85em;

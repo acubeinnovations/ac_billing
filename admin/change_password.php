@@ -20,7 +20,7 @@ $page = new Page;
 	$page->connection_list = array("connection.php");
 
 	$page->function_list = array("functions.php");
-	$page->class_list = array("class_administrator.php");
+	$page->class_list = array("class_user.php");
 
 	$page->access_list = array("ADMINISTRATOR");
 
@@ -35,7 +35,7 @@ $page = new Page;
 	$page->content_list = $content_list;
 
 
-    $page->module_path = 'modules/administrator/';
+    $page->module_path = 'modules/user/';
     $page->module = 'change_password';
 
 	$page->display(); //completed page with dynamic cintent will be displayed

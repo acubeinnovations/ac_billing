@@ -55,9 +55,16 @@ if(isset($_POST['submit']) and $_POST['submit'] == $capSIGNIN)
 				exit();
 			}
 		}
+		else{
+			$_SESSION[SESSION_TITLE.'flash'] = $usersession->error_description;
+			header( "Location:".$current_url);
+			exit();
+		}
 
 	} else{
-		$login_error = "Invalid Username or password!";
+		$_SESSION[SESSION_TITLE.'flash'] = $login_error;
+		header( "Location:".$current_url);
+		exit();
 	}
 	
 }

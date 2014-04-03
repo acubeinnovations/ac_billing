@@ -4,6 +4,11 @@ if(!defined('CHECK_INCLUDED')){
 }
 
 $pagination = new Pagination(10);
+
+$account_settings = new AccountSettings($myconnection);
+$account_settings->connection = $myconnection;
+$account_settings->getAccountSettings();
+
 $ledger = new Ledger($myconnection);
 $ledger->connection = $myconnection;
 
@@ -28,6 +33,7 @@ $dateto =date("d-m-Y");
 if(isset($_GET['submit'])){
 
 	if($_GET['lstledger'] > 0 ){
+		$ledger_name = $ledger->ledgerName($_GET['lstledger']);
 		$dataArray['ref_ledger'] = $_GET['lstledger'];
 		$account->ref_ledger = $_GET['lstledger'];	
 

@@ -11,7 +11,7 @@
 
 
 //for pagination
-	$Mypagination = new Pagination(2);
+	$Mypagination = new Pagination(10);
 	$data_bylimit = $myuser->get_list_array_bylimit($Mypagination->start_record,$Mypagination->max_records);
     $user_statuses=$myuser->get_array_userstatus();
     if ( $data_bylimit == false ){

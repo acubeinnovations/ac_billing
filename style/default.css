@@ -67,10 +67,16 @@ fieldset{
   {
   .show_print{display: none;}
   .show_screen{display: block;}
+
+   .print-head{display: none;}
+   .page-head{display: block;}
   }
 
 @media print
   {
   	 .show_print{display: block;}
 	 .show_screen{display: none;}
+
+	  .print-head{display: block;}
+ 	  .page-head{display: none;}
   }

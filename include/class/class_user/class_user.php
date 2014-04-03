@@ -105,24 +105,25 @@ class User {
 
 
     function change_password($newpasswd,$oldpasswd){
-                    $strSQL3 = "UPDATE users SET ";
-                    $strSQL3 .= "password = NULL";
-                    $strSQL3 .= " WHERE id = '" . $this->id ."' AND password = '".mysql_real_escape_string($oldpasswd)."'";
-		    $rsRES3 = mysql_query($strSQL3,$this->connection) or die(mysql_error(). $strSQL3 );
-		    if ( mysql_affected_rows($this->connection) > 0 ) {
+        $strSQL3 = "UPDATE users SET ";
+        $strSQL3 .= "password = NULL";
+        $strSQL3 .= " WHERE id = '" . $this->id ."' AND password = '".mysql_real_escape_string($oldpasswd)."'";
+       // echo $strSQL3;exit();
+		$rsRES3 = mysql_query($strSQL3,$this->connection) or die(mysql_error(). $strSQL3 );
+		if ( mysql_affected_rows($this->connection) > 0 ) {
 		    $strSQL = "UPDATE users SET ";
-                    $strSQL .= "password = '" .mysql_real_escape_string($newpasswd). "' ";
-                    $strSQL .= "WHERE id = '" . $this->id . "'";
-                    $rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
-                    if ( mysql_affected_rows($this->connection) > 0 ) {
-                        return true;
-                    }
-                    else{
-                        return false;
-                        $this->error_description = "Incorrect password";
-                    }
+            $strSQL .= "password = '" .mysql_real_escape_string($newpasswd). "' ";
+            $strSQL .= "WHERE id = '" . $this->id . "'";
+            $rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
+            if ( mysql_affected_rows($this->connection) > 0 ) {
+                return true;
+            }
+            else{
+                return false;
+                $this->error_description = "Incorrect password";
+            }
+        }
     }
-}
 
     function exist(){
         $strSQL = "SELECT id FROM users WHERE username = '".$this->username."'"; 

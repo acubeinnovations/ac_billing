@@ -92,6 +92,9 @@ if(!defined('CHECK_INCLUDED')){
 	<?php ob_start();?>
 
 		<div id="print_content" >
+		<h3><?php echo $account_settings->organization_name; ?></h3>
+		<p><?php echo $account_settings->organization_address; ?></p>
+
 		<?php if(count($account_total_list) >0){?>
 		<h3><?php echo $page_heading; ?></h3>
 		<p>Date : <?php echo ($account->date_from == $account->date_to)?$account->date_from:$account->date_from." - ".$account->date_to;?></p>
@@ -185,6 +188,9 @@ if(!defined('CHECK_INCLUDED')){
 	<?php ob_start();?>
 
 		<div id="print_content" >
+		<h3><?php echo $account_settings->organization_name; ?></h3>
+		<p><?php echo $account_settings->organization_address; ?></p>
+
 		<?php if(count($account_total_list) >0){?>
 			<h3><?php echo $page_heading; ?></h3>
 			<p>Date : <?php echo ($account->date_from == $account->date_to)?$account->date_from:$account->date_from." - ".$account->date_to;?></p>

@@ -5,18 +5,50 @@ if(!defined('CHECK_INCLUDED')){
 ?>
 
 <?php ob_start();?>
-
+<form id="" name="form1" method="GET" action="" >
+<input type="hidden" value="<?php echo $report->report_id;?>" name="slno">
 
 <div class="row" >
-	<div class="medium-4 columns">
-		<h3><?php echo $page_heading; ?></h3>
+	<div class="medium-10 columns">
+		<div class="print-head">
+			<h3><?php echo $account_settings->organization_name; ?></h3>
+			<p><?php echo $account_settings->organization_address; ?></p>
+			<h5><?php echo $page_heading; ?></h5>
+		</div>
+		<div class="page-head">
+			<h3><?php echo $page_heading; ?></h3>
+		</div>
 	</div>
-	<div class="medium-8 columns">
+	<div class="medium-2 columns">
 		<div class="text-right" style="margin-top:5px;">
 			<input type="button" class="tiny button" value="print" id="button-print"/>
 		</div>
 	</div>
 </div>
+
+<div class="page-head">
+<fieldset>
+	<div class="row">		
+		<div class="medium-2 columns">
+			<label for="name"> From Date</label>
+			<input class="mydatepicker" name="txtfrom" id="" value="<?php echo $report_feature->date_from;?>" />
+		</div>
+
+		<div class="medium-2 columns">
+			<label for="name"> To Date</label>
+			<input class="mydatepicker" name="txtto" id="" value="<?php echo $report_feature->date_to;?>" />
+		</div>
+		<div class="medium-2 columns">
+			<input type="submit" class="small button" value="Search" name="submit">
+		</div>
+			<div class="medium-4 columns">
+			&nbsp;
+		</div>
+		
+	</div>
+</fieldset>
+</div>
+
 
 <div class="row">
 <div class="medium-12 columns">
@@ -182,3 +214,5 @@ if(!defined('CHECK_INCLUDED')){
 	echo $print_content;
 	
 ?>
+
+</form>

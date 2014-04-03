@@ -20,6 +20,9 @@ Class StockRegister{
 	var $fy_id = gINVALID;
 	
 
+	var $date_from = '';
+	var $date_to = '';
+
 	var $error = false;
     var $error_number=gINVALID;
     var $error_description="";
@@ -291,6 +294,15 @@ Class StockRegister{
         $strSQL .= " LEFT JOIN uom_master um ON sm.uom_id = um.uom_id";
         $strSQL .= " WHERE sr.fy_id = '".$this->current_fy_id."'";
 
+        if($this->date_from !=""){
+           if($this->date_to !="" and $this->date_from != $this->date_to){
+                 $strSQL .= " AND (sr.date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+            }else{
+                $strSQL .= " AND sr.date = '".date('Y-m-d',strtotime($this->date_from))."'";
+            }
+            
+        }
+
         if($this->input_type != ""){
         	$strSQL .= " AND sr.input_type = '".$this->input_type."'";
         }
@@ -326,6 +338,14 @@ Class StockRegister{
         $strSQL .= " LEFT JOIN tax_master tm ON tm.id = sr.tax_id";
         $strSQL .= " LEFT JOIN uom_master um ON sm.uom_id = um.uom_id";
         $strSQL .= " WHERE sr.fy_id = '".$this->current_fy_id."'";
+        if($this->date_from !=""){
+           if($this->date_to !="" and $this->date_from != $this->date_to){
+                 $strSQL .= " AND (sr.date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+            }else{
+                $strSQL .= " AND sr.date = '".date('Y-m-d',strtotime($this->date_from))."'";
+            }
+            
+        }
 
         if($this->input_type != ""){
         	$strSQL .= " AND sr.input_type = '".$this->input_type."'";

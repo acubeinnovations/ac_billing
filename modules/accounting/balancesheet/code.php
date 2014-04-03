@@ -5,6 +5,11 @@ if(!defined('CHECK_INCLUDED')){
 
 $mybalancesheet = new BalanceSheet($myconnection);
 
+$account_settings = new AccountSettings($myconnection);
+$account_settings->connection = $myconnection;
+$account_settings->getAccountSettings();
+
+
 if($mybalancesheet->error == true){
 
 	$_SESSION[SESSION_TITLE.'flash'] = "Please set Financial Year";

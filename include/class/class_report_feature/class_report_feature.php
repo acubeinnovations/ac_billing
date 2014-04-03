@@ -15,6 +15,9 @@ Class ReportFeature{
 	var $sort_order 		= "";
 	var $status 			= STATUS_INACTIVE;
 
+    var $date_from = '';
+    var $date_to = '';
+
 	
 
 	var $error = false;
@@ -108,9 +111,21 @@ Class ReportFeature{
 						// Do Noting
 					}
 
-                    $strSQL_sub = "SELECT ls.ledger_sub_id,ls.ledger_sub_name, (SELECT SUM(account_debit) FROM account_master   WHERE fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id AND deleted = '".NOT_DELETED."' ) AS debit,(SELECT SUM(account_credit) FROM account_master   WHERE  fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id AND deleted = '".NOT_DELETED."') AS credit";
+                    $date_filter = "";
+                    if($this->date_from !=""){
+                       if($this->date_to !="" and $this->date_from != $this->date_to){
+                             $date_filter .= " AND (date BETWEEN '".date('Y-m-d',strtotime($this->date_from))."' AND '".date('Y-m-d',strtotime($this->date_to))."')";
+                        }else{
+                            $date_filter .= " AND date = '".date('Y-m-d',strtotime($this->date_from))."'";
+                        }
+                        
+                    }
+
+                    $strSQL_sub = "SELECT ls.ledger_sub_id,ls.ledger_sub_name, (SELECT SUM(account_debit) FROM account_master   WHERE fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id AND deleted = '".NOT_DELETED."' ".$date_filter." ) AS debit,(SELECT SUM(account_credit) FROM account_master   WHERE  fy_id = '".$this->current_fy_id."' AND ref_ledger = ledger_sub_id AND deleted = '".NOT_DELETED."' ".$date_filter.") AS credit";
                     $strSQL_sub .= " FROM ledger_sub ls";
                     $strSQL_sub .= " WHERE ls.ledger_sub_id IN(SELECT ledger_sub_id FROM fy_ledger_sub WHERE fy_id = '".$this->current_fy_id."') AND ls.ledger_sub_id IN(".$sub_ledgers.")";
+
+
 
                     $strSQL_sub .= " ORDER BY ls.ledger_sub_name";
 
