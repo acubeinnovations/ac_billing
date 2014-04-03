@@ -88,10 +88,13 @@ if(!defined('CHECK_INCLUDED')){
 		<table  id="tbl-append">
 			<thead>
 			<tr>
-				<td width="10%">Item Code</td>
-				<td width="30%">Item Description</td>
-				<td width="10%">Quantity</td>
+				<td width="7%">Item Code</td>
+				<td width="25%">Item Description</td>
+				<td width="7%">Qty</td>
 				<td width="10%">Unit Rate</td>
+				<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
+				<td width="10%">Cash Discount</td>
+				<?php }?>
 				<td width="10%">Tax(%)</td>
 				<td width="10%">Total</td>
 				<td></td>
@@ -108,6 +111,9 @@ if(!defined('CHECK_INCLUDED')){
 					<td><?php echo $item['item_name'];?></td>
 					<td><?php echo $item['quantity'];?><input type="hidden" name="hd_itemqty[]" value="<?php echo $item['quantity'];?>"></td>
 					<td><?php echo $item['unit_rate'];?><input type="hidden" name="hd_itemrate[]" value="<?php echo $item['unit_rate'];?>"></td>
+					<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
+					<td >Cash Discount</td>
+					<?php }?>
 					<td><?php echo $item['tax'];?>%<input type="hidden" name="hd_itemtax[]" value="<?php echo $item['tax'];?>"></td>
 					<td><?php echo $item['total'];?></td>
 					<td></td>
@@ -120,6 +126,11 @@ if(!defined('CHECK_INCLUDED')){
 					<td><?php echo populate_list_array("lstitem", $items, 'id','name', '',$disable=false);?></td>
 					<td><input type="text" name="txtquantity" id="txtquantity" value="1" /></td>
 					<td><input type="text" name="txtrate" id="txtrate" value=0.00 /></td>
+					<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
+					<td >
+						<input type="text" id="txtdiscount" name="txtdiscount" value="<?php echo number_format($discount,2);?>"/>
+					</td>
+					<?php }?>
 					<td><?php echo populate_list_array("lsttax", $taxes, 'id','rate','',$disable=false,true);?></td>
 					<td><label id="txtlinetotal">0.00</label></td>
 					<td>
@@ -128,28 +139,10 @@ if(!defined('CHECK_INCLUDED')){
 					</td>
 				</tr>
 
-				<!--<tr style="font-weight:bold;">
-					<td colspan="5" align="right">Total Tax</td>
-					<td colspan="2" align="left">
-						<div class="medium-6 columns">
-						<span id="lbl_tax"><?php echo number_format($amount,2);?></span>
-						</div>
-					</td>
-				</tr>-->
-				<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
-				<tr style="font-weight:bold;">
-					<td colspan="5" align="right">Cash Discount</td>
-					<td colspan="2" align="left">
-						<div class="medium-6 columns">
-						<input type="text" id="txtdiscount" name="txtdiscount" value="<?php echo number_format($discount,2);?>"/>
-						</div>
-					</td>
-				</tr>
-				<?php }?>
 
 				<?php if($voucher->frieght_demurge == DEFAULT_TRUE){?>
 				<tr style="font-weight:bold;">
-					<td colspan="5" align="right">Frieght and Demurge</td>
+					<td colspan="6" align="right">Frieght and Demurge</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
 						<input type="text" id="txtfrieght" name="txtfrieght" value="<?php echo number_format($frieght,2);?>"/>
@@ -160,7 +153,7 @@ if(!defined('CHECK_INCLUDED')){
 
 				<?php if($voucher->round_off == DEFAULT_TRUE){?>
 				<tr style="font-weight:bold;">
-					<td colspan="5" align="right">Round Off</td>
+					<td colspan="6" align="right">Round Off</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
 						<span id="lbl_round">
@@ -173,7 +166,7 @@ if(!defined('CHECK_INCLUDED')){
 				<?php }?>
 
 				<tr style="font-weight:bold;">
-					<td colspan="5" align="right">Total Amount</td>
+					<td colspan="6" align="right">Total Amount</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
 						<span id="lbl_total"><?php echo number_format($amount,2);?></span>

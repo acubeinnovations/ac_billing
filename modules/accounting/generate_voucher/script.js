@@ -4,6 +4,28 @@ $(document).ready(function(){
 	var total_amount = 0;
 	var total_tax = {};
 
+	//if lost focus then fill with default value
+	$("#txtrate").on("focusout",function(){
+		if($(this).val() == ''){
+			$(this).val("0.00");
+		}
+	});
+	$("#txtquantity").on("focusout",function(){
+		if($(this).val() == ''){
+			$(this).val(1);
+		}
+	});
+	$("#txtdiscount").on("focusout",function(){
+		if($(this).val() == ''){
+			$(this).val("0.00");
+		}
+	});
+	$("#txtfrieght").on("focusout",function(){
+		if($(this).val() == ''){
+			$(this).val("0.00");
+		}
+	});
+
 
 	//item code entry
 	$("#lstitem").change(function(){
@@ -58,6 +80,20 @@ $(document).ready(function(){
 	$("#txtrate").keyup(function(){
 
 		var rate = $(this).val();formatNumber(rate);
+		var qty = $("#txtquantity").val();
+		if(rate == ''){
+			$("#txtlinetotal").text("0.00");
+		}else{
+			var lineTotal = calculateLineTotal(rate,qty);
+			var lineTotalText = formatNumber(lineTotal);
+			$("#txtlinetotal").text(lineTotalText);
+		}
+	});
+
+	//calculate line total
+	$("#txtdiscount").keyup(function(){
+
+		var rate = $("#txtrate").val();formatNumber(rate);
 		var qty = $("#txtquantity").val();
 		if(rate == ''){
 			$("#txtlinetotal").text("0.00");
@@ -125,6 +161,14 @@ $(document).ready(function(){
 		var qtytxt = qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">';
 		var taxtxt = taxvalue+'<input type="hidden" name="hd_itemtax[]" value="'+tax+'">';
 
+		if($("#txtdiscount").length > 0){
+			var discount = $("#txtdiscount").val();
+			var discounttxt = discount+'<input type="hidden" name="hd_discount[]" value="'+discount+'">';
+		}else{
+			var discount = -1;
+			var discounttxt = '<input type="hidden" name="hd_discount[]" value="0.00">';
+		}
+
 
 		if($("#lstitem").val() >0){
 			
@@ -141,12 +185,18 @@ $(document).ready(function(){
 			
 
 			$(".trtax").remove();
+			var row = '';
+			if(discount == -1){
+				row += '<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+discounttxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>';
+			}else{
+				row +='<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+'</td><td>'+discounttxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>';
+			}
 			
-			$("#insert-item").before('<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>');
+			$("#insert-item").before(row);
 
 			$.each(total_tax, function( index, value ) {
 				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger" value="'+index+'_'+'" />'
-				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="5" align="right">'+index+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
+				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+index+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
 			});
 			
 
@@ -205,13 +255,19 @@ function clearForm(){
 	$("#txtunit").text("0.00");
 	$("#txtlinetotal").text("0.00");
 	$("#lsttax").val(-1);
+	$("#txtdiscount").val("0.00");
 }
 
 function calculateLineTotal(rate,quantity)
 {
-	var total = parseFloat(rate)*parseInt(quantity);
+	var discount = 0;
+	if($("#txtdiscount").length > 0){
+		discount = parseFloat($("#txtdiscount").val());
+	}
+	var total = (parseFloat(rate)*parseInt(quantity))-discount;
+	
 	var tax = calculateTax(total);
-	return total+tax;
+	return (total+tax);
 }
 
 function calculateTax(total)
@@ -233,11 +289,6 @@ function updateTotal()
 		value += frieght;
 	}
 
-	if($("#txtdiscount").length > 0){
-		var discount = parseFloat($("#txtdiscount").val());
-		value -= discount;
-	}
-	
 	changeTotal(value);
 	
 }
