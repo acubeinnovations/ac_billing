@@ -6,8 +6,9 @@
 		$total = 0;
 		
 		foreach($dataArray as $line){
-			$total_no_tax = $line['rate']*abs($line['quantity']);
-			$tax = $total_no_tax*$line['tax'];
+			$total_no_tax = ($line['rate']*abs($line['quantity']))-$line['discount'];
+
+			$tax = $total_no_tax*$line['tax_rate'];
 			$total_with_tax = $total_no_tax + $tax;
 			$total += $total_with_tax;
 				

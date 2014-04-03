@@ -217,6 +217,9 @@ define("CUSTOMER_TIN_CST", 2);
 define("ALL_SUPPLIERS",1);
 define("SUPPLIER_TIN_CST", 2);
 
+//define tax types
+define("TAX_TYPE_SALE", 1);
+define("TAX_TYPE_PURCHASE", 2);
 
 ?>
 

@@ -19,7 +19,7 @@ $ledger->connection = $myconnection;
 
 $tax = new Tax($myconnection);
 $tax->connection = $myconnection;
-$taxes = $tax->get_list_array();
+
 
 $ledgers_all = $ledger->get_list_array_have_no_children();
 $items = $stock->get_list_array();
@@ -79,6 +79,14 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 		//echo $voucher_number;exit();
 	}
 	
+
+	if($voucher->voucher_master_id == SALES){
+		$tax->type = TAX_TYPE_SALE;
+	}else if($voucher->voucher_master_id == PURCHASE){
+		$tax->type = TAX_TYPE_PURCHASE;
+	}
+	$taxes = $tax->get_list_array();
+
 	$page_heading = $voucher->voucher_name;
 
 	if($voucher->default_from != ""){
@@ -143,7 +151,6 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 }
 else if(isset($_GET['item'])){//jquery select item
 
-	
 	$stock->item_id = $_GET['item'];
 	$stock->get_details();
 
@@ -210,6 +217,7 @@ if(isset($_POST['submit'])){
 
 			}else if($voucher->source == VOUCHER_FOR_INVENTORY and isset($_POST['hd_itemcode'])){
 				$item_count = count($_POST['hd_itemcode']);
+
 
 				$arr['narration'] = $_POST['txtnarration'];
 				$dataArray = array();
@@ -280,23 +288,72 @@ if(isset($_POST['submit'])){
 				$dataAccount[1]['ref_ledger'] = $_POST['lstto'];
 				$insert = $account->insert_batch($dataAccount);
 			}elseif($voucher->source == VOUCHER_FOR_INVENTORY and isset($_POST['hd_itemcode'])){//update both account master and stock register	
+				$index = 0;//index for dataaccount - insert into account master
+
+				//1. tax ledger start
+				if(isset($_POST['hd_tax_ledger'])){
+					$tax_ledgers = $_POST['hd_tax_ledger']; 
+					for($j=0; $j < count($tax_ledgers); $j++){
+						$list = explode("_", $tax_ledgers[$j]);
+
+						$tax->id = $list[0];
+						$tax->get_details();
+						$tax_ledger_id = $tax->ledger_sub_id;
+						$tax_amount = $list[1];
+						if($voucher->voucher_master_id == SALES){
+							$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+							$dataAccount[$index]['account_to']  	= $tax_ledger_id;
+							$dataAccount[$index]['ref_ledger'] 		= $tax_ledger_id;
+							$dataAccount[$index]['account_debit']  	= "";
+							$dataAccount[$index]['account_credit'] 	= $tax_amount;
+						}elseif($voucher->voucher_master_id == PURCHASE){
+							$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+							$dataAccount[$index]['account_to']  	= $tax_ledger_id;
+							$dataAccount[$index]['ref_ledger'] 		= $tax_ledger_id;
+							$dataAccount[$index]['account_debit']  	= $tax_amount;
+							$dataAccount[$index]['account_credit'] 	= "";
+						}
+					}
+					$index++;
+				}
+				// tax ledger ends
+
+				//2. frieght ledger start
+				//frieght ledger ends
+
+				//3. roundoff ledger start
+				//roundoff ledger ends
+
 				
-				$item_count = count($_POST['hd_itemcode']);
+
 				$dataArray = array();
+				$item_count = count($_POST['hd_itemcode']);
 				for($i=0; $i<$item_count; $i++){
 					$dataArray[$i]['item_id'] 	= $_POST['hd_itemcode'][$i];
 					$dataArray[$i]['quantity'] 	= ($voucher->voucher_master_id == SALES)?-($_POST['hd_itemqty'][$i]):$_POST['hd_itemqty'][$i];
 					$dataArray[$i]['rate'] 		= $_POST['hd_itemrate'][$i];
 					$dataArray[$i]['tax'] 		= $_POST['hd_itemtax'][$i];
+					$dataArray[$i]['discount']  = $_POST['hd_discount'][$i];
 					$dataArray[$i]['tax_rate']  = $tax->getRate($_POST['hd_itemtax'][$i]);
 				}
+
 				
-				$dataAccount[0]['account_debit']  = calculateTotal($dataArray);
-				$dataAccount[0]['account_credit'] = "";
-				$dataAccount[0]['ref_ledger'] = $_POST['lstfrom'];
-				$dataAccount[1]['account_debit']  = "";
-				$dataAccount[1]['account_credit'] = calculateTotal($dataArray);
-				$dataAccount[1]['ref_ledger'] = $_POST['lstto'];
+				//4.actual to ledger selected from list start
+				$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+				$dataAccount[$index]['account_to']  	= $_POST['lstto'];
+				$dataAccount[$index]['account_debit']  = calculateTotal($dataArray);
+				$dataAccount[$index]['account_credit'] = "";
+				$dataAccount[$index]['ref_ledger'] = $_POST['lstfrom'];
+				$index++;
+				$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+				$dataAccount[$index]['account_to']  	= $_POST['lstto'];
+				$dataAccount[$index]['account_debit']  = "";
+				$dataAccount[$index]['account_credit'] = calculateTotal($dataArray);
+				$dataAccount[$index]['ref_ledger'] = $_POST['lstto'];
+
+				//actual to ledger selected from list end
+
+				//print_r($dataAccount);exit();
 
 				$insert = $account->insert_batch($dataAccount);
 				if($insert){

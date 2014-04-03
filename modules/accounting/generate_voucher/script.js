@@ -115,6 +115,7 @@ $(document).ready(function(){
 		else{
 
 			var rate = $("#txtrate").val();
+
 			if(qty == ''){
 				$("#txtlinetotal").text(rate);
 			}else{
@@ -154,20 +155,21 @@ $(document).ready(function(){
 		var l_totaltxt = $("#txtlinetotal").text();
 		var stock = $("#hd_stock").val();
 
-		
+		if($("#txtdiscount").length > 0){
+			var discount = $("#txtdiscount").val();
+			var discounttxt = discount+'<input type="hidden" name="hd_discount[]" value="'+discount+'">';
+			rate = rate-discount;
+		}else{
+			var discount = -1;
+			var discounttxt = '<input type="hidden" name="hd_discount[]" value="0.00">';
+		}
 
 		var codetxt = code+'<input type="hidden" name="hd_itemcode[]" value="'+code+'">';
 		var ratetxt = rate+'<input type="hidden" name="hd_itemrate[]" value="'+rate+'">';
 		var qtytxt = qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">';
 		var taxtxt = taxvalue+'<input type="hidden" name="hd_itemtax[]" value="'+tax+'">';
 
-		if($("#txtdiscount").length > 0){
-			var discount = $("#txtdiscount").val();
-			var discounttxt = discount+'<input type="hidden" name="hd_discount[]" value="'+discount+'">';
-		}else{
-			var discount = -1;
-			var discounttxt = '<input type="hidden" name="hd_discount[]" value="0.00">';
-		}
+		
 
 
 		if($("#lstitem").val() >0){
@@ -176,11 +178,11 @@ $(document).ready(function(){
 			$("#hd_total").val(total_amount);
 			
 			if(tax > 0){
-				if( total_tax[taxvalue] == undefined ) {
-					total_tax[taxvalue] = 0;
+				if( total_tax[tax] == undefined ) {
+					total_tax[tax] = 0;
 				}
 				
-				total_tax[taxvalue] += calculateTax(qty*rate);
+				total_tax[tax] += calculateTax(qty*rate);
 			}
 			
 
@@ -195,7 +197,8 @@ $(document).ready(function(){
 			$("#insert-item").before(row);
 
 			$.each(total_tax, function( index, value ) {
-				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger" value="'+index+'_'+'" />'
+				var hd_tax_val = index+"_"+value;
+				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger[]" value="'+hd_tax_val+'" />'
 				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+index+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
 			});
 			
@@ -222,7 +225,7 @@ $(document).ready(function(){
 		
 	});
 
-	$("#txtfrieght").blur(function(){
+	$("#txtfrieght").keyup(function(){
 		var discount = $(this).val();
 		if(isNaN(discount)){
 			$(this).val(formatNumber(0));
@@ -260,12 +263,14 @@ function clearForm(){
 
 function calculateLineTotal(rate,quantity)
 {
+	var quantity = $("#txtquantity").val();
+	var rate = $("#txtrate").val();
 	var discount = 0;
 	if($("#txtdiscount").length > 0){
-		discount = parseFloat($("#txtdiscount").val());
+		discount = $("#txtdiscount").val();
 	}
-	var total = (parseFloat(rate)*parseInt(quantity))-discount;
-	
+	rate = rate-discount;
+	var total = (parseFloat(rate)*parseInt(quantity));
 	var tax = calculateTax(total);
 	return (total+tax);
 }

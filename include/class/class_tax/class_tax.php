@@ -13,6 +13,7 @@ Class Tax{
 	var $status = "";
 	var $deleted = NOT_DELETED;
 	var $ledger_sub_id = gINVALID;
+	var $type = gINVALID;
 	
 
 	var $error = false;
@@ -122,6 +123,9 @@ Class Tax{
 	{
 		$tax = array();$i=0;
 		$strSQL = "SELECT  id,name,rate,status,ledger_sub_id FROM tax_master WHERE deleted = '".NOT_DELETED."' AND status = '".STATUS_ACTIVE."'";
+		if($this->type > 0){
+			$strSQL .= " AND type = '".$this->type."'";
+		}
 		$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
 		if ( mysql_num_rows($rsRES) > 0 )
 			{

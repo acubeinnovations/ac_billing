@@ -88,8 +88,8 @@ Class Account{
 	    		$strSQL.= mysql_real_escape_string($this->voucher_type_id)."','";
 	    		$strSQL.= mysql_real_escape_string($this->current_fy_id)."','";
 	    		$strSQL.= mysql_real_escape_string($this->reference_number)."','";
-	    		$strSQL.= mysql_real_escape_string($this->account_from)."','";
-	    		$strSQL.= mysql_real_escape_string($this->account_to)."','";
+	    		$strSQL.= mysql_real_escape_string($dataArray[$i]['account_from'])."','";
+	    		$strSQL.= mysql_real_escape_string($dataArray[$i]['account_to'])."','";
 	    		$strSQL.= mysql_real_escape_string($dataArray[$i]['account_debit'])."','";
 	    		$strSQL.= mysql_real_escape_string($dataArray[$i]['account_credit'])."','";
 	    		$strSQL.= date('Y-m-d',strtotime($this->date))."','";
