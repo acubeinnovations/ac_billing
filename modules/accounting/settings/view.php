@@ -43,16 +43,16 @@ if(!defined('CHECK_INCLUDED')){
 		</div>	
  		<div class="row">
  			<div class="medium-6 columns">
- 				<label for="ledger">Financial Year</label>
+ 				<label for="ledger">Financial Year (Current Fy : <?php echo $financial_year->fy_name; ?>)</label>
  				<?php echo populate_list_array("lstfy", $financial_years, 'fy_id','fy_name', '',$disable=false);?>
- 				<label for="ledger">(Current Fy : <?php echo $financial_year->fy_name; ?>)</label>
+ 				
  			</div>
  			
  		
  			<div class="medium-6 columns">
- 				<label for="ledger">Default Capital Ledger(Current: <?php echo $account_settings->organization_address; ?>)</label>
+ 				<label for="ledger">Default Capital Ledger</label>
  				<?php echo populate_list_array("lstledger", $ledgers, 'id','name', $account_settings->default_capital,$disable=false);?>
- 				<label for="ledger">(Selcted Default)</label>
+ 				
  			</div>
  			
  		</div>
