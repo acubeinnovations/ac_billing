@@ -226,15 +226,17 @@ $(document).ready(function(){
 	});
 
 	$("#txtfrieght").keyup(function(){
-		var discount = $(this).val();
-		if(isNaN(discount)){
+		var fright = $(this).val();
+		if(isNaN(fright)){
 			$(this).val(formatNumber(0));
 			popup_alert("Enter valid frieght amount",false);
 
-		}else{
-			updateTotal();
+		}else if(fright == ""){
+			$(this).val(formatNumber(0));
+			$(this).select();
+
 		}
-		
+		updateTotal();		
 	});
 
 
@@ -299,13 +301,15 @@ function updateTotal()
 }
 function changeTotal(total)
 {
-	var round_total = formatNumber(parseInt(total));
-	total = formatNumber(total);
+	var round_total = parseInt(total);
+	var round_off = total-round_total;
 	
-	$("#txtamount").val(total);
-	$("#lbl_total").html(total);
-	$("#lbl_total").html(total);
-	$("#lbl_round").html(round_total);
+	
+	$("#txtamount").val(formatNumber(round_total));
+	$("#lbl_total").html(formatNumber(round_total));
+
+	var round_txt = '<input type="hidden" name="hd_round" id="hd_round" value="'+round_off+'" />'+formatNumber(round_off);
+	$("#lbl_round").html(round_txt);
 	
 }
 
@@ -314,10 +318,9 @@ function changeTotal(total)
 function formatNumber(number)
 {
 	var numberText = "";
-	if(parseInt(number) > 0){
+	if(parseFloat(number) > 0){
 	    var list = number.toString().split(".");
 	   
-	    
 	    numberText += list[0];
 	    if(list[1]){
 	    	if(list[1].length == 1){

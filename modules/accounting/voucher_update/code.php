@@ -22,7 +22,8 @@ $currencies = $currency->get_list_array();
 
 $voucher_source_items = new VoucherSourceItem($myconnection);
 $voucher_source_items->connection = $myconnection;
-$voucher_source_item_list = $voucher_source_items->get_list_array();
+$sales_voucher_items = $voucher_source_items->get_filtered_list_array(SALES);
+$purchase_voucher_items = $voucher_source_items->get_filtered_list_array(PURCHASE);
 
 $masterVouchers = $voucher->get_list_master_array();
 
@@ -85,25 +86,40 @@ if(isset($_POST['submit'])){
 
 		if(isset($_POST['chk_header'])){
 			$voucher->default_header = $_POST['chk_header'];
+		}else{
+			$voucher->default_header = DEFAULT_FALSE;
 		}
+
 
 		if(isset($_POST['chk_footer'])){
 			$voucher->default_footer  = $_POST['chk_footer'];
+		}else{
+			$voucher->default_footer = DEFAULT_FALSE;
 		}
+
 		if(isset($_POST['chk_currency'])){
 			$voucher->default_currency  = $_POST['chk_currency'];
 			$voucher->currency_id = $_POST['lstcurrency'];
 		}else{
 			$voucher->currency_id = $currency->default_currency_id;
 		}
+
 		if(isset($_POST['chk_drc'])){
 			$voucher->discount_rc_amt = $_POST['chk_drc'];
+		}else{
+			$voucher->discount_rc_amt = DEFAULT_FALSE;
 		}
+
 		if(isset($_POST['chk_fad'])){
 			$voucher->frieght_demurge = $_POST['chk_fad'];
+		}else{
+			$voucher->frieght_demurge = DEFAULT_FALSE;
 		}
+		
 		if(isset($_POST['chk_drc'])){
 			$voucher->round_off = $_POST['chk_drc'];
+		}else{
+			$voucher->round_off = DEFAULT_FALSE;
 		}
 		
 
@@ -124,26 +140,26 @@ if(isset($_POST['submit'])){
 
 			}elseif($_POST['lstsource'] == VOUCHER_FOR_INVENTORY){//voucher for inventory
 
-				if(isset($_POST['lstsourceitem']) and $_POST['lstsourceitem'] >0){
-					$voucher->voucher_source_item_id = $_POST['lstsourceitem'];
-					switch($_POST['lstsourceitem']){
-						case 1:$voucher->default_to = LEDGER_SUNDRY_CREDITORS;break;
-						case 2:$voucher->default_to = LEDGER_SUNDRY_CREDITORS;break;
-						case 3:$voucher->default_to = LEDGER_SUNDRY_DEBITORS;break;
-						case 4:$voucher->default_to = LEDGER_SUNDRY_DEBITORS;break;
-						default:$voucher->default_to =-1;
-					}
-				}else{
-					$voucher->default_to = ($_POST['lsttoledger'])?$_POST['lsttoledger']:'';
-				}
-				$voucher->default_from = ($_POST['lstfromledger'] > 0)?$_POST['lstfromledger']:'';
-				
 				$voucher->form_type_id	= $_POST['lstformtype'];
 				$voucher->no_of_copies = $_POST['lstcopy'];
-			}
-		}
-		
-
+				
+				if($_POST['lstmvoucher'] == SALES){
+					$voucher->voucher_source_item_id = $_POST['lstsourceitem1'];
+					if($voucher->voucher_source_item_id > 0){
+						$voucher->default_to = LEDGER_SUNDRY_CREDITORS;
+					}
+					$voucher->default_from = ($_POST['lstfromledger'] > 0)?$_POST['lstfromledger']:'';
+				}else if($_POST['lstmvoucher'] == PURCHASE){
+					$voucher->voucher_source_item_id = $_POST['lstsourceitem2'];
+					if($voucher->voucher_source_item_id > 0){
+						$voucher->default_from = LEDGER_SUNDRY_DEBITORS;
+					}
+					
+					$voucher->default_to = ($_POST['lsttoledger'])?$_POST['lsttoledger']:'';
+				}
+			
+			}//inventory details
+		}//not hidden
 		
 
 		

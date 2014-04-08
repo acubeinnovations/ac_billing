@@ -47,7 +47,6 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 		$voucher->get_details();
 		$voucher_number = $account->voucher_number;
 		$readonly = "readonly='readonly'";
-
 		$list_url = "ac_generated_vouchers.php?slno=".$voucher->voucher_id;
 
 		if($account->account_from ==$account->ref_ledger){
@@ -62,12 +61,19 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 			$edt_items = $stock_register->get_voucher_items();
 			
 		}
+
+		//freight and demurge
+		if($voucher->frieght_demurge == DEFAULT_TRUE){
+
+		}
+
 	}
 	//new voucher
 	if(isset($_GET['v'])){//url parameter voucher id
 		$list_url = "ac_generated_vouchers.php?slno=".$_GET['v'];
 		$voucher->voucher_id = $_GET['v'];
 		$voucher->get_details();
+		
 
 		//get next voucher number
 		$next_voucher_number = $account->getNextVoucherNumber($voucher->voucher_id);
@@ -76,7 +82,11 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 		}else{
 			$voucher_number = $voucher->series_start;
 		}
-		//echo $voucher_number;exit();
+		if($voucher_number ==''){
+			$_SESSION[SESSION_TITLE.'flash'] = "Invalid Voucher";
+		    header( "Location:ac_vouchers.php");
+		    exit();
+		}
 	}
 	
 
@@ -89,9 +99,10 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 
 	$page_heading = $voucher->voucher_name;
 
+
 	if($voucher->default_from != ""){
 		$default_from = true;
-		$ids = unserialize($voucher->default_from);
+		$ids = @unserialize($voucher->default_from);
 		$filter = "ledger_sub_id IN (".implode(",",$ids).")";
 		$ledgers_default_from_filtered = $ledger->get_list_array_have_no_children($filter);
 		$filter1 = "ledger_sub_id NOT IN (".implode(",",$ids).")";
@@ -103,8 +114,9 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 	if($voucher->default_to != ""){
 		$default_to = true;
 		$join = "";
+
 		if($voucher->voucher_source_item_id > 0){
-			if($voucher->voucher_source_item_id == ALL_CUSTOMERS and $voucher->voucher_source_item_id == ALL_SUPPLIERS){
+			if($voucher->voucher_source_item_id == ALL_CUSTOMERS || $voucher->voucher_source_item_id == ALL_SUPPLIERS){
 				$filter = "ls.ledger_id = '".$voucher->default_to."'";
 			}else if($voucher->voucher_source_item_id == CUSTOMER_TIN_CST){
 				$join = " LEFT JOIN customer c ON c.ledger_sub_id = ls.ledger_sub_id";
@@ -112,6 +124,8 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 			}else if($voucher->voucher_source_item_id == SUPPLIER_TIN_CST){
 				$join = " LEFT JOIN supplier s ON s.ledger_sub_id = ls.ledger_sub_id";
 				$filter = "ls.ledger_id = '".$voucher->default_to."' AND s.supplier_cst_number <> '' AND s.supplier_tin_number <> ''";
+			}else{
+				$filter = "";
 			}
 			$filter1 = "ls.ledger_id <> '".$voucher->default_to."'";
 			
@@ -128,7 +142,7 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 				$filter1 = "";
 			}
 		}
-		//echo $filter;exit();
+		
 		$ledgers_default_to_filtered = $ledger->get_list_array_have_no_children($filter,$join);
 		
 		$ledgers_exept_default_to_filtered = $ledger->get_list_array_have_no_children($filter1);
@@ -291,7 +305,7 @@ if(isset($_POST['submit'])){
 				$index = 0;//index for dataaccount - insert into account master
 
 				//1. tax ledger start
-				if(isset($_POST['hd_tax_ledger'])){
+				if(isset($_POST['hd_tax_ledger'])){ 
 					$tax_ledgers = $_POST['hd_tax_ledger']; 
 					for($j=0; $j < count($tax_ledgers); $j++){
 						$list = explode("_", $tax_ledgers[$j]);
@@ -313,15 +327,49 @@ if(isset($_POST['submit'])){
 							$dataAccount[$index]['account_debit']  	= $tax_amount;
 							$dataAccount[$index]['account_credit'] 	= "";
 						}
+						$index++;
 					}
-					$index++;
+					
 				}
 				// tax ledger ends
 
 				//2. frieght ledger start
+				if(isset($_POST['txtfrieght']) and $_POST['txtfrieght']!= "" and  $_POST['txtfrieght'] > 0){
+					if($voucher->voucher_master_id == SALES){
+						$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+						$dataAccount[$index]['account_to']  	= LEDGER_SUB_FRIGHT;
+						$dataAccount[$index]['ref_ledger'] 		= LEDGER_SUB_FRIGHT;
+						$dataAccount[$index]['account_debit']  	= "";
+						$dataAccount[$index]['account_credit'] 	= $_POST['txtfrieght'];
+					}elseif($voucher->voucher_master_id == PURCHASE){
+						$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+						$dataAccount[$index]['account_to']  	= LEDGER_SUB_FRIGHT;
+						$dataAccount[$index]['ref_ledger'] 		= LEDGER_SUB_FRIGHT;
+						$dataAccount[$index]['account_debit']  	= $_POST['txtfrieght'];
+						$dataAccount[$index]['account_credit'] 	= "";
+					}
+					$index++;
+				}
 				//frieght ledger ends
+				
 
 				//3. roundoff ledger start
+				if(isset($_POST['hd_round']) and $_POST['hd_round']!= "" and  $_POST['hd_round'] > 0){
+					if($voucher->voucher_master_id == SALES){
+						$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+						$dataAccount[$index]['account_to']  	= LEDGER_SUB_RONUNDOFF;
+						$dataAccount[$index]['ref_ledger'] 		= LEDGER_SUB_RONUNDOFF;
+						$dataAccount[$index]['account_debit']  	= "";
+						$dataAccount[$index]['account_credit'] 	= $_POST['hd_round'];
+					}elseif($voucher->voucher_master_id == PURCHASE){
+						$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+						$dataAccount[$index]['account_to']  	= LEDGER_SUB_RONUNDOFF;
+						$dataAccount[$index]['ref_ledger'] 		= LEDGER_SUB_RONUNDOFF;
+						$dataAccount[$index]['account_debit']  	= $_POST['hd_round'];
+						$dataAccount[$index]['account_credit'] 	= "";
+					}
+					$index++;
+				}
 				//roundoff ledger ends
 
 				
@@ -339,21 +387,40 @@ if(isset($_POST['submit'])){
 
 				
 				//4.actual to ledger selected from list start
-				$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
-				$dataAccount[$index]['account_to']  	= $_POST['lstto'];
-				$dataAccount[$index]['account_debit']  = calculateTotal($dataArray);
-				$dataAccount[$index]['account_credit'] = "";
-				$dataAccount[$index]['ref_ledger'] = $_POST['lstfrom'];
-				$index++;
-				$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
-				$dataAccount[$index]['account_to']  	= $_POST['lstto'];
-				$dataAccount[$index]['account_debit']  = "";
-				$dataAccount[$index]['account_credit'] = calculateTotal($dataArray);
-				$dataAccount[$index]['ref_ledger'] = $_POST['lstto'];
+				if($voucher->voucher_master_id == SALES){
+					$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+					$dataAccount[$index]['account_to']  	= $_POST['lstto'];
+					$dataAccount[$index]['account_debit']  = $_POST['txtamount'];;
+					$dataAccount[$index]['account_credit'] = "";
+					$dataAccount[$index]['ref_ledger'] = $_POST['lstfrom'];
+					$index++;
+					$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+					$dataAccount[$index]['account_to']  	= $_POST['lstto'];
+					$dataAccount[$index]['account_debit']  = "";
+					$dataAccount[$index]['account_credit'] = $_POST['txtamount'];
+					$dataAccount[$index]['ref_ledger'] = $_POST['lstto'];
+				}elseif($voucher->voucher_master_id == PURCHASE){
+					$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+					$dataAccount[$index]['account_to']  	= $_POST['lstto'];
+					$dataAccount[$index]['account_debit']  = "";
+					$dataAccount[$index]['account_credit'] = $_POST['txtamount'];
+					$dataAccount[$index]['ref_ledger'] = $_POST['lstfrom'];
+					$index++;
+					$dataAccount[$index]['account_from']  	= $_POST['lstfrom'];
+					$dataAccount[$index]['account_to']  	= $_POST['lstto'];
+					$dataAccount[$index]['account_debit']  = $_POST['txtamount'];
+					$dataAccount[$index]['account_credit'] = "";
+					$dataAccount[$index]['ref_ledger'] = $_POST['lstto'];
+				}
 
 				//actual to ledger selected from list end
 
-				//print_r($dataAccount);exit();
+				/*
+				echo "<pre>";
+				print_r($dataAccount);exit();
+				echo "</pre>";
+				*/
+
 
 				$insert = $account->insert_batch($dataAccount);
 				if($insert){

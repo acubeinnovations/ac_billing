@@ -30,6 +30,7 @@ define("USERSTATUS_DISABLED", 4);
 // Status
 define("STATUS_ACTIVE", 1);
 define("STATUS_INACTIVE", 2);
+define("STATUS_DELETED",3);
 
 //REPORT FEATURE POSITION
 define("LHS", 1);
@@ -182,8 +183,11 @@ define('LEDGER_DUTIES_AND_TAXES', 12);
 define('LEDGER_SUNDRY_CREDITORS', 31);
 define('LEDGER_SUNDRY_DEBITORS', 32);
 
-//SUB LEDGER
+//SUB LEDGER TEXT
 define('LEDGER_SUB_VAZHIPADU', 'വഴിപാട്');
+//SUB LEDGER ID
+define('LEDGER_SUB_FRIGHT',83);
+define('LEDGER_SUB_RONUNDOFF',84);
 
 //vazhipadu cancel
 define('CANCEL_STATUS_TRUE', 2);
@@ -214,8 +218,8 @@ define("V_MASTER_SOURCE_FALSE", 2);
 //voucher source items
 define("ALL_CUSTOMERS",1);
 define("CUSTOMER_TIN_CST", 2);
-define("ALL_SUPPLIERS",1);
-define("SUPPLIER_TIN_CST", 2);
+define("ALL_SUPPLIERS",3);
+define("SUPPLIER_TIN_CST", 4);
 
 //define tax types
 define("TAX_TYPE_SALE", 1);

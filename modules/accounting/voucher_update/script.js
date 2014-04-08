@@ -1,15 +1,16 @@
 $(document).ready(function(){
 
-	$("#div-dtls1").hide();
-	$("#div-dtls2").hide();
-	$("#src_items").hide();
-	$("#div_cnr").hide();
+	//default settings
+	setDefault()
 	
 
 
 	//master voucher change
 	$("#lstmvoucher").change(function(){
 		var voucher_master = $(this).val();
+		//setDefault();
+		checkSourceItem();
+		/*
 		$.ajax({
 			type:'POST',
 			url:CURRENT_URL,
@@ -24,11 +25,10 @@ $(document).ready(function(){
 				}
 			}
 		});
+*/
 	});
 
-	$("#lstsourceitem").change(function(){
-		checkSourceItem();
-	});
+	
 
 	//checkbox default currency
 	$("#chk_currency").click(function(){
@@ -65,8 +65,7 @@ $(document).ready(function(){
 			$("#div-dtls2").hide();
 		}else if(source == "2"){
 			$("#div-dtls1").hide();
-			$("#div-dtls2").show();
-			checkSourceItem();	
+			$("#div-dtls2").show();	
 		}else{
 			$("#div-dtls1").hide();
 			$("#div-dtls2").hide();
@@ -114,7 +113,15 @@ $(document).ready(function(){
 					msg += "Select default ledgers<br>";
 				}
 			}else if(source == 2){
-				
+				if(voucher_type == SALES_VOUCHER){
+					if($("#lstfromledger").val() == null || $("#lstfromledger").val() == -1){
+						msg += "Select default from ledger <br/>";
+					}
+				}else if(voucher_type == PURCHASE_VOUCHER){
+					if($("#lsttoledger").val() == null  || $("#lsttoledger").val() == -1){
+						msg += "Select default to ledger <br/>";
+					}
+				}
 			}
 		}
 
@@ -133,10 +140,34 @@ $(document).ready(function(){
 
 function checkSourceItem()
 {
+	var voucher_type = $("#lstmvoucher").val();
 	var v_src_item = $("#lstsourceitem").val();
-	if(v_src_item >0){
+	if(voucher_type == SALES_VOUCHER){
 		$("#src2_dft_to").hide();
+		$("#src2_dft_from").show();
+		$("#src_items_for_sales").show();
+		$("#src_items_for_purchase").hide();
+
+	}else if(voucher_type == PURCHASE_VOUCHER){
+		$("#src2_dft_to").show();
+		$("#src2_dft_from").hide();
+		$("#src_items_for_sales").hide();
+		$("#src_items_for_purchase").show();
 	}else{
 		$("#src2_dft_to").show();
+		$("#src2_dft_from").show();
+
+		$("#src_items_for_sales").hide();
+		$("#src_items_for_purchase").hide();
 	}
+}
+
+function setDefault()
+{
+	$("#div-dtls1").hide();
+	$("#div-dtls2").hide();
+	$("#src_items").hide();
+	$("#div_cnr").hide();
+	$("#src_items_for_sales").hide();
+	$("#src_items_for_purchase").hide();
 }

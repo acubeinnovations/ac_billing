@@ -39,9 +39,15 @@ if(!defined('CHECK_INCLUDED')){
 					</label>
 				</div>
 
-				<div class="medium-5 columns" id="src_items" >
+				<div class="medium-5 columns" id="src_items_for_sales" >
 					<label for="ledger">Customer/Supplier
-					<?php echo populate_list_array("lstsourceitem", $voucher_source_item_list, 'id','name', '',$disable=false);?>
+					<?php echo populate_list_array("lstsourceitem1", $sales_voucher_items, 'id','name', '',$disable=false);?>
+					<input type="hidden" value="-1" name="hd_ac_to" id="hd_ac_to" />
+					</label>
+				</div>
+				<div class="medium-5 columns" id="src_items_for_purchase" >
+					<label for="ledger">Customer/Supplier
+					<?php echo populate_list_array("lstsourceitem2", $purchase_voucher_items, 'id','name', '',$disable=false);?>
 					<input type="hidden" value="-1" name="hd_ac_to" id="hd_ac_to" />
 					</label>
 				</div>
@@ -188,7 +194,7 @@ if(!defined('CHECK_INCLUDED')){
 
  		<div class="medium-8 columns" id="div-dtls2">
  			<div class="row">
-	 			<div class="medium-4 columns" >
+	 			<div class="medium-4 columns" id="src2_dft_from">
 		 			<label for="ledger">Default From Account</label>
 		 			<?php echo populate_multiple_list_array("lstfromledger", $ledgers, 'id','name', array(),$disable=false,false);?>
 	 			</div>

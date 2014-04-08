@@ -261,8 +261,9 @@ Class StockRegister{
 
     public function get_voucher_items()
     {
-    	$strSQL = "SELECT sr.item_id,sr.quantity,sr.unit_rate,sm.item_name FROM stock_register sr";	
+    	$strSQL = "SELECT sr.item_id,sr.quantity,sr.unit_rate,sm.item_name,tm.id AS tax_id,tm.rate AS tax_rate FROM stock_register sr";	
     	$strSQL .=" LEFT JOIN stock_master sm ON sm.item_id = sr.item_id";
+    	$strSQL .=" LEFT JOIN tax_master tm ON tm.id = sr.tax_id";
     	$strSQL .=" INNER JOIN voucher v ON v.voucher_id = sr.voucher_type_id";
     	$strSQL .= " WHERE sr.fy_id = '".$this->current_fy_id."' AND sr.voucher_number = '".$this->voucher_number."' AND sr.voucher_type_id = '".$this->voucher_type_id."'";
     	$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
@@ -273,8 +274,11 @@ Class StockRegister{
 				$items[$i]['item_name'] = $row['item_name'];
 				$items[$i]['quantity'] = abs($row['quantity']);
 				$items[$i]['unit_rate'] = $row['unit_rate'];
-				$items[$i]['tax'] = 0;
-				$items[$i]['total'] = $row['unit_rate']*abs($row['quantity']);
+				$items[$i]['tax'] = $row['tax_id'];
+				$items[$i]['tax_rate'] = $row['tax_rate']*100;
+				$taxable_amount = $row['unit_rate']*abs($row['quantity']); 
+				$tax_amount = $taxable_amount * $row['tax_rate'];
+				$items[$i]['total'] = $taxable_amount + $tax_amount;
 				$i++;
 			}
 			return $items;

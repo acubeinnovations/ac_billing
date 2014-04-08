@@ -54,12 +54,21 @@ if(isset($_GET['slno'])){
 	$page_heading = $voucher->voucher_name;
 
 	$dataArray = array();
-	if($voucher->default_from!=""){
-		$dataArray['account_from'] = unserialize($voucher->default_from);
+
+	$from_data =  @unserialize($voucher->default_from);
+	$to_data = @unserialize($voucher->default_to);
+	if($from_data != false){
+		$dataArray['account_from'] = $from_data;
+	}else{
+		$dataArray['account_from'] = $voucher->default_from;
 	}
-	if($voucher->default_to!=""){
-		$dataArray['account_to'] = unserialize($voucher->default_to);
+	if($to_data != false){
+		$dataArray['account_to'] = $to_data;
+	}else{
+		$dataArray['account_to'] = $voucher->default_to;
 	}
+
+	
 	$account->voucher_type_id = $voucher->voucher_id;
  
 	$account_list = $account->getAccountTransaction($pagination->start_record,$pagination->max_records,$dataArray);

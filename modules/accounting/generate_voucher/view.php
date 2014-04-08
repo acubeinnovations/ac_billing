@@ -112,10 +112,10 @@ if(!defined('CHECK_INCLUDED')){
 					<td><?php echo $item['quantity'];?><input type="hidden" name="hd_itemqty[]" value="<?php echo $item['quantity'];?>"></td>
 					<td><?php echo $item['unit_rate'];?><input type="hidden" name="hd_itemrate[]" value="<?php echo $item['unit_rate'];?>"></td>
 					<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
-					<td >Cash Discount</td>
+					<td >0.00</td>
 					<?php }?>
-					<td><?php echo $item['tax'];?>%<input type="hidden" name="hd_itemtax[]" value="<?php echo $item['tax'];?>"></td>
-					<td><?php echo $item['total'];?></td>
+					<td><?php echo $item['tax_rate'];?>%<input type="hidden" name="hd_itemtax[]" value="<?php echo $item['tax'];?>"></td>
+					<td><?php echo number_format($item['total'],2);?></td>
 					<td></td>
 				</tr>
 				<?php }
