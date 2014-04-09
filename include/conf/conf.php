@@ -225,6 +225,15 @@ define("SUPPLIER_TIN_CST", 4);
 define("TAX_TYPE_SALE", 1);
 define("TAX_TYPE_PURCHASE", 2);
 
+
+//voucher default account settings constants
+define("DEFAULT_ACCOUNT_FROM",1);
+define("DEFAULT_ACCOUNT_TO", 2);
+
+//voucher master types
+define("ACCOUNT_VOUCHER",1);
+define("INVENTORY_VOUCHER",2);
+
 ?>
 
 

@@ -9,7 +9,8 @@ Class Voucher{
 	var $connection ="";
 	var $voucher_master_id  =  gINVALID; //master voucher
 	var $voucher_master_name ="";
-	var $voucher_master_source = "";
+	var $voucher_master_type = gINVALID;
+	var $default_account = gINVALID;
 
 	var $voucher_id = gINVALID; //voucher
 	var $voucher_name = "";
@@ -177,7 +178,10 @@ Class Voucher{
     {
     	$vouchers = array();$i=0;
 		$strSQL = "SELECT  voucher_master_id,voucher_master_name FROM voucher_master WHERE status = '".STATUS_ACTIVE."'";
-		 mysql_query("SET NAMES utf8");
+		if($this->voucher_master_type > 0){
+			$strSQL .= " AND voucher_master_type = '".$this->voucher_master_type."'";
+		}
+		mysql_query("SET NAMES utf8");
 		$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
 		if ( mysql_num_rows($rsRES) > 0 )
 		{
@@ -277,7 +281,8 @@ Class Voucher{
 			$this->voucher_master_id 	 = $row['voucher_master_id'];
 			$this->voucher_master_name   = $row['voucher_master_name'];
 			$this->status 				 = $row['status'];
-			$this->voucher_master_source = $row['voucher_master_source'];
+			$this->voucher_master_type 	 = $row['voucher_master_type'];
+			$this->default_account 		 = $row['default_account'];
 			return true;
 		}else{
 			return false;

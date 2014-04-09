@@ -152,6 +152,7 @@ if ( mysql_num_rows($rsRES2) > 0 )
             <li class="has-dropdown"> 
               <a href="ac_vouchers.php">Voucher</a>
               <ul class="dropdown">
+               <li><a href="ac_account_voucher.php">Add Account Voucher</a></li>
               <li><a href="ac_vouchers.php">Add Voucher</a></li>
               <li class="divider"></li>
               <?php if($vouchers){

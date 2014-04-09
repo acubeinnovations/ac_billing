@@ -211,12 +211,21 @@ Class Account{
             }
 
     	    if(isset($voucher['account_from'])){
-    			$ids = implode(",",$voucher['account_from']);
-                $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                if(is_array($voucher['account_from'])){
+                    $ids = implode(",",$voucher['account_from']);
+                    $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                }else if($voucher['account_from'] > 0){
+                    $strSQL.= " AND am.ref_ledger = '".$voucher['account_from']."'";
+                }
+    			
     		}
             else if(isset($voucher['account_to'])){
-    			$ids = implode(",",$voucher['account_to']);
-    			$strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                if(is_array($voucher['account_to'])){
+    			    $ids = implode(",",$voucher['account_to']);
+    			    $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                }else if($voucher['account_to'] > 0){
+                    $strSQL.= " AND am.ref_ledger = '".$voucher['account_to']."'";
+                }
     		}
 
 	        if(isset($voucher['book_ledgers'])){
@@ -285,13 +294,24 @@ Class Account{
             }
 
             if(isset($voucher['account_from'])){
-                $ids = implode(",",$voucher['account_from']);
-                $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                if(is_array($voucher['account_from'])){
+                    $ids = implode(",",$voucher['account_from']);
+                    $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                }else if($voucher['account_from'] > 0){
+                    $strSQL.= " AND am.ref_ledger = '".$voucher['account_from']."'";
+                }
+                
             }
             else if(isset($voucher['account_to'])){
-                $ids = implode(",",$voucher['account_to']);
-                $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                if(is_array($voucher['account_to'])){
+                    $ids = implode(",",$voucher['account_to']);
+                    $strSQL.= " AND am.ref_ledger IN(".$ids.")";
+                }else if($voucher['account_to'] > 0){
+                    $strSQL.= " AND am.ref_ledger = '".$voucher['account_to']."'";
+                }
             }
+
+           
 
             if(isset($voucher['book_ledgers'])){
                 $ids = implode(",",$voucher['book_ledgers']);
