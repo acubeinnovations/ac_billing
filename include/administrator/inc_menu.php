@@ -10,20 +10,21 @@ if(mysql_num_rows($rsRES_ac) > 0){
   $current_fy_id =$row_ac['current_fy_id'];
 }
 
-$strSQL = "SELECT V.voucher_id ,V.voucher_name AS voucher FROM voucher V WHERE  V.fy_id = '".$current_fy_id."' AND V.hidden = '".VOUCHER_SHOW."'";
+//get account vouchers
+$strSQL = "SELECT V.voucher_id ,V.voucher_name AS voucher FROM voucher V WHERE  V.fy_id = '".$current_fy_id."' AND V.hidden = '".VOUCHER_SHOW."' AND V.source = '".ACCOUNT_VOUCHER."'";
  mysql_query("SET NAMES utf8");
 $rsRES = mysql_query($strSQL,$myconnection) or die(mysql_error(). $strSQL );
-$vouchers = array();$i=0;
+$ac_vouchers = array();$i=0;
 if ( mysql_num_rows($rsRES) > 0 )
 {
   while ( list ($id,$name) = mysql_fetch_row($rsRES) ){
-      $vouchers[$i]['id'] =$id;
-      $vouchers[$i]['name'] =$name;
+      $ac_vouchers[$i]['id'] =$id;
+      $ac_vouchers[$i]['name'] =$name;
       $i++;
   }
     
 }else{
-    $vouchers = false;
+    $ac_vouchers = false;
 }
 
 $strSQL1 = "SELECT  id,name,ledgers FROM ac_books";
@@ -155,12 +156,12 @@ if ( mysql_num_rows($rsRES2) > 0 )
                <li><a href="ac_account_voucher.php">Add Account Voucher</a></li>
               <li><a href="ac_vouchers.php">Add Voucher</a></li>
               <li class="divider"></li>
-              <?php if($vouchers){
+              <?php if($ac_vouchers){
                    $i=0;
-                  while($i<count($vouchers)){
-                   $url = "ac_generate_voucher.php?v=".$vouchers[$i]['id'];
+                  while($i<count($ac_vouchers)){
+                   $url = "ac_generate_ac_voucher.php?v=".$ac_vouchers[$i]['id'];
                 ?>
-                <li><a href="<?php echo $url;?>"><?php echo $vouchers[$i]['name'];?></a></li>
+                <li><a href="<?php echo $url;?>"><?php echo $ac_vouchers[$i]['name'];?></a></li>
                 <li class="divider"></li>
                 <?php 
                     $i++;
