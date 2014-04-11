@@ -7,11 +7,16 @@ if ( !defined('CHECK_INCLUDED') ){
 Class Voucher{
 
 	var $connection ="";
+
+	//master columns
 	var $voucher_master_id  =  gINVALID; //master voucher
 	var $voucher_master_name ="";
+	var $status = "";
 	var $voucher_master_type = gINVALID;
 	var $default_account = gINVALID;
+	var $inventory_type = gINVALID;
 
+	//voucher columns
 	var $voucher_id = gINVALID; //voucher
 	var $voucher_name = "";
 	var $voucher_description = "";
@@ -35,9 +40,10 @@ Class Voucher{
 	var $default_footer = "";
 	var $default_currency = "";
 	var $currency_id = gINVALID;
-	var $discount_rc_amt = "";
-	var $frieght_demurge = "";
-	var $round_off = "";
+	var $inventory_account = gINVALID;
+	var $cash_discount = DEFAULT_FALSE;
+	var $frieght_demurge = gINVALID;
+	var $round_off = gINVALID;
 	var $no_of_copies = "";
 	
 
@@ -64,7 +70,8 @@ Class Voucher{
     public function update()
     {
     	if ( $this->voucher_id == "" || $this->voucher_id == gINVALID) {
-    		$strSQL= "INSERT INTO voucher(voucher_name,voucher_description,fy_id,voucher_master_id,header,footer,number_series,series_prefix,series_sufix,series_start,series_seperator,default_from,default_to,form_type_id,source,hidden,module_id,voucher_source_item_id,default_header,default_footer,default_currency,currency_id,discount_rc_amt,frieght_demurge,round_off,no_of_copies) VALUES('";
+
+    		$strSQL = "INSERT INTO `ac_billing`.`voucher` (`voucher_name` ,`voucher_description` ,`fy_id` ,`voucher_master_id` ,`header` ,`footer` ,`number_series` ,`series_prefix` ,`series_sufix` ,`series_start` ,`series_seperator` ,`default_from` ,`default_to` ,`form_type_id` ,`source` ,`hidden` ,`module_id` ,`voucher_source_item_id` ,`default_header` ,`default_footer` ,`default_currency` ,`currency_id` ,`inventory_account` , `cash_discount` ,`frieght_demurge` ,`round_off` ,`no_of_copies`) VALUES('";
     		$strSQL.= mysql_real_escape_string($this->voucher_name)."','";
     		$strSQL.= mysql_real_escape_string($this->voucher_description)."','";
     		$strSQL.= mysql_real_escape_string($this->current_fy_id)."','";
@@ -97,12 +104,14 @@ Class Voucher{
     		$strSQL.= mysql_real_escape_string($this->default_footer)."','";
     		$strSQL.= mysql_real_escape_string($this->default_currency)."','";
     		$strSQL.= mysql_real_escape_string($this->currency_id)."','";
-    		$strSQL.= mysql_real_escape_string($this->discount_rc_amt)."','";
+    		$strSQL.= mysql_real_escape_string($this->inventory_account)."','";
+    		$strSQL.= mysql_real_escape_string($this->cash_discount)."','";
     		$strSQL.= mysql_real_escape_string($this->frieght_demurge)."','";
     		$strSQL.= mysql_real_escape_string($this->round_off)."','";
     		$strSQL.= mysql_real_escape_string($this->no_of_copies)."')";
-
-			//echo $strSQL;exit();
+			//echo "<pre>";
+			//echo $strSQL;
+			//echo "</pre>";exit();
 			mysql_query("SET NAMES utf8");
 			$rsRES = mysql_query($strSQL,$this->connection) or die ( mysql_error() . $strSQL );
 
@@ -181,6 +190,7 @@ Class Voucher{
 		if($this->voucher_master_type > 0){
 			$strSQL .= " AND voucher_master_type = '".$this->voucher_master_type."'";
 		}
+		//echo $strSQL;exit();
 		mysql_query("SET NAMES utf8");
 		$rsRES = mysql_query($strSQL,$this->connection) or die(mysql_error(). $strSQL );
 		if ( mysql_num_rows($rsRES) > 0 )
@@ -259,7 +269,8 @@ Class Voucher{
 				$this->default_footer 		= $row['default_footer'];
 				$this->default_currency 	= $row['default_currency'];
 				$this->currency_id 			= $row['currency_id'];
-				$this->discount_rc_amt 		= $row['discount_rc_amt'];
+				$this->inventory_account 	= $row['inventory_account'];
+				$this->cash_discount		= $row['cash_discount'];
 				$this->frieght_demurge 		= $row['frieght_demurge'];
 				$this->round_off 			= $row['round_off'];
 				$this->no_of_copies 		= $row['no_of_copies'];
@@ -283,6 +294,7 @@ Class Voucher{
 			$this->status 				 = $row['status'];
 			$this->voucher_master_type 	 = $row['voucher_master_type'];
 			$this->default_account 		 = $row['default_account'];
+			$this->inventory_type		 = $row['inventory_type'];
 			return true;
 		}else{
 			return false;

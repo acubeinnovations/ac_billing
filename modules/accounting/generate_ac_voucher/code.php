@@ -54,7 +54,7 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 		}
 		if($voucher_number ==''){
 			$_SESSION[SESSION_TITLE.'flash'] = "Invalid Voucher";
-		    header( "Location:ac_vouchers.php");
+		    header( "Location:ac_account_voucher.php");
 		    exit();
 		}
 	}

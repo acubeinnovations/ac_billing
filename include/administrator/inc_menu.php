@@ -27,6 +27,23 @@ if ( mysql_num_rows($rsRES) > 0 )
     $ac_vouchers = false;
 }
 
+//get inventory vouchers
+$strSQL = "SELECT V.voucher_id ,V.voucher_name AS voucher FROM voucher V WHERE  V.fy_id = '".$current_fy_id."' AND V.hidden = '".VOUCHER_SHOW."' AND V.source = '".INVENTORY_VOUCHER."'";
+ mysql_query("SET NAMES utf8");
+$rsRES = mysql_query($strSQL,$myconnection) or die(mysql_error(). $strSQL );
+$invt_vouchers = array();$i=0;
+if ( mysql_num_rows($rsRES) > 0 )
+{
+  while ( list ($id,$name) = mysql_fetch_row($rsRES) ){
+      $invt_vouchers[$i]['id'] =$id;
+      $invt_vouchers[$i]['name'] =$name;
+      $i++;
+  }
+    
+}else{
+    $invt_vouchers = false;
+}
+
 $strSQL1 = "SELECT  id,name,ledgers FROM ac_books";
  mysql_query("SET NAMES utf8");
 $rsRES1 = mysql_query($strSQL1,$myconnection) or die(mysql_error(). $strSQL1 );
@@ -154,7 +171,8 @@ if ( mysql_num_rows($rsRES2) > 0 )
               <a href="ac_vouchers.php">Voucher</a>
               <ul class="dropdown">
                <li><a href="ac_account_voucher.php">Add Account Voucher</a></li>
-              <li><a href="ac_vouchers.php">Add Voucher</a></li>
+               <li><a href="ac_inventory_voucher.php">Add Inventory Voucher</a></li>
+              <!-- <li><a href="ac_vouchers.php">Add Voucher</a></li>-->
               <li class="divider"></li>
               <?php if($ac_vouchers){
                    $i=0;
@@ -167,7 +185,21 @@ if ( mysql_num_rows($rsRES2) > 0 )
                     $i++;
                   }
                 }
+              ?>
+
+              <?php if($invt_vouchers){
+                   $i=0;
+                  while($i<count($invt_vouchers)){
+                   $url = "ac_generate_voucher.php?v=".$invt_vouchers[$i]['id'];
                 ?>
+                <li><a href="<?php echo $url;?>"><?php echo $invt_vouchers[$i]['name'];?></a></li>
+                <li class="divider"></li>
+                <?php 
+                    $i++;
+                  }
+                }
+              ?>
+
               </ul>
             </li>
             <li class="divider"></li>

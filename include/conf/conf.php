@@ -182,6 +182,8 @@ define('LEDGER_DIRECT_INCOME', 11);
 define('LEDGER_DUTIES_AND_TAXES', 12);
 define('LEDGER_SUNDRY_CREDITORS', 31);
 define('LEDGER_SUNDRY_DEBITORS', 32);
+define("LEDGER_SALES",28);
+define("LEDGER_PURCHASE", 25);
 
 //SUB LEDGER TEXT
 define('LEDGER_SUB_VAZHIPADU', 'വഴിപാട്');
@@ -233,6 +235,10 @@ define("DEFAULT_ACCOUNT_TO", 2);
 //voucher master types
 define("ACCOUNT_VOUCHER",1);
 define("INVENTORY_VOUCHER",2);
+
+//voucher master inventory type
+define("INVENTORY_TYPE_SALE",1);
+define("INVENTORY_TYPE_PURCHASE", 2);
 
 ?>
 

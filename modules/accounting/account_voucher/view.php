@@ -104,7 +104,7 @@ if(!defined('CHECK_INCLUDED')){
 	<div class="row" >
 		<div class="medium-12 columns">	
 		<fieldset>
-	 		<legend>Voucher Account / Module Settings</legend>
+	 		<legend>Account / Module Settings</legend>
 	 		<div class="row">
 		 		<div class="medium-4 columns" >
 		 			<div class="row">
