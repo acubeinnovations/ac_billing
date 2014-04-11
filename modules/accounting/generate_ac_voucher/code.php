@@ -31,7 +31,7 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 		$voucher->get_details();
 		$voucher_number = $account->voucher_number;
 		$readonly = "readonly='readonly'";
-		$list_url = "ac_generated_vouchers.php?slno=".$voucher->voucher_id;
+		$list_url = "ac_generated_ac_vouchers.php?slno=".$voucher->voucher_id;
 
 		if($account->account_from ==$account->ref_ledger){
 			$amount = $account->account_debit;
@@ -42,7 +42,7 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 	}
 	//new voucher
 	if(isset($_GET['v'])){//url parameter voucher id
-		$list_url = "ac_generated_vouchers.php?slno=".$_GET['v'];
+		$list_url = "ac_generated_ac_vouchers.php?slno=".$_GET['v'];
 		$voucher->voucher_id = $_GET['v'];
 		$voucher->get_details();
 		//get next voucher number
@@ -104,7 +104,7 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 	
 	
 	$_SESSION[SESSION_TITLE.'flash'] = $account->error_description;
-    header( "Location:ac_generated_vouchers.php?slno=".$voucher_type_id);
+    header( "Location:ac_generated_ac_vouchers.php?slno=".$voucher_type_id);
     exit();
 	
 }
@@ -160,7 +160,7 @@ if(isset($_POST['submit'])){
 				exit();
 			}else{
 				$_SESSION[SESSION_TITLE.'flash'] = $account->error_description;
-				header( "Location:ac_generated_vouchers.php?slno=".$voucher->voucher_id);
+				header( "Location:ac_generated_ac_vouchers.php?slno=".$voucher->voucher_id);
 				exit();
 
 			}	
