@@ -190,7 +190,7 @@ if ( mysql_num_rows($rsRES2) > 0 )
               <?php if($invt_vouchers){
                    $i=0;
                   while($i<count($invt_vouchers)){
-                   $url = "ac_generate_voucher.php?v=".$invt_vouchers[$i]['id'];
+                   $url = "ac_generate_invt_voucher.php?v=".$invt_vouchers[$i]['id'];
                 ?>
                 <li><a href="<?php echo $url;?>"><?php echo $invt_vouchers[$i]['name'];?></a></li>
                 <li class="divider"></li>
