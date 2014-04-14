@@ -7,6 +7,7 @@ if(!defined('CHECK_INCLUDED')){
 <form name="frmvoucher" id="frmvoucher" action="" method="POST">
 <input type="hidden" name="hd_ac_id" value="<?php echo $account->account_id; ?>" />
 <input type="hidden" name="hd_voucherid" value="<?php echo $voucher->voucher_id; ?>" />
+<input type="hidden" name="hd_int_type" id="hd_int_type" value="<?php echo $voucher->inventory_type; ?>" />
 
 <div class="row" >
 	<div class="medium-4 columns">
@@ -38,7 +39,8 @@ if(!defined('CHECK_INCLUDED')){
 	<div class="row">
 		<div class="medium-4 columns">
 			<label for="voucher">From  :
-			<input type="radio" name="radio" value="1" /> Cash / <input type="radio" name="radio" value="2" /> Credit
+			<input type="radio" name="radio" value="<?php echo $ac_tx_CASH;?>" checked /> Cash / 
+			<input type="radio" name="radio" value="<?php echo $ac_tx_CREDIT;?>" /> Credit
 			
 			<?php 
 				if(isset($_GET['edt'])){
@@ -46,27 +48,25 @@ if(!defined('CHECK_INCLUDED')){
 				}else{
 					$disable = false;
 				}
-				if($default_from){
-					echo populate_list_array("lstfrom", $ledgers_default_from_filtered, 'id','name', $account->account_from,$disable);
-				}else{
-					echo populate_list_array("lstfrom", $ledgers_exept_default_to_filtered, 'id','name', $account->account_from,$disable);
+				if($ledgers_from){
+					echo populate_list_array("lstfrom", $ledgers_from, 'id','name', $account->account_from,$disable);
 				}
 			?>
 			</label>
 		</div>
 		<div class="medium-4 columns">
-			<label for="voucher">To :</label>
+			<label for="voucher">To :
+
 			<?php 
-				if($default_to){
-					echo populate_list_array("lstto", $ledgers_default_to_filtered, 'id','name', $account->account_to,$disable);
-				}else{
-					echo populate_list_array("lstto", $ledgers_exept_default_from_filtered, 'id','name', $account->account_to,$disable);
+				if($ledgers_to){
+					echo populate_list_array("lstto", $ledgers_to, 'id','name', $account->account_to,$disable);
 				}
 			?>
+			</label>
 		</div>
 		<div class="medium-4 columns">
 			<label for="voucher">Amount</label>
-			<input type="text" name="txtamount" id="txtamount" value="<?php echo number_format($amount,2);?>" <?php if($voucher->source == VOUCHER_FOR_INVENTORY){ echo "readonly";}?>/>
+			<input type="text" name="txtamount" id="txtamount" readonly value="<?php echo number_format($amount,2);?>"/>
 		</div>
 	</div>
 	<div class="row">
@@ -145,9 +145,9 @@ if(!defined('CHECK_INCLUDED')){
 				</tr>
 
 
-				<?php if($voucher->frieght_demurge > 0){?>
+				<?php if($voucher->freight_demurge > 0){?>
 				<tr style="font-weight:bold;">
-					<td colspan="6" align="right">Frieght and Demurge</td>
+					<td colspan="6" align="right">Freight and Demurge</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
 						<input type="text" id="txtfrieght" name="txtfrieght" value="<?php echo number_format($frieght,2);?>"/>

@@ -42,7 +42,7 @@ Class Voucher{
 	var $currency_id = gINVALID;
 	var $inventory_account = gINVALID;
 	var $cash_discount = DEFAULT_FALSE;
-	var $frieght_demurge = gINVALID;
+	var $freight_demurge = gINVALID;
 	var $round_off = gINVALID;
 	var $no_of_copies = "";
 	
@@ -71,7 +71,7 @@ Class Voucher{
     {
     	if ( $this->voucher_id == "" || $this->voucher_id == gINVALID) {
 
-    		$strSQL = "INSERT INTO `ac_billing`.`voucher` (`voucher_name` ,`voucher_description` ,`fy_id` ,`voucher_master_id` ,`header` ,`footer` ,`number_series` ,`series_prefix` ,`series_sufix` ,`series_start` ,`series_seperator` ,`default_from` ,`default_to` ,`form_type_id` ,`source` ,`hidden` ,`module_id` ,`voucher_source_item_id` ,`default_header` ,`default_footer` ,`default_currency` ,`currency_id` ,`inventory_account` , `cash_discount` ,`frieght_demurge` ,`round_off` ,`no_of_copies`) VALUES('";
+    		$strSQL = "INSERT INTO `ac_billing`.`voucher` (`voucher_name` ,`voucher_description` ,`fy_id` ,`voucher_master_id` ,`header` ,`footer` ,`number_series` ,`series_prefix` ,`series_sufix` ,`series_start` ,`series_seperator` ,`default_from` ,`default_to` ,`form_type_id` ,`source` ,`hidden` ,`module_id` ,`voucher_source_item_id` ,`default_header` ,`default_footer` ,`default_currency` ,`currency_id` ,`inventory_account` , `cash_discount` ,`freight_demurge` ,`round_off` ,`no_of_copies`) VALUES('";
     		$strSQL.= mysql_real_escape_string($this->voucher_name)."','";
     		$strSQL.= mysql_real_escape_string($this->voucher_description)."','";
     		$strSQL.= mysql_real_escape_string($this->current_fy_id)."','";
@@ -106,7 +106,7 @@ Class Voucher{
     		$strSQL.= mysql_real_escape_string($this->currency_id)."','";
     		$strSQL.= mysql_real_escape_string($this->inventory_account)."','";
     		$strSQL.= mysql_real_escape_string($this->cash_discount)."','";
-    		$strSQL.= mysql_real_escape_string($this->frieght_demurge)."','";
+    		$strSQL.= mysql_real_escape_string($this->freight_demurge)."','";
     		$strSQL.= mysql_real_escape_string($this->round_off)."','";
     		$strSQL.= mysql_real_escape_string($this->no_of_copies)."')";
 			//echo "<pre>";
@@ -271,7 +271,7 @@ Class Voucher{
 				$this->currency_id 			= $row['currency_id'];
 				$this->inventory_account 	= $row['inventory_account'];
 				$this->cash_discount		= $row['cash_discount'];
-				$this->frieght_demurge 		= $row['frieght_demurge'];
+				$this->freight_demurge 		= $row['freight_demurge'];
 				$this->round_off 			= $row['round_off'];
 				$this->no_of_copies 		= $row['no_of_copies'];
 				

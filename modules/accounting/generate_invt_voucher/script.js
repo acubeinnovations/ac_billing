@@ -71,8 +71,9 @@ $(document).ready(function(){
 			$("#txtlinetotal").text("0.00");
 		}else{
 			var lineTotal = calculateLineTotal(rate,qty);
-			var lineTotalText = formatNumber(lineTotal);
-			$("#txtlinetotal").text(lineTotalText);
+			changeLineTotal(lineTotal);
+			//var lineTotalText = formatNumber(lineTotal);
+			//$("#txtlinetotal").text(lineTotalText);
 		}
 	});
 
@@ -87,8 +88,9 @@ $(document).ready(function(){
 
 		}else{
 			var lineTotal = calculateLineTotal(rate,qty);
-			var lineTotalText = formatNumber(lineTotal);
-			$("#txtlinetotal").text(lineTotalText);
+			changeLineTotal(lineTotal);
+			//var lineTotalText = formatNumber(lineTotal);
+			//$("#txtlinetotal").text(lineTotalText);
 		}
 	});
 
@@ -101,8 +103,9 @@ $(document).ready(function(){
 			$("#txtlinetotal").text("0.00");
 		}else{
 			var lineTotal = calculateLineTotal(rate,qty);
-			var lineTotalText = formatNumber(lineTotal);
-			$("#txtlinetotal").text(lineTotalText);
+			changeLineTotal(lineTotal);
+			//var lineTotalText = formatNumber(lineTotal);
+			//$("#txtlinetotal").text(lineTotalText);
 		}
 	});
 
@@ -122,8 +125,9 @@ $(document).ready(function(){
 				$("#txtlinetotal").text(rate);
 			}else{
 				var lineTotal = calculateLineTotal(rate,qty);
-				var lineTotalText = formatNumber(lineTotal);
-				$("#txtlinetotal").text(lineTotalText);
+				changeLineTotal(lineTotal);
+				//var lineTotalText = formatNumber(lineTotal);
+				//$("#txtlinetotal").text(lineTotalText);
 				postForm();
 			}
 		}
@@ -201,7 +205,7 @@ $(document).ready(function(){
 			$.each(total_tax, function( index, value ) {
 				var hd_tax_val = index+"_"+value;
 				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger[]" value="'+hd_tax_val+'" />'
-				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+index+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
+				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+value+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
 			});
 			
 
@@ -215,7 +219,7 @@ $(document).ready(function(){
 	});
 
 
-	$("#txtdiscount").blur(function(){
+	/*$("#txtdiscount").blur(function(){
 		var discount = $(this).val();
 		if(isNaN(discount)){
 			$(this).val(formatNumber(0));
@@ -225,7 +229,7 @@ $(document).ready(function(){
 			updateTotal();
 		}
 		
-	});
+	});*/
 
 	$("#txtfrieght").keyup(function(){
 		var fright = $(this).val();
@@ -241,12 +245,26 @@ $(document).ready(function(){
 		updateTotal();		
 	});
 
+
+
+
+	//select cash or credit
 	$("input:radio[name=radio]").click(function(){
-		if($(this).val() == 1){//cash
-			$("#lstfrom").attr('disabled',false);
-		}else if($(this).val() == 2){//credit
-			$("#lstfrom").attr('disabled',true);
+		var inv_type = $("#hd_int_type").val();
+		if(inv_type == INVENTORY_TYPE_SALE){
+			if($(this).val() == 1){//cash
+				$("#lstfrom").attr('disabled',false);
+			}else if($(this).val() == 2){//credit
+				$("#lstfrom").attr('disabled',true);
+			}
+		}else if(inv_type == INVENTORY_TYPE_PURCHASE){
+			if($(this).val() == 1){//cash
+				$("#lstto").attr('disabled',false);
+			}else if($(this).val() == 2){//credit
+				$("#lstto").attr('disabled',true);
+			}
 		}
+		
 	});
 
 
@@ -294,7 +312,15 @@ function calculateTax(total)
 		tax_value = parseFloat($("#lsttax option:selected").text());
 	}
 	var tax = total*tax_value/100;
+
 	return tax;
+}
+
+function changeLineTotal(lineTotal)
+{
+	var lineTotalText = formatNumber(lineTotal);
+
+	$("#txtlinetotal").text(lineTotalText);	
 }
 
 function updateTotal()
@@ -338,7 +364,7 @@ function formatNumber(number)
 	    	}else if(list[1].length == 2){
 	    		numberText += "."+list[1];
 	    	}else{
-	    		numberText += "."+list[1].substing(0,1);
+	    		numberText += "."+list[1].substring(0,2);
 	    	}
 	    	
 	    }else{
@@ -348,6 +374,7 @@ function formatNumber(number)
 	}else{
 		numberText = "0.00";
 	}
+	
 	return numberText;
 
 }
