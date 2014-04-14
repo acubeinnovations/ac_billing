@@ -210,24 +210,13 @@ Class Account{
               $strSQL .= " AND am.voucher_type_id = '".$this->voucher_type_id."'";
             }
 
-    	    if(isset($voucher['account_from'])){
-                if(is_array($voucher['account_from'])){
-                    $ids = implode(",",$voucher['account_from']);
+    	    if(isset($voucher['ref_ledgers'])){
+                if(is_array($voucher['ref_ledgers'])){
+                    $ids = implode(",",$voucher['ref_ledgers']);
                     $strSQL.= " AND am.ref_ledger IN(".$ids.")";
-                }else if($voucher['account_from'] > 0){
-                    $strSQL.= " AND am.ref_ledger = '".$voucher['account_from']."'";
-                }
-    			
+                }    			
     		}
-            else if(isset($voucher['account_to'])){
-                if(is_array($voucher['account_to'])){
-    			    $ids = implode(",",$voucher['account_to']);
-    			    $strSQL.= " AND am.ref_ledger IN(".$ids.")";
-                }else if($voucher['account_to'] > 0){
-                    $strSQL.= " AND am.ref_ledger = '".$voucher['account_to']."'";
-                }
-    		}
-
+            
 	        if(isset($voucher['book_ledgers'])){
                 $ids = implode(",",$voucher['book_ledgers']);
                 $strSQL.= " AND am.ref_ledger IN(".$ids.")";
@@ -540,7 +529,55 @@ Class Account{
     }
 
 
+    public function getVoucherTaxTransactions()
+    {
+        $strSQL = "SELECT am.account_credit,am.account_debit,am.ref_ledger,ls.ledger_sub_name as ref_ledger_name FROM account_master am ";
+        $strSQL .= " LEFT JOIN ledger_sub ls ON ls.ledger_sub_id = am.ref_ledger";
+        $strSQL .= " WHERE am.deleted = '".NOT_DELETED."' AND am.voucher_number = '".$this->voucher_number."' AND am.voucher_type_id = '".$this->voucher_type_id."' AND am.ref_ledger IN (SELECT ledger_sub_id FROM tax_master)";
+      //  echo $strSQL;exit();
+        $rsRES = mysql_query($strSQL, $this->connection) or die(mysql_error(). $strSQL);
+        $result_list = array();$i=0;
+        if(mysql_num_rows($rsRES) > 0)
+        {
+            while($row = mysql_fetch_assoc($rsRES)){
+                $result_list[$i]['account_credit']  = $row['account_credit'];
+                $result_list[$i]['account_debit']   = $row['account_debit'];
+                $result_list[$i]['ref_ledger']      = $row['ref_ledger'];
+                $result_list[$i]['ref_ledger_name'] = $row['ref_ledger_name'];
+                $i++;
+            }
+            return $result_list;
+        }else{
+            return false;
+        }
 
+    }
+
+    public function getRefLedgertTransaction($ref_ledger = gINVALID)
+    {
+        if($ref_ledger > 0){
+            $strSQL = "SELECT am.account_credit,am.account_debit,am.ref_ledger,ls.ledger_sub_name as ref_ledger_name FROM account_master am ";
+            $strSQL .= " LEFT JOIN ledger_sub ls ON ls.ledger_sub_id = am.ref_ledger";
+            $strSQL .= " WHERE am.deleted = '".NOT_DELETED."' AND am.voucher_number = '".$this->voucher_number."' AND am.voucher_type_id = '".$this->voucher_type_id."' AND am.ref_ledger = '".$ref_ledger."'";
+          //  echo $strSQL;exit();
+            $rsRES = mysql_query($strSQL, $this->connection) or die(mysql_error(). $strSQL);
+            $result_list = array();
+            if(mysql_num_rows($rsRES) > 0)
+            {
+                $row = mysql_fetch_assoc($rsRES);
+                $result_list['account_credit']  = $row['account_credit'];
+                $result_list['account_debit']   = $row['account_debit'];
+                $result_list['ref_ledger']      = $row['ref_ledger'];
+                $result_list['ref_ledger_name'] = $row['ref_ledger_name'];
+                return $result_list;
+            }else{
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+    }
     
 
 

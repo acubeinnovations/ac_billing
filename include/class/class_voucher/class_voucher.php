@@ -274,6 +274,7 @@ Class Voucher{
 				$this->freight_demurge 		= $row['freight_demurge'];
 				$this->round_off 			= $row['round_off'];
 				$this->no_of_copies 		= $row['no_of_copies'];
+				$this->get_master_details();
 				
 				return true;
 			}else{

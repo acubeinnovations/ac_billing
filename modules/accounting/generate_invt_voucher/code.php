@@ -30,7 +30,7 @@ $page_heading = "Generate Voucher";
 $list_url = "#";
 $readonly = "";
 $amount = 0;
-$frieght = 0;
+$freight = 0;
 $discount = 0;
 $roundoff = 0;
 $edt_items = false;
@@ -47,30 +47,49 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 
 		$voucher->voucher_id = $account->voucher_type_id;
 		$voucher->get_details();
-		$voucher->get_master_details();
 		$voucher_number = $account->voucher_number;
 		$readonly = "readonly='readonly'";
 		$list_url = "ac_generated_invt_vouchers.php?slno=".$voucher->voucher_id;
-
-		if($account->account_from ==$account->ref_ledger){
-			$amount = $account->account_debit;
-		}elseif($account->account_to ==$account->ref_ledger){
+		if($voucher->inventory_type == INVENTORY_TYPE_SALE){
 			$amount = $account->account_credit;
+		}else if($voucher->inventory_type == INVENTORY_TYPE_PURCHASE){
+			$amount = $account->account_debit;
 		}
-
-		
+				
 		$stock_register->voucher_type_id = $account->voucher_type_id;
 		$stock_register->voucher_number = $account->voucher_number;	
 		$edt_items = $stock_register->get_voucher_items();
-		
+
+ 		$tax_rows = $account->getVoucherTaxTransactions();
+
+ 		if($voucher->freight_demurge > 0){
+ 			$freight_tx = $account->getRefLedgertTransaction($voucher->freight_demurge);
+ 			if($freight_tx){
+ 				if($voucher->inventory_type == INVENTORY_TYPE_SALE){
+					$freight = $freight_tx['account_credit'];
+				}else if($voucher->inventory_type == INVENTORY_TYPE_PURCHASE){
+					$freight = $freight_tx['account_debit'];
+				}
+ 			}
+ 		}
+
+ 		if($voucher->round_off > 0){
+ 			$roundoff_tx = $account->getRefLedgertTransaction($voucher->round_off);
+ 			if($roundoff_tx){
+ 				if($voucher->inventory_type == INVENTORY_TYPE_SALE){
+					$roundoff = $roundoff_tx['account_credit'];
+				}else if($voucher->inventory_type == INVENTORY_TYPE_PURCHASE){
+					$roundoff = $roundoff_tx['account_debit'];
+				}
+ 			}
+ 		}
 
 	}
 	//new voucher
 	if(isset($_GET['v'])){//url parameter voucher id
-		$list_url = "ac_generated_vouchers.php?slno=".$_GET['v'];
+		$list_url = "ac_generated_invt_vouchers.php?slno=".$_GET['v'];
 		$voucher->voucher_id = $_GET['v'];
 		$voucher->get_details();
-		$voucher->get_master_details();
 		
 		//get next voucher number
 		$next_voucher_number = $account->getNextVoucherNumber($voucher->voucher_id);
@@ -330,12 +349,12 @@ if(isset($_POST['submit'])){
 				}
 				
 				//3. if freight and demurge
-				if(isset($_POST['txtfrieght']) and $_POST['txtfrieght']!= "" and  $_POST['txtfrieght'] > 0){
+				if(isset($_POST['txtfreight']) and $_POST['txtfreight']!= "" and  $_POST['txtfreight'] > 0){
 					$dataAccount[$index]['account_from']  	= $voucher->inventory_account;
 					$dataAccount[$index]['account_to']  	= $voucher->freight_demurge;
 					$dataAccount[$index]['ref_ledger'] 		= $voucher->freight_demurge;
 					$dataAccount[$index]['account_debit']  	= "";
-					$dataAccount[$index]['account_credit'] 	= $_POST['txtfrieght'];
+					$dataAccount[$index]['account_credit'] 	= $_POST['txtfreight'];
 					$index++;
 				}
 				//4.if round off
@@ -396,11 +415,11 @@ if(isset($_POST['submit'])){
 				}
 				
 				//3. if freight and demurge
-				if(isset($_POST['txtfrieght']) and $_POST['txtfrieght']!= "" and  $_POST['txtfrieght'] > 0){
+				if(isset($_POST['txtfreight']) and $_POST['txtfreight']!= "" and  $_POST['txtfreight'] > 0){
 					$dataAccount[$index]['account_from']  	= $voucher->inventory_account;
 					$dataAccount[$index]['account_to']  	= $voucher->freight_demurge;
 					$dataAccount[$index]['ref_ledger'] 		= $voucher->freight_demurge;
-					$dataAccount[$index]['account_debit']  	= $_POST['txtfrieght'];
+					$dataAccount[$index]['account_debit']  	= $_POST['txtfreight'];
 					$dataAccount[$index]['account_credit'] 	= "";
 					$index++;
 				}

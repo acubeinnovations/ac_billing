@@ -116,7 +116,7 @@ if(!defined('CHECK_INCLUDED')){
 					<td><?php echo $item['item_name'];?></td>
 					<td><?php echo $item['quantity'];?><input type="hidden" name="hd_itemqty[]" value="<?php echo $item['quantity'];?>"></td>
 					<td><?php echo $item['unit_rate'];?><input type="hidden" name="hd_itemrate[]" value="<?php echo $item['unit_rate'];?>"></td>
-					<?php if($voucher->discount_rc_amt == DEFAULT_TRUE){?>
+					<?php if($voucher->cash_discount == DEFAULT_TRUE){?>
 					<td >0.00</td>
 					<?php }?>
 					<td><?php echo $item['tax_rate'];?>%<input type="hidden" name="hd_itemtax[]" value="<?php echo $item['tax'];?>"></td>
@@ -143,6 +143,29 @@ if(!defined('CHECK_INCLUDED')){
 						<input type="button" name="button-add" value="+" id="button-add" class="tiny secondary button" />
 					</td>
 				</tr>
+				<?php if($tax_rows){ 
+					foreach($tax_rows as $row){
+				?>
+				<tr class="trtax" style="font-weight:bold;">
+					<td colspan="6" align="right"><?php echo $row['ref_ledger_name'];?></td>
+					<td colspan="2" align="left">
+						<input type="hidden" name="hd_tax_ledger[]" value="<?php echo $row['ref_ledger'];?>" />
+						<div class="medium-6 columns">
+							<span id="lbl_tax">
+								<?php 
+								if($voucher->inventory_type == INVENTORY_TYPE_SALE){
+									echo $row['account_credit'];
+								}else if($voucher->inventory_type == INVENTORY_TYPE_PURCHASE){
+									echo $row['account_debit'];
+								}
+								?>
+
+							</span>
+						</div>
+					</td>
+				</tr>
+				<?php }
+				}?>
 
 
 				<?php if($voucher->freight_demurge > 0){?>
@@ -150,7 +173,7 @@ if(!defined('CHECK_INCLUDED')){
 					<td colspan="6" align="right">Freight and Demurge</td>
 					<td colspan="2" align="left">
 						<div class="medium-6 columns">
-						<input type="text" id="txtfrieght" name="txtfrieght" value="<?php echo number_format($frieght,2);?>"/>
+						<input type="text" id="txtfreight" name="txtfreight" value="<?php echo number_format($freight,2);?>"/>
 						</div>
 					</td>
 				</tr>
