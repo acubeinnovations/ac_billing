@@ -11,5 +11,7 @@ var PURCHASE = '<?php echo PURCHASE ?>';
 var INVENTORY_TYPE_SALE = '<?php echo INVENTORY_TYPE_SALE ?>';
 var INVENTORY_TYPE_PURCHASE = '<?php echo INVENTORY_TYPE_PURCHASE ?>';
 
+var tax_list = '<?php echo $tax_josn; ?>';
+
 
 -->

@@ -204,8 +204,9 @@ $(document).ready(function(){
 
 			$.each(total_tax, function( index, value ) {
 				var hd_tax_val = index+"_"+value;
+				var tax_name = getTaxName(index);
 				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger[]" value="'+hd_tax_val+'" />'
-				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+value+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
+				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+tax_name+'%</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
 			});
 			
 
@@ -219,7 +220,7 @@ $(document).ready(function(){
 	});
 
 
-	/*$("#txtdiscount").blur(function(){
+	$("#txtdiscount").blur(function(){
 		var discount = $(this).val();
 		if(isNaN(discount)){
 			$(this).val(formatNumber(0));
@@ -229,7 +230,7 @@ $(document).ready(function(){
 			updateTotal();
 		}
 		
-	});*/
+	});
 
 	$("#txtfrieght").keyup(function(){
 		var fright = $(this).val();
@@ -379,7 +380,13 @@ function formatNumber(number)
 
 }
 
-//functions 
+function getTaxName(tax_id =-1)
+{	
+
+	var tax_array = jQuery.parseJSON(tax_list);
+	return tax_array[tax_id];
+
+}
 
 function postForm()
 {
