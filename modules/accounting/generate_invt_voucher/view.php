@@ -9,6 +9,10 @@ if(!defined('CHECK_INCLUDED')){
 <input type="hidden" name="hd_voucherid" value="<?php echo $voucher->voucher_id; ?>" />
 <input type="hidden" name="hd_int_type" id="hd_int_type" value="<?php echo $voucher->inventory_type; ?>" />
 
+<?php if($voucher->cash_discount == DEFAULT_TRUE){?>
+<input type="hidden" name="hd_discount" id="hd_discount" value="<?php echo $voucher->cash_discount; ?>" />
+<?php }?>
+
 <div class="row" >
 	<div class="medium-4 columns">
 		<h3><?php echo $page_heading;?></h3>
@@ -107,11 +111,12 @@ if(!defined('CHECK_INCLUDED')){
 			</thead>
 			<tbody>
 				<?php if($edt_items){
+
 					
 					foreach($edt_items as $item){
 						$amount +=$item['total'];
 				?>
-				<tr>
+				<tr id="save">
 					<td><?php echo $item['item_id'];?><input type="hidden" name="hd_itemcode[]" value="<?php echo $item['item_id'];?>"></td>
 					<td><?php echo $item['item_name'];?></td>
 					<td><?php echo $item['quantity'];?><input type="hidden" name="hd_itemqty[]" value="<?php echo $item['quantity'];?>"></td>
@@ -121,7 +126,10 @@ if(!defined('CHECK_INCLUDED')){
 					<?php }?>
 					<td><?php echo $item['tax_rate'];?>%<input type="hidden" name="hd_itemtax[]" value="<?php echo $item['tax'];?>"></td>
 					<td><?php echo number_format($item['total'],2);?></td>
-					<td></td>
+					<td>
+						<img src="/images/edit.png" class="edit" title="edit"/>
+						<img src="/images/delete.png" class="delete" title="delete"/>
+					</td>
 				</tr>
 				<?php }
 					}

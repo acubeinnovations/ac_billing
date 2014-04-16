@@ -272,21 +272,18 @@ $(document).ready(function(){
 	//Add, Save, Edit and Delete functions code
 	$(function(){
 		$('#tbl-append .edit').bind("click", Edit);
-		$('#tbl-append .update').bind("click", Update);
-		$('#tbl-append .delete').bind("click", Delete);
-		
+		//$('#tbl-append .delete').bind("click", Delete);
+		$('#tbl-append .add').bind("click", Add);
 	});
-	
 
 
 });
-var index=0;
 
 function Edit(){
-	var tax_list = $('#lsttax').clone();
-	tax_list.attr('id','lsttax'+index);
 
-	var par = $(this).parent().parent(); //tr
+	var tax_list = $('#lsttax').clone();
+
+	var par = $(this).parent(); //tr
     var tdCode = par.children("td:nth-child(1)");
 	var tdName = par.children("td:nth-child(2)");
 	var tdQty = par.children("td:nth-child(3)");
@@ -305,78 +302,22 @@ function Edit(){
 	tdUnitRate.html('<input type="text" name="edttrate" id="edtrate" value="'+rate+'" />');
 	tdCashDiscount.html('<input type="text" id="edtdiscount" name="edtdiscount" value="0.00"/>');
 	tdTax.html(tax_list);
-	tdTotal.html('-');
-	tdButton.html('<img src="/images/save.png" class="update" title="update"/> <img src="/images/delete.png" class="delete" title="delete"/>');
+	tdButton.html('Update');
+	tdButton.attr('class','add');
+	
 
-	
-	$('#tbl-append .update').bind("click", Update);
-	$('#tbl-append .delete').bind("click", Delete);
-	index++;
-	
+	$(".add").bind("click", Add);
+	$(".edit").bind("click", Edit);
+	$(".delete").bind("click", Delete);
 }
 
-
-function Update(){
-	var td_index = 1;
-	var par = $(this).parent().parent(); //tr
-    var tdCode = par.children("td:nth-child("+td_index+")");td_index++;
-	var tdName = par.children("td:nth-child("+td_index+")");td_index++;
-	var tdQty = par.children("td:nth-child("+td_index+")");td_index++;
-	var tdUnitRate = par.children("td:nth-child("+td_index+")");td_index++;
-	if($("#hd_discount").length > 0){
-		var tdCashDiscount = par.children("td:nth-child("+td_index+")");td_index++;
-		var discount = tdCashDiscount.children("input[type=text]").val();
-		tdCashDiscount.html('0.00');
-	}else{
-		var discount = 0;
-	}
-	var tdTax = par.children("td:nth-child("+td_index+")");td_index++;
-	var tdTotal = par.children("td:nth-child("+td_index+")");td_index++;
-	var tdButton = par.children("td:nth-child("+td_index+")");td_index++;
-
-	var qty = tdQty.children("input[type=text]").val();
-	var rate = tdUnitRate.children("input[type=text]").val();
-	
-	
-	var tax = tdTax.children("select").val();
-	if(tax > 0){
-		var taxid=tdTax.children("select").attr('id');
-		var taxrate = $("#"+taxid+" option:selected").text();
-	}else{
-		var taxrate = 0;
-	}
-	
-
-	var line_total = calculateEditLineTotal(rate,qty,discount,taxrate);
-
-	tdQty.html(qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">');
-	tdUnitRate.html(rate+'<input type="hidden" name="hd_itemrate[]" value="'+rate+'">');
-	
-	tdTax.html(taxrate+'%<input type="hidden" name="hd_itemtax[]" value="'+tax+'">');
-	tdTotal.html(formatNumber(line_total));
-	tdButton.html('<img src="/images/edit.png" class="edit" title="edit"/><img src="/images/delete.png" class="delete" title="delete"/>');
-
-	findTaxRows();
-
-	$('#tbl-append .edit').bind("click", Edit);
-	$('#tbl-append .delete').bind("click", Delete);
-
-
+function Add(){
+	alert("add");
 }
 
 function Delete(){
 	var par = $(this).parent().parent(); //tr
 	par.remove();
-}
-
-
-function findTaxRows()
-{
-		var data = $('input:hidden[name=hd_itemtax[]]');
-		$.each(data, function(key, object) {
-			alert(object.value);
-		});
-	
 }
 
 
@@ -412,16 +353,6 @@ function calculateLineTotal(rate,quantity)
 	rate = rate-discount;
 	var total = (parseFloat(rate)*parseInt(quantity));
 	var tax = calculateTax(total);
-	return (total+tax);
-}
-
-function calculateEditLineTotal(rate=0,quantity=1,discount=0,tax=0)
-{
-	rate = rate-discount;
-	var total = (parseFloat(rate)*parseInt(quantity));
-	tax_value = parseFloat(tax);
-	var tax = total*tax_value/100;
-
 	return (total+tax);
 }
 

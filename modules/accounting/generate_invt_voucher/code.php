@@ -34,6 +34,7 @@ $freight = 0;
 $discount = 0;
 $roundoff = 0;
 $edt_items = false;
+$tax_rows = false;
 
 
 
@@ -219,33 +220,42 @@ if(isset($_POST['submit'])){
         header( "Location:".$current_url."?v=".$voucher->voucher_id);
         exit();
 	}else{
+
+		$inventory_amount = 0;
+
+
 		$account->voucher_number 	= $_POST['txtvnumber'];
 		$account->voucher_type_id	= $voucher->voucher_id;
 		$exist = $account->exist();
 		if($exist){ //edit
 			$account_id = $account->account_id;
 			$arr = array();
-			if($voucher->source == VOUCHER_FOR_ACCOUNT){//update account master only
-				$arr['narration'] = $_POST['txtnarration'];
-				$arr['amount'] 	  = $_POST['txtamount'];
-				$update = $account->update_batch($arr);
-
-			}else if($voucher->source == VOUCHER_FOR_INVENTORY and isset($_POST['hd_itemcode'])){
-				$item_count = count($_POST['hd_itemcode']);
-
-
-				$arr['narration'] = $_POST['txtnarration'];
-				$dataArray = array();
-				for($i=0; $i<$item_count; $i++){
-					$dataArray[$i]['item_id'] 	= $_POST['hd_itemcode'][$i];
-					$dataArray[$i]['quantity'] 	= ($voucher->voucher_master_id = SALES)?-($_POST['hd_itemqty'][$i]):$_POST['hd_itemqty'][$i];
-					$dataArray[$i]['rate'] 		= $_POST['hd_itemrate'][$i];
-					$dataArray[$i]['tax'] 		= $_POST['hd_itemtax'][$i];
+			
+			$item_count = count($_POST['hd_itemcode']);
+			$arr['narration'] = $_POST['txtnarration'];
+			$dataArray = array();
+			for($i=0; $i<$item_count; $i++){
+				$dataArray[$i]['item_id'] 	= $_POST['hd_itemcode'][$i];
+				$dataArray[$i]['quantity'] 	= ($voucher->voucher_master_id == SALES)?-($_POST['hd_itemqty'][$i]):$_POST['hd_itemqty'][$i];
+				$dataArray[$i]['rate'] 		= $_POST['hd_itemrate'][$i];
+				$dataArray[$i]['tax'] 		= $_POST['hd_itemtax'][$i];
+				if(isset($_POST['hd_discount'][$i])){
+					$dataArray[$i]['discount']  = $_POST['hd_discount'][$i];
+				}else{
+					$dataArray[$i]['discount']  = 0;
 				}
-				//print_r($dataArray);exit();
-				$arr['amount'] = calculateTotal($dataArray);
-				//echo $arr['amount'];exit();
+				
+				$dataArray[$i]['tax_rate']  = $tax->getRate($_POST['hd_itemtax'][$i]);
+				$inventory_amount += ($_POST['hd_itemqty'][$i] * $_POST['hd_itemrate'][$i]);
+			}
+				/*echo "<pre>";
+				print_r($dataArray);
+				echo "</pre>";exit();*/
+				
+				echo $inventory_amount;exit();
+				//---------------update account master entries starts here --------------------------
 				$account->update_batch($arr);
+				//---------------update account master entries ends here --------------------------
 
 			
 				//delete and reinsert items
@@ -265,7 +275,7 @@ if(isset($_POST['submit'])){
 				}
 				
 				
-			}
+			
 
 			
 			if(isset($_POST['ch_print'])){
@@ -291,7 +301,7 @@ if(isset($_POST['submit'])){
 			$account->narration 		= $_POST['txtnarration'];
 			$amount = $_POST['txtamount'];
 
-			$inventory_amount = 0;
+			
 
 			//item list array
 			$dataArray = array();
