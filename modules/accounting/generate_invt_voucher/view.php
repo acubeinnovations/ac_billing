@@ -61,7 +61,7 @@ if(!defined('CHECK_INCLUDED')){
 		<div class="medium-4 columns">
 			<label for="voucher">To :
 
-			<?php 
+			<?php  
 				if($ledgers_to){
 					echo populate_list_array("lstto", $ledgers_to, 'id','name', $account->account_to,$disable);
 				}
@@ -92,7 +92,7 @@ if(!defined('CHECK_INCLUDED')){
 	
 	<div class="row">
 		<div class="medium-12 columns">
-		<input type="hidden" name="hd_total" id="hd_total" value=0 />
+		<input type="hidden" name="hd_total" id="hd_total" value= 0 />
 
 		<table  id="tbl-append">
 			<thead>
@@ -114,7 +114,7 @@ if(!defined('CHECK_INCLUDED')){
 
 					
 					foreach($edt_items as $item){
-						$amount +=$item['total'];
+						
 				?>
 				<tr id="save">
 					<td><?php echo $item['item_id'];?><input type="hidden" name="hd_itemcode[]" value="<?php echo $item['item_id'];?>"></td>
@@ -125,7 +125,10 @@ if(!defined('CHECK_INCLUDED')){
 					<td >0.00</td>
 					<?php }?>
 					<td><?php echo $item['tax_rate'];?>%<input type="hidden" name="hd_itemtax[]" value="<?php echo $item['tax'];?>"></td>
-					<td><?php echo number_format($item['total'],2);?></td>
+					<td>
+						<?php echo number_format($item['total'],2);?>
+						<input type="hidden" name="hd_itemtotal[]" value="<?php echo $item['total'];?>" />
+					</td>
 					<td>
 						<img src="/images/edit.png" class="edit" title="edit"/>
 						<img src="/images/delete.png" class="delete" title="delete"/>

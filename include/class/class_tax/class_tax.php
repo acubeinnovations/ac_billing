@@ -131,6 +131,20 @@ Class Tax{
 		}
     }
 
+    public function get_tax_rate_json_array(){
+ 		$json = array();
+		$strSQL = "SELECT id,rate FROM tax_master WHERE deleted = '".NOT_DELETED."' AND status = '".STATUS_ACTIVE."'";
+		$rsRES	= mysql_query($strSQL,$this->connection) or die(mysql_error().$strSQL);
+		if(mysql_num_rows($rsRES) > 0){
+			while(list($id,$rate) = mysql_fetch_row($rsRES)){
+				$json[$id]			= $rate;
+			}
+			return json_encode($json);
+		}else{
+			return false;
+		}
+    }
+
     
 
     function get_list_array()

@@ -517,12 +517,16 @@ Class Account{
 
     public function exist()
     {
+        $result_list = array();$i=0;
         $strSQL = "SELECT * FROM account_master WHERE fy_id = '".$this->current_fy_id."' AND deleted='".NOT_DELETED."' AND voucher_type_id = '".$this->voucher_type_id."' AND voucher_number = '".$this->voucher_number."'";
         $rsRES = mysql_query($strSQL, $this->connection) or die(mysql_error(). $strSQL);
         if(mysql_num_rows($rsRES) > 0){
-            $row = mysql_fetch_assoc($rsRES);
-            $this->account_id = $row['account_id'];
-           return true;
+            while($row = mysql_fetch_assoc($rsRES)){
+                $result_list[$i]['account_id'] = $row['account_id'];
+                $result_list[$i]['ref_ledger'] = $row['ref_ledger'];
+                $i++;
+            }
+           return $result_list;
         }else{
             return false;
         }

@@ -21,6 +21,7 @@ $tax = new Tax($myconnection);
 $tax->connection = $myconnection;
 //array for find tax name with id in jquery
 $tax_josn = $tax->get_tax_json_array();
+$tax_rate_josn = $tax->get_tax_rate_json_array();
 
 
 $ledgers_all = $ledger->get_list_array_have_no_children();
@@ -46,15 +47,20 @@ if(isset($_GET['edt']) || isset($_GET['v'])){
 		$account->account_id = $_GET['edt'];
 		$account->get_details();
 
+
 		$voucher->voucher_id = $account->voucher_type_id;
 		$voucher->get_details();
 		$voucher_number = $account->voucher_number;
 		$readonly = "readonly='readonly'";
 		$list_url = "ac_generated_invt_vouchers.php?slno=".$voucher->voucher_id;
 		if($voucher->inventory_type == INVENTORY_TYPE_SALE){
-			$amount = $account->account_credit;
+			$ref_ledger_detail = $account->getRefLedgertTransaction($account->account_to);
+			$amount = $ref_ledger_detail['account_debit'];
+			//$amount = $account->account_credit;
 		}else if($voucher->inventory_type == INVENTORY_TYPE_PURCHASE){
-			$amount = $account->account_debit;
+			$ref_ledger_detail = $account->getRefLedgertTransaction($account->account_from);
+			$amount = $ref_ledger_detail['account_credit'];
+			//$amount = $account->account_debit;
 		}
 				
 		$stock_register->voucher_type_id = $account->voucher_type_id;
@@ -223,14 +229,16 @@ if(isset($_POST['submit'])){
 
 		$inventory_amount = 0;
 
-
 		$account->voucher_number 	= $_POST['txtvnumber'];
+		$dataAccount = array();
+		//index for account entry array
+		$index = 0;
+		$account->narration 		= $_POST['txtnarration'];
+		$amount = $_POST['txtamount'];
 		$account->voucher_type_id	= $voucher->voucher_id;
-		$exist = $account->exist();
-		if($exist){ //edit
-			$account_id = $account->account_id;
-			$arr = array();
-			
+		$account_list = $account->exist();
+
+		if($account_list){ //edit
 			$item_count = count($_POST['hd_itemcode']);
 			$arr['narration'] = $_POST['txtnarration'];
 			$dataArray = array();
@@ -248,12 +256,26 @@ if(isset($_POST['submit'])){
 				$dataArray[$i]['tax_rate']  = $tax->getRate($_POST['hd_itemtax'][$i]);
 				$inventory_amount += ($_POST['hd_itemqty'][$i] * $_POST['hd_itemrate'][$i]);
 			}
-				/*echo "<pre>";
-				print_r($dataArray);
-				echo "</pre>";exit();*/
 				
-				echo $inventory_amount;exit();
-				//---------------update account master entries starts here --------------------------
+			//---------------update account master entries starts here --------------------------
+
+				/*need to generate account array for insertion edit only amount (credit/debit)
+				not completed for this edit action*/
+				//1.sale account and customer
+				$dataAccount[$index]['ref_ledger'] 		= $voucher->inventory_account;
+				$dataAccount[$index]['account_debit']  	= "";
+				$dataAccount[$index]['account_credit'] 	= $inventory_amount;
+				$index++;
+				$dataAccount[$index]['ref_ledger'] 		= $account->account_to;
+				$dataAccount[$index]['account_debit']  	= $amount;
+				$dataAccount[$index]['account_credit'] 	= "";
+				$index++;
+
+				echo "<pre>";
+				print_r($account_list);
+				echo "</pre>";exit();
+				
+				
 				$account->update_batch($arr);
 				//---------------update account master entries ends here --------------------------
 
@@ -295,11 +317,10 @@ if(isset($_POST['submit'])){
 			
 
 		}else{//new entry
-			$dataAccount = array();
+			
 			$account->reference_number 	= $_POST['txtrnumber'];
 			$account->date				= $_POST['txtdate'];
-			$account->narration 		= $_POST['txtnarration'];
-			$amount = $_POST['txtamount'];
+			
 
 			
 
@@ -323,8 +344,6 @@ if(isset($_POST['submit'])){
 				$tax_ledgers = false;
 			}
 
-			//index for account entry array
-			$index = 0;
 			
 			if($voucher->inventory_type == INVENTORY_TYPE_SALE){
 				//1.sale account and customer

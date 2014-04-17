@@ -20,7 +20,7 @@ $(document).ready(function(){
 			$(this).val("0.00");
 		}
 	});
-	$("#txtfrieght").on("focusout",function(){
+	$("#txtfreight").on("focusout",function(){
 		if($(this).val() == ''){
 			$(this).val("0.00");
 		}
@@ -46,8 +46,8 @@ $(document).ready(function(){
 	$("#txtdiscount").on("focus",function(){
 		$(this).select();
 	});
-	//select frieght	
-	$("#txtfrieght").on("focus",function(){
+	//select freight	
+	$("#txtfreight").on("focus",function(){
 		$(this).select();
 	});
 
@@ -62,9 +62,8 @@ $(document).ready(function(){
 
 	});
 
-	//calculate line total
+	//calculate line total on change tax
 	$("#lsttax").change(function(){
-
 		var rate = $("#txtrate").val();
 		var qty = $("#txtquantity").val();
 		if(rate == ''){
@@ -72,14 +71,11 @@ $(document).ready(function(){
 		}else{
 			var lineTotal = calculateLineTotal(rate,qty);
 			changeLineTotal(lineTotal);
-			//var lineTotalText = formatNumber(lineTotal);
-			//$("#txtlinetotal").text(lineTotalText);
 		}
 	});
 
-	//calculate line total
+	//calculate line total on enter unit rate
 	$("#txtrate").keyup(function(){
-
 		var rate = $(this).val();formatNumber(rate);
 		var qty = $("#txtquantity").val();
 		if(rate == ''){
@@ -89,14 +85,11 @@ $(document).ready(function(){
 		}else{
 			var lineTotal = calculateLineTotal(rate,qty);
 			changeLineTotal(lineTotal);
-			//var lineTotalText = formatNumber(lineTotal);
-			//$("#txtlinetotal").text(lineTotalText);
 		}
 	});
 
-	//calculate line total
+	//calculate line total on enter discount
 	$("#txtdiscount").keyup(function(){
-
 		var rate = $("#txtrate").val();formatNumber(rate);
 		var qty = $("#txtquantity").val();
 		if(rate == ''){
@@ -104,23 +97,18 @@ $(document).ready(function(){
 		}else{
 			var lineTotal = calculateLineTotal(rate,qty);
 			changeLineTotal(lineTotal);
-			//var lineTotalText = formatNumber(lineTotal);
-			//$("#txtlinetotal").text(lineTotalText);
 		}
 	});
 
-
+	//calculate line total on enter quantity
 	$("#txtquantity").keyup(function(){
 		var qty = $(this).val();
-
 		if(isNaN(qty)){
 			alert("Invalid Quantity");
 			$("#txtquantity").val('');
 		}
 		else{
-
 			var rate = $("#txtrate").val();
-
 			if(qty == ''){
 				$("#txtlinetotal").text(rate);
 			}else{
@@ -134,120 +122,11 @@ $(document).ready(function(){
 
 	});
 
-	$("#txtquantity").blur(function(){
-		//postForm();
-	});
 
+	//find item name
 	$("#txtcode").blur(function(){
 		postForm();
 	});
-
-	
-	
-
-	$("#button-add").click(function(){
-
-		var code = $("#txtcode").val();
-		var nametxt = $("#lstitem option:selected").text();
-		var rate = $("#txtrate").val();
-		var qty = $("#txtquantity").val();
-		var tax = $("#lsttax").val();
-		if(tax > 0){
-			var taxvalue = $("#lsttax option:selected").text();
-		}else{
-			tax = 0;
-			var taxvalue = 0;
-		}
-		var l_totaltxt = $("#txtlinetotal").text();
-		var stock = $("#hd_stock").val();
-
-		if($("#txtdiscount").length > 0){
-			var discount = $("#txtdiscount").val();
-			var discounttxt = discount+'<input type="hidden" name="hd_discount[]" value="'+discount+'">';
-			rate = rate-discount;
-		}else{
-			var discount = -1;
-			var discounttxt = '<input type="hidden" name="hd_discount[]" value="0.00">';
-		}
-
-		var codetxt = code+'<input type="hidden" name="hd_itemcode[]" value="'+code+'">';
-		var ratetxt = rate+'<input type="hidden" name="hd_itemrate[]" value="'+rate+'">';
-		var qtytxt = qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">';
-		var taxtxt = taxvalue+'<input type="hidden" name="hd_itemtax[]" value="'+tax+'">';
-
-		
-
-
-		if($("#lstitem").val() >0){
-			
-			total_amount += parseFloat(l_totaltxt);
-			$("#hd_total").val(total_amount);
-			
-			if(tax > 0){
-				if( total_tax[tax] == undefined ) {
-					total_tax[tax] = 0;
-				}
-				
-				total_tax[tax] += calculateTax(qty*rate);
-			}
-			
-
-			$(".trtax").remove();
-			var row = '';
-			if(discount == -1){
-				row += '<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+discounttxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>';
-			}else{
-				row +='<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+'</td><td>'+discounttxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>';
-			}
-			
-			$("#insert-item").before(row);
-
-			$.each(total_tax, function( index, value ) {
-				var hd_tax_val = index+"_"+value;
-				var tax_name = getTaxName(index);
-				var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger[]" value="'+hd_tax_val+'" />'
-				$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+tax_name+'</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
-			});
-			
-
-			clearForm();
-			updateTotal();
-			//$("#lbl_tax").html(formatNumber(total_tax));
-			
-			
-		}
-    	 return false;
-	});
-
-
-	$("#txtdiscount").blur(function(){
-		var discount = $(this).val();
-		if(isNaN(discount)){
-			$(this).val(formatNumber(0));
-			popup_alert("Enter valid discount amount",false);
-
-		}else{
-			updateTotal();
-		}
-		
-	});
-
-	$("#txtfrieght").keyup(function(){
-		var fright = $(this).val();
-		if(isNaN(fright)){
-			$(this).val(formatNumber(0));
-			popup_alert("Enter valid frieght amount",false);
-
-		}else if(fright == ""){
-			$(this).val(formatNumber(0));
-			$(this).select();
-
-		}
-		updateTotal();		
-	});
-
-
-
 
 	//select cash or credit
 	$("input:radio[name=radio]").click(function(){
@@ -268,6 +147,115 @@ $(document).ready(function(){
 		
 	});
 
+	
+	
+	//add item row
+	$("#button-add").click(function(){
+
+		var code = $("#txtcode").val();
+		var nametxt = $("#lstitem option:selected").text();
+		var rate = $("#txtrate").val();
+		var qty = $("#txtquantity").val();
+		var tax = $("#lsttax").val();
+		if(tax > 0){
+			var taxvalue = $("#lsttax option:selected").text();
+		}else{
+			tax = 0;
+			var taxvalue = 0;
+		}
+		var l_totaltxt = $("#txtlinetotal").text();
+		var l_total = parseFloat(l_totaltxt);
+
+		
+
+		var stock = $("#hd_stock").val();
+
+		if($("#txtdiscount").length > 0){
+			var discount = $("#txtdiscount").val();
+			var discounttxt = discount+'<input type="hidden" name="hd_discount[]" value="'+discount+'">';
+			rate = rate-discount;
+		}else{
+			var discount = -1;
+			var discounttxt = '<input type="hidden" name="hd_discount[]" value="0.00">';
+		}
+
+		var codetxt = code+'<input type="hidden" name="hd_itemcode[]" value="'+code+'">';
+		var ratetxt = rate+'<input type="hidden" name="hd_itemrate[]" value="'+rate+'">';
+		var qtytxt = qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">';
+		var taxtxt = taxvalue+'<input type="hidden" name="hd_itemtax[]" value="'+tax+'">';
+		l_totaltxt += '<input type="hidden" name="hd_itemtotal[]" value="'+l_totaltxt+'" />';
+
+		
+
+		if($("#lstitem").val() >0){
+			
+			total_amount += parseFloat(l_totaltxt);
+			$("#hd_total").val(total_amount);
+			
+			if(tax > 0){
+				if( total_tax[tax] == undefined ) {
+					total_tax[tax] = 0;
+				}
+				
+				total_tax[tax] += calculateTax(qty*rate);
+			}
+			
+
+			
+			var row = '';
+			if(discount == -1){
+				row += '<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+discounttxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>';
+			}else{
+				row +='<tr><td>'+codetxt+'</td><td>'+nametxt+'</td><td>'+qtytxt+'</td><td>'+ratetxt+'</td><td>'+discounttxt+'</td><td>'+taxtxt+'%</td><td>'+l_totaltxt+'</td><td></td></tr>';
+			}
+			
+			$("#insert-item").before(row);
+
+			//tax rows 
+
+			findTaxRows();
+			
+
+			clearForm();
+			calculateTotal();
+			//$("#lbl_tax").html(formatNumber(total_tax));
+			
+			
+		}
+    	 return false;
+	});
+
+
+	//validate discount
+	$("#txtdiscount").blur(function(){
+		var discount = $(this).val();
+		if(isNaN(discount)){
+			$(this).val(formatNumber(0));
+			popup_alert("Enter valid discount amount",false);
+
+		}
+		
+	});
+
+
+	//validate freight
+	$("#txtfreight").keyup(function(){
+		var fright = $(this).val();
+		if(isNaN(fright)){
+			$(this).val(formatNumber(0));
+			popup_alert("Enter valid freight amount",false);
+
+		}else if(fright == ""){
+			$(this).val(formatNumber(0));
+			$(this).select();
+
+		}
+		calculateTotal();		
+	});
+
+
+	
+
 
 	//Add, Save, Edit and Delete functions code
 	$(function(){
@@ -280,6 +268,10 @@ $(document).ready(function(){
 
 
 });
+
+//functions
+
+
 var index=0;
 
 function Edit(){
@@ -325,10 +317,9 @@ function Update(){
 	var tdUnitRate = par.children("td:nth-child("+td_index+")");td_index++;
 	if($("#hd_discount").length > 0){
 		var tdCashDiscount = par.children("td:nth-child("+td_index+")");td_index++;
-		var discount = tdCashDiscount.children("input[type=text]").val();
-		tdCashDiscount.html('0.00');
+		
 	}else{
-		var discount = 0;
+		var tdCashDiscount = false;
 	}
 	var tdTax = par.children("td:nth-child("+td_index+")");td_index++;
 	var tdTotal = par.children("td:nth-child("+td_index+")");td_index++;
@@ -336,6 +327,13 @@ function Update(){
 
 	var qty = tdQty.children("input[type=text]").val();
 	var rate = tdUnitRate.children("input[type=text]").val();
+	if(tdCashDiscount){
+		var discount = tdCashDiscount.children("input[type=text]").val();
+		rate = rate-discount;
+		tdCashDiscount.html('0.00');
+	}else{
+		var discount = 0;
+	}
 	
 	
 	var tax = tdTax.children("select").val();
@@ -347,16 +345,19 @@ function Update(){
 	}
 	
 
-	var line_total = calculateEditLineTotal(rate,qty,discount,taxrate);
+	var line_total = calculateEditLineTotal(rate,qty,taxrate);
 
 	tdQty.html(qty+'<input type="hidden" name="hd_itemqty[]" value="'+qty+'">');
 	tdUnitRate.html(rate+'<input type="hidden" name="hd_itemrate[]" value="'+rate+'">');
+
 	
 	tdTax.html(taxrate+'%<input type="hidden" name="hd_itemtax[]" value="'+tax+'">');
-	tdTotal.html(formatNumber(line_total));
-	tdButton.html('<img src="/images/edit.png" class="edit" title="edit"/><img src="/images/delete.png" class="delete" title="delete"/>');
+	tdTotal.html(formatNumber(line_total)+'<input type="hidden" name="hd_itemtotal[]" value="'+line_total+'">');
+	tdButton.html('<img src="/images/edit.png" class="edit" title="edit"/> <img src="/images/delete.png" class="delete" title="delete"/>');
 
 	findTaxRows();
+	calculateTotal();
+	
 
 	$('#tbl-append .edit').bind("click", Edit);
 	$('#tbl-append .delete').bind("click", Delete);
@@ -370,13 +371,50 @@ function Delete(){
 }
 
 
+//find tax amount for each tax with hidden rows
 function findTaxRows()
 {
-		var data = $('input:hidden[name=hd_itemtax[]]');
-		$.each(data, function(key, object) {
-			alert(object.value);
-		});
-	
+	var total_tax = {};
+	var tax_array = $('input:hidden[name="hd_itemtax[]"]');
+	var qty_array = $('input:hidden[name="hd_itemqty[]"]');
+	var rate_array = $('input:hidden[name="hd_itemrate[]"]');
+	//var rate_array = $('input:hidden[name="hd_discount[]"]');
+	var total = 0;
+	var qty = 0;
+	var rate = 0;
+	var tax_rate = 0;
+
+
+	$.each(tax_array,function(index,value){
+		var tax_id = $(value).val();
+		if(tax_id > 0){
+			if( total_tax[tax_id] == undefined ) {
+				total_tax[tax_id] = 0;
+			}
+			qty = qty_array[index].value;
+			rate = rate_array[index].value;
+			//total = parseInt(qty)*parseFloat(rate);
+			//tax_rate = parseFloat(getTaxRate(tax_id));
+			total = qty*rate;
+			tax_rate = getTaxRate(tax_id);
+			total_tax[tax_id] += total*tax_rate;
+		}
+	});
+	insertTaxRows(total_tax);
+    		
+}
+
+
+//function for insert tax ledger rows , parameter tax calculated array
+function insertTaxRows(total_tax)
+{
+	$(".trtax").remove();
+	$.each(total_tax, function( index, value ) {
+		var hd_tax_val = index+"_"+value;
+		var tax_name = getTaxName(index);
+		var hd_tax_ledger = '<input type="hidden" name="hd_tax_ledger[]" value="'+hd_tax_val+'" />'
+		$("#insert-item").after('<tr class="trtax" style="font-weight:bold;"><td colspan="6" align="right">'+tax_name+'</td><td colspan="2" align="left">'+hd_tax_ledger+'<div class="medium-6 columns"><span id="lbl_tax">'+formatNumber(value)+'</span></div></td></tr>');
+	});
 }
 
 
@@ -386,9 +424,6 @@ function findTaxRows()
 
 
 
-
-
-//functions 
 
 function clearForm(){
 	$("#txtcode").val('');
@@ -415,9 +450,8 @@ function calculateLineTotal(rate,quantity)
 	return (total+tax);
 }
 
-function calculateEditLineTotal(rate=0,quantity=1,discount=0,tax=0)
+function calculateEditLineTotal(rate=0,quantity=1,tax=0)
 {
-	rate = rate-discount;
 	var total = (parseFloat(rate)*parseInt(quantity));
 	tax_value = parseFloat(tax);
 	var tax = total*tax_value/100;
@@ -439,22 +473,30 @@ function calculateTax(total)
 function changeLineTotal(lineTotal)
 {
 	var lineTotalText = formatNumber(lineTotal);
-
 	$("#txtlinetotal").text(lineTotalText);	
 }
 
-function updateTotal()
+//calculate total with all hidden line totals
+function calculateTotal()
 {
-	var total_amount = parseFloat($("#hd_total").val());
-	var value = total_amount;
-	if($("#txtfrieght").length > 0){
-		var frieght = parseFloat($("#txtfrieght").val());
-		value += frieght;
-	}
+	var l_total_array = $('input:hidden[name="hd_itemtotal[]"]');
+	var total = 0;
+	$.each(l_total_array,function(index,value){
+		var l_total = $(value).val();
+		total += parseFloat(l_total);
+		//alert(l_total);
+	});
 
-	changeTotal(value);
-	
+	if($("#txtfreight").length > 0){
+		var freight = parseFloat($("#txtfreight").val());
+		total += freight;
+	}
+	$("#hd_total").val(total);
+	changeTotal(total);
+
 }
+
+
 function changeTotal(total)
 {
 	var str = formatNumber(total).split(".");
@@ -503,6 +545,14 @@ function getTaxName(tax_id =-1)
 {	
 
 	var tax_array = jQuery.parseJSON(tax_list);
+	return tax_array[tax_id];
+
+}
+
+function getTaxRate(tax_id =-1)
+{	
+
+	var tax_array = jQuery.parseJSON(tax_rate_list);
 	return tax_array[tax_id];
 
 }
